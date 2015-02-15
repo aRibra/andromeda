@@ -16,6 +16,8 @@ public interface CouponDAO {
 
 	public Collection<Coupon> getAllCoupons();
 
-	public Collection<Coupon> getCouponByType(CouponType type);
+	public Collection<Coupon> getAllCouponsByType(CouponType type);
+
+	public Collection<Coupon> getCompanyCouponsByType(Company company);
 
 }

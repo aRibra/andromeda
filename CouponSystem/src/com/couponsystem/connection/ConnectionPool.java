@@ -5,12 +5,12 @@ import java.util.*;
 
 public class ConnectionPool {
 
-	private DBConnection dbConnection = new DBConnection();
-	private Set<Connection> connections;
-	private static ConnectionPool connectionPool;
+	private static int initialNumberOfConnections;
+	private Collection<Connection> connections;
+	private static ConnectionPool connectionPool = new ConnectionPool();
 
 	private ConnectionPool() {
-		this.connections = new HashSet<Connection>();
+		this.connections = new ArrayList<Connection>();
 	}
 
 	public static ConnectionPool getInstance() {
@@ -18,33 +18,14 @@ public class ConnectionPool {
 	}
 
 	public synchronized Connection getConnection() {
-		while (connections.isEmpty()) {
-			try {
-				this.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		connections.remove(dbConnection.getDBConnection());
-		return connections.iterator().next();
-
+		return null;
 	}
 
 	public synchronized void returnConnections() {
-		connections.add(dbConnection.getDBConnection());
-		this.notify();
+
 	}
 
 	public void closeAllConnections() {
 
-		Iterator<Connection> it = connections.iterator();
-
-		while (it.hasNext()) {
-			try {
-				it.next().close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 }

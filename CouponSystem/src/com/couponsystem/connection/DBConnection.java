@@ -22,7 +22,6 @@ public class DBConnection {
 			connection = DriverManager.getConnection(host, "root", "root");
 
 		} catch (SQLException e) {
-			e.getLocalizedMessage();
 			System.out.println("Connection Failed! Check output console");
 			e.printStackTrace();
 			return null;

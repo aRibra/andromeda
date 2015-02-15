@@ -71,8 +71,9 @@ public class Customer {
 
 	@Override
 	public String toString() {
-		return "ID:" + id + " ,CustomerName:" + customerName + " ,Password:"
-				+ password + " ,Coupons:" + coupons + " ,Client Type:"
-				+ this.clientType;
+		return "--(Customer)--" + "\n" + "ID=" + id + "\n" + "CustomerName="
+				+ customerName + "\n" + "Password=" + password + "\n"
+				+ "Coupons=" + coupons + "\n" + "Client Type="
+				+ this.clientType + "\n" + "-----------";
 	}
 }

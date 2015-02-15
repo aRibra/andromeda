@@ -11,6 +11,7 @@ import java.util.Collection;
 import com.couponsystem.beans.ClientType;
 import com.couponsystem.beans.Company;
 import com.couponsystem.beans.Coupon;
+import com.couponsystem.beans.CouponType;
 import com.couponsystem.connection.DBConnection;
 
 public class CompanyDBDAO implements CompanyDAO {
@@ -150,7 +151,8 @@ public class CompanyDBDAO implements CompanyDAO {
 			while (resultSet.next()) {
 
 				retrievedCompany.setId(resultSet.getLong("ID"));
-				retrievedCompany.setCompanyName(resultSet.getString("COMP_NAME"));
+				retrievedCompany.setCompanyName(resultSet
+						.getString("COMP_NAME"));
 				retrievedCompany.setPassword(resultSet.getString("PASSWORD"));
 				retrievedCompany.setEmail(resultSet.getString("EMAIL"));
 				retrievedCompany.setClientType(ClientType.valueOf(resultSet
@@ -182,7 +184,7 @@ public class CompanyDBDAO implements CompanyDAO {
 		Connection connection = new DBConnection().getDBConnection();
 		PreparedStatement preparedStatement = null;
 
-		Collection<Company> cmpList = new ArrayList<>();
+		Collection<Company> companyList = new ArrayList<>();
 
 		String selectSQLQuery = "SELECT ID, COMP_NAME, PASSWORD, EMAIL, CLIENT_TYPE FROM COMPANY";
 
@@ -203,7 +205,7 @@ public class CompanyDBDAO implements CompanyDAO {
 				company.setClientType(ClientType.valueOf(resultSet
 						.getString("CLIENT_TYPE")));
 
-				cmpList.add(company);
+				companyList.add(company);
 
 				preparedStatement.close();
 			}
@@ -224,16 +226,63 @@ public class CompanyDBDAO implements CompanyDAO {
 				}
 			}
 		}
-		return cmpList;
+		return companyList;
 	}
 
-	// TODO: IBRAHIM
+	// DONE TODO: IBRAHIM
 	@Override
 	public Collection<Coupon> getCoupons(Company company) {
 
 		// returns coupons for a specific company
+		Connection connection = new DBConnection().getDBConnection();
+		PreparedStatement preparedStatement = null;
 
-		return null;
+		Collection<Coupon> couponList = new ArrayList<>();
+
+		String selectSQLQuery = "SELECT CPN.* FROM COUPON CPN INNER JOIN COMPANY_COUPON CC ON CPN.ID = CC.COUPON_ID AND CC.COMP_ID = ?";
+
+		try {
+
+			preparedStatement = connection.prepareStatement(selectSQLQuery);
+			preparedStatement.setLong(1, company.getId());
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+
+				Coupon coupon = new Coupon();
+
+				coupon.setId(resultSet.getLong("ID"));
+				coupon.setTitle(resultSet.getString("TITLE"));
+				coupon.setStartDate(resultSet.getDate("START_DATE"));
+				coupon.setEndDate(resultSet.getDate("END_DATE"));
+				coupon.setAmount(resultSet.getInt("AMOUNT"));
+				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
+				coupon.setMessage("MESSAGE");
+				coupon.setImage("IMAGE");
+
+				couponList.add(coupon);
+			}
+
+			resultSet.close();
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+
+		} finally {
+
+			if (connection != null) {
+				try {
+					preparedStatement.close();
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return couponList;
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import java.util.Collection;
 
 import com.couponsystem.beans.ClientType;
 import com.couponsystem.beans.Coupon;
+import com.couponsystem.beans.CouponType;
 import com.couponsystem.beans.Customer;
 import com.couponsystem.connection.DBConnection;
 
@@ -181,7 +182,8 @@ public class CustomerDBDAO implements CustomerDAO {
 
 	}
 
-	// TODO: company collection??????? should be Customer. Yes, u r right bitch!
+	// DONE - TODO: company collection??????? should be Customer. Yes, u r right
+	// bitch!
 	@Override
 	public Collection<Customer> getAllCustomers() {
 
@@ -230,20 +232,281 @@ public class CustomerDBDAO implements CustomerDAO {
 		return customersList;
 	}
 
+	// DONE - TODO: IBRAHIM
 	@Override
 	public Collection<Coupon> getCoupons(Customer customer) {
-		return null;
+
+		// retrieve coupons for a specific customer
+
+		Connection connection = new DBConnection().getDBConnection();
+		PreparedStatement preparedStatement = null;
+
+		Collection<Coupon> couponList = new ArrayList<>();
+
+		String selectSQL = "SELECT CPN.* FROM COUPON CPN INNER JOIN CUSTOMER_COUPON CC ON CC.COUPON_ID = CPN.ID AND CC.CUST_ID = ?";
+
+		try {
+
+			preparedStatement = connection.prepareStatement(selectSQL);
+			preparedStatement.setLong(1, customer.getId());
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+
+				Coupon coupon = new Coupon();
+
+				coupon.setId(resultSet.getLong("ID"));
+				coupon.setTitle(resultSet.getString("TITLE"));
+				coupon.setStartDate(resultSet.getDate("START_DATE"));
+				coupon.setEndDate(resultSet.getDate("END_DATE"));
+				coupon.setAmount(resultSet.getInt("AMOUNT"));
+				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
+				coupon.setMessage("MESSAGE");
+				coupon.setImage("IMAGE");
+
+				couponList.add(coupon);
+
+			}
+
+			preparedStatement.close();
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+
+		} finally {
+
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return couponList;
+	}
+
+	@Override
+	public void purchaseCoupon(Coupon coupon, Customer customer) {
+
+		Connection connection = new DBConnection().getDBConnection();
+		PreparedStatement preparedStatement = null;
+
+		String insertSQL = "INSERT INTO CUSTOMER_COUPON (CUST_ID, COUPON_ID) VALUES(?,?)";
+
+		try {
+
+			preparedStatement = connection.prepareStatement(insertSQL);
+
+			preparedStatement.setLong(1, coupon.getId());
+			preparedStatement.setLong(2, customer.getId());
+
+			preparedStatement.executeUpdate();
+
+			System.out
+					.println("Coupon Purchase process completed successfully!");
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+
+		} finally {
+
+			if (preparedStatement != null && connection != null) {
+				try {
+					preparedStatement.close();
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+	}
+
+	@Override
+	public Collection<Coupon> getAllPurchasedCoupons(Customer customer) {
+
+		Connection connection = new DBConnection().getDBConnection();
+		PreparedStatement preparedStatement = null;
+
+		Collection<Coupon> couponList = new ArrayList<>();
+
+		String selectSQL = "SELECT CPN.* FROM COUPON CPN INNER JOIN CUSTOMER_COUPON CC ON CPN.ID = CC.COUPON_ID AND CC.CUST_ID = ?";
+
+		try {
+
+			preparedStatement = connection.prepareStatement(selectSQL);
+			preparedStatement.setLong(1, customer.getId());
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+
+				Coupon coupon = new Coupon();
+
+				coupon.setId(resultSet.getLong("ID"));
+				coupon.setTitle(resultSet.getString("TITLE"));
+				coupon.setStartDate(resultSet.getDate("START_DATE"));
+				coupon.setEndDate(resultSet.getDate("END_DATE"));
+				coupon.setAmount(resultSet.getInt("AMOUNT"));
+				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
+				coupon.setMessage(resultSet.getString("MESSAGE"));
+				coupon.setPrice(resultSet.getDouble("PRICE"));
+				coupon.setImage(resultSet.getString("IMAGE"));
+
+				couponList.add(coupon);
+
+			}
+
+			preparedStatement.close();
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+
+		} finally {
+
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return couponList;
+	}
+
+	@Override
+	public Collection<Coupon> getAllPurchasedCouponsByType(
+			CouponType couponType, Customer customer) {
+
+		Connection connection = new DBConnection().getDBConnection();
+		PreparedStatement preparedStatement = null;
+
+		Collection<Coupon> couponList = new ArrayList<>();
+
+		String selectSQL = "SELECT cpn.* FROM COUPON cpn INNER JOIN customer_coupon cc ON cpn.ID = cc.COUPON_ID AND cc.CUST_ID = ? AND cpn.TYPE = ? ";
+
+		try {
+
+			preparedStatement = connection.prepareStatement(selectSQL);
+			preparedStatement.setLong(1, customer.getId());
+			preparedStatement.setString(2, couponType.name());
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+
+				Coupon coupon = new Coupon();
+
+				coupon.setId(resultSet.getLong("ID"));
+				coupon.setTitle(resultSet.getString("TITLE"));
+				coupon.setStartDate(resultSet.getDate("START_DATE"));
+				coupon.setEndDate(resultSet.getDate("END_DATE"));
+				coupon.setAmount(resultSet.getInt("AMOUNT"));
+				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
+				coupon.setMessage(resultSet.getString("MESSAGE"));
+				coupon.setPrice(resultSet.getDouble("PRICE"));
+				coupon.setImage(resultSet.getString("IMAGE"));
+
+				couponList.add(coupon);
+
+			}
+
+			preparedStatement.close();
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+
+		} finally {
+
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return couponList;
+	}
+
+	@Override
+	public Collection<Coupon> getAllPurchasedCouponsByPrice(Double price,
+			Customer customer) {
+
+		Connection connection = new DBConnection().getDBConnection();
+		PreparedStatement preparedStatement = null;
+
+		Collection<Coupon> couponList = new ArrayList<>();
+
+		String selectSQL = "SELECT cpn.* FROM COUPON cpn INNER JOIN customer_coupon cc ON cpn.ID = cc.COUPON_ID AND cc.CUST_ID = ? AND cpn.PRICE = ?";
+
+		try {
+
+			preparedStatement = connection.prepareStatement(selectSQL);
+
+			preparedStatement.setLong(1, customer.getId());
+			preparedStatement.setDouble(2, price);
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+
+				Coupon coupon = new Coupon();
+
+				coupon.setId(resultSet.getLong("ID"));
+				coupon.setTitle(resultSet.getString("TITLE"));
+				coupon.setStartDate(resultSet.getDate("START_DATE"));
+				coupon.setEndDate(resultSet.getDate("END_DATE"));
+				coupon.setAmount(resultSet.getInt("AMOUNT"));
+				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
+				coupon.setMessage(resultSet.getString("MESSAGE"));
+				coupon.setPrice(resultSet.getDouble("PRICE"));
+				coupon.setImage(resultSet.getString("IMAGE"));
+
+				couponList.add(coupon);
+
+			}
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+
+		} finally {
+
+			if (preparedStatement != null && connection != null) {
+				try {
+					preparedStatement.close();
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return couponList;
 	}
 
 	@Override
 	public boolean login(String custName, String password) {
 
 		Connection connection = new DBConnection().getDBConnection();
+		PreparedStatement preparedStatement = null;
 
+		// TODO: some sort of encyption should be added
 		String selectSQL = "SELECT CUST_NAME, PASSWORD FROM CUSTOMER";
 
 		try {
-			PreparedStatement preparedStatement = null;
+
 			preparedStatement = connection.prepareStatement(selectSQL);
 
 			ResultSet resultSet = preparedStatement.executeQuery();

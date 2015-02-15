@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.couponsystem.beans.Company;
 import com.couponsystem.beans.Coupon;
 import com.couponsystem.beans.CouponType;
 import com.couponsystem.connection.DBConnection;
@@ -67,7 +68,7 @@ public class CouponDBDAO implements CouponDAO {
 	}
 
 	@Override
-	public void removeCoupon(Coupon c) {
+	public void removeCoupon(Coupon coupon) {
 
 		Connection connection = new DBConnection().getDBConnection();
 		PreparedStatement preparedStatement = null;
@@ -76,10 +77,10 @@ public class CouponDBDAO implements CouponDAO {
 
 		try {
 			preparedStatement = connection.prepareStatement(deleteSQLQuery);
-			preparedStatement.setLong(1, c.getId());
+			preparedStatement.setLong(1, coupon.getId());
 			preparedStatement.executeUpdate();
 
-			System.out.println("Record: " + c.getId()
+			System.out.println("Record: " + coupon.getId()
 					+ " is deleted from COUPON table!");
 
 		} catch (SQLException e) {
@@ -101,7 +102,7 @@ public class CouponDBDAO implements CouponDAO {
 	}
 
 	@Override
-	public void updateCoupon(Coupon c) {
+	public void updateCoupon(Coupon coupon) {
 
 		Connection connection = new DBConnection().getDBConnection();
 		PreparedStatement preparedStatement = null;
@@ -112,21 +113,21 @@ public class CouponDBDAO implements CouponDAO {
 		try {
 			preparedStatement = connection.prepareStatement(updateSQL);
 
-			preparedStatement.setString(1, c.getTitle());
-			preparedStatement.setDate(2, c.getStartDate());
-			preparedStatement.setDate(3, c.getEndDate());
-			preparedStatement.setInt(4, c.getAmount());
+			preparedStatement.setString(1, coupon.getTitle());
+			preparedStatement.setDate(2, coupon.getStartDate());
+			preparedStatement.setDate(3, coupon.getEndDate());
+			preparedStatement.setInt(4, coupon.getAmount());
 
 			// DONE - TODO: ERROR - set ENUMS ???
-			preparedStatement.setString(5, c.getType().name());
-			preparedStatement.setString(6, c.getMessage());
-			preparedStatement.setDouble(7, c.getPrice());
-			preparedStatement.setString(8, c.getImage());
-			preparedStatement.setLong(9, c.getId());
+			preparedStatement.setString(5, coupon.getType().name());
+			preparedStatement.setString(6, coupon.getMessage());
+			preparedStatement.setDouble(7, coupon.getPrice());
+			preparedStatement.setString(8, coupon.getImage());
+			preparedStatement.setLong(9, coupon.getId());
 
 			preparedStatement.executeUpdate();
 
-			System.out.println("COUPON record ID: " + c.getId()
+			System.out.println("COUPON record ID: " + coupon.getId()
 					+ " was updated! ");
 
 		} catch (SQLException e) {
@@ -200,8 +201,116 @@ public class CouponDBDAO implements CouponDAO {
 
 	// TODO: IBRAHIM get coupon by enum type???
 	@Override
-	public Collection<Coupon> getCouponByType(CouponType n) {
-		return null;
+	public Collection<Coupon> getAllCouponsByType(CouponType type) {
+
+		// retrieves list of all coupons based on a specific type
+
+		Connection connection = new DBConnection().getDBConnection();
+		PreparedStatement preparedStatement = null;
+
+		Collection<Coupon> couponList = new ArrayList<>();
+
+		String selectSQLQuery = "SELECT * FROM COUPON CPN WHERE CPN.TYPE = ?";
+
+		try {
+
+			preparedStatement = connection.prepareStatement(selectSQLQuery);
+			preparedStatement.setString(1, type.name());
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+
+				Coupon coupon = new Coupon();
+
+				coupon.setId(resultSet.getLong("ID"));
+				coupon.setTitle(resultSet.getString("TITLE"));
+				coupon.setStartDate(resultSet.getDate("START_DATE"));
+				coupon.setEndDate(resultSet.getDate("END_DATE"));
+				coupon.setAmount(resultSet.getInt("AMOUNT"));
+				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
+				coupon.setMessage(resultSet.getString("MESSAGE"));
+				coupon.setPrice(resultSet.getDouble("PRICE"));
+				coupon.setImage(resultSet.getString("IMAGE"));
+
+				couponList.add(coupon);
+
+			}
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+
+		} finally {
+
+			if (connection != null) {
+				try {
+					preparedStatement.close();
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return couponList;
+	}
+
+	@Override
+	public Collection<Coupon> getCompanyCouponsByType(Company company) {
+
+		// retrieves list of coupons for a specific company based on a specific
+		// type
+
+		Connection connection = new DBConnection().getDBConnection();
+		PreparedStatement preparedStatement = null;
+
+		Collection<Coupon> couponList = new ArrayList<>();
+
+		String selectSQLQuery = "SELECT * FROM COUPON cpn INNER JOIN company_coupon cc ON cpn.ID = cc.COUPON_ID AND cc.COMP_ID = ?";
+
+		try {
+
+			preparedStatement = connection.prepareStatement(selectSQLQuery);
+			preparedStatement.setLong(1, company.getId());
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+
+				Coupon coupon = new Coupon();
+
+				coupon.setId(resultSet.getLong("ID"));
+				coupon.setTitle(resultSet.getString("TITLE"));
+				coupon.setStartDate(resultSet.getDate("START_DATE"));
+				coupon.setEndDate(resultSet.getDate("END_DATE"));
+				coupon.setAmount(resultSet.getInt("AMOUNT"));
+				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
+				coupon.setMessage(resultSet.getString("MESSAGE"));
+				coupon.setPrice(resultSet.getDouble("PRICE"));
+				coupon.setImage(resultSet.getString("IMAGE"));
+
+				couponList.add(coupon);
+
+			}
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+
+		} finally {
+
+			if (connection != null) {
+				try {
+					preparedStatement.close();
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return couponList;
 	}
 
 	@Override

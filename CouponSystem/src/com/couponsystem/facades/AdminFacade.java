@@ -9,8 +9,9 @@ import com.couponsystem.dao.*;
 
 public class AdminFacade implements CouponSystemClientFacade {
 
-	private CompanyDBDAO companyDbDao;
-	private CustomerDBDAO customerDbDao;
+	private CompanyDAO companyDbDao;
+	private CustomerDAO customerDbDao;
+	private AdminDAO adminDbDao;
 
 	public AdminFacade() {
 		companyDbDao = new CompanyDBDAO();
@@ -19,44 +20,43 @@ public class AdminFacade implements CouponSystemClientFacade {
 
 	@Override
 	public boolean login(String name, String password, ClientType clientType) {
-		// TODO
-
-		return false;
+		// TODO: we have to do somthn' with the clientType
+		return adminDbDao.login(name, name);
 	}
 
-	public void createCompanyFacade(Company company) {
+	public void createCompany(Company company) {
 		companyDbDao.createCompany(company);
 	}
 
-	public void removeCompanyFacade(Company company) {
+	public void removeCompany(Company company) {
 		companyDbDao.removeCompany(company);
 	}
 
-	public void updateCompanyFacade(Company company) {
+	public void updateCompany(Company company) {
 		companyDbDao.updateCompany(company);
 	}
 
-	public Company getCompanyFacade(int id) {
+	public Company getCompany(int id) {
 		return companyDbDao.getCompany(id);
 	}
 
-	public Collection<Company> getAllCompainesFacade() {
+	public Collection<Company> getAllCompaines() {
 		return companyDbDao.getAllCompaines();
 	}
 
-	public void createCustomerFacade(Customer customer) {
+	public void createCustomer(Customer customer) {
 		customerDbDao.createCustomer(customer);
 	}
 
-	public void removeCustomerFacade(Customer customer) {
+	public void removeCustomer(Customer customer) {
 		customerDbDao.removeCustomer(customer);
 	}
 
-	public void updateCustomerFacade(Customer customer) {
+	public void updateCustomer(Customer customer) {
 		customerDbDao.updateCustomer(customer);
 	}
 
-	public Customer getCustomerFacade(int id) {
+	public Customer getCustomer(int id) {
 		return customerDbDao.getCustomer(id);
 	}
 

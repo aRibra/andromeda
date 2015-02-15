@@ -45,8 +45,9 @@ public class Admin {
 
 	@Override
 	public String toString() {
-		return "ID:" + this.id + " ,AdminName: " + this.name + " ,Password:"
-				+ this.password + " ,Client Type:" + this.clientType;
+		return "--(Admin)--" + "\n"+ "ID=" + this.id + "\n" + "AdminName="
+				+ this.name + "\n" + "Password=" + this.password + "\n"
+				+ "Client Type=" + this.clientType + "\n" + "-----------";
 	}
 
 }
