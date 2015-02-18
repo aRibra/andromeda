@@ -1,0 +1,46 @@
+﻿Merge branch 'master' of https://github.com/spac3hit/andromeda.git
+
+Conflicts:
+	CouponSystem/bin/Test.class
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch and 'origin/master' have diverged,
+# and have 1 and 2 different commits each, respectively.
+#   (use "git pull" to merge the remote branch into yours)
+#
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	modified:   CouponSystem/bin/.gitignore
+#	modified:   CouponSystem/bin/Test.class
+#	modified:   CouponSystem/bin/com/couponsystem/beans/Admin.class
+#	modified:   CouponSystem/bin/com/couponsystem/beans/ClientType.class
+#	modified:   CouponSystem/bin/com/couponsystem/beans/Company.class
+#	modified:   CouponSystem/bin/com/couponsystem/beans/Coupon.class
+#	modified:   CouponSystem/bin/com/couponsystem/beans/CouponType.class
+#	modified:   CouponSystem/bin/com/couponsystem/beans/Customer.class
+#	modified:   CouponSystem/bin/com/couponsystem/connection/ConnectionPool.class
+#	modified:   CouponSystem/bin/com/couponsystem/connection/DBConnection.class
+#	modified:   CouponSystem/bin/com/couponsystem/dao/AdminDAO.class
+#	modified:   CouponSystem/bin/com/couponsystem/dao/AdminDBDAO.class
+#	modified:   CouponSystem/bin/com/couponsystem/dao/CompanyDAO.class
+#	modified:   CouponSystem/bin/com/couponsystem/dao/CompanyDBDAO.class
+#	modified:   CouponSystem/bin/com/couponsystem/dao/CouponDAO.class
+#	modified:   CouponSystem/bin/com/couponsystem/dao/CouponDBDAO.class
+#	modified:   CouponSystem/bin/com/couponsystem/dao/CustomerDAO.class
+#	modified:   CouponSystem/bin/com/couponsystem/dao/CustomerDBDAO.class
+#	modified:   CouponSystem/bin/com/couponsystem/facades/AdminFacade.class
+#	modified:   CouponSystem/bin/com/couponsystem/facades/CompanyFacade.class
+#	modified:   CouponSystem/bin/com/couponsystem/facades/CouponSystemClientFacade.class
+#	modified:   CouponSystem/bin/com/couponsystem/facades/CustomerFacade.class
+#	modified:   README.md
+#
+
