@@ -5,14 +5,29 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.couponsystem.connection.ConnectionPool;
 import com.couponsystem.connection.DBConnection;
 
 public class AdminDBDAO implements AdminDAO {
 
+	private ConnectionPool connectionPool = ConnectionPool.getInstance();
+
+	public AdminDBDAO() {
+
+	}
+
 	@Override
 	public boolean login(String adminName, String password) {
 
-		Connection connection = new DBConnection().getDBConnection();
+		// connectionPool.getConnection();
+		// make a new thread for every process
+
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 
 		String selectSQL = "SELECT ADMIN_NAME, PASSWORD FROM ADMIN";
 
@@ -40,11 +55,7 @@ public class AdminDBDAO implements AdminDAO {
 		} finally {
 
 			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				connectionPool.releaseConnection(connection);
 			}
 		}
 		return false;

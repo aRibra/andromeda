@@ -12,14 +12,15 @@ import com.couponsystem.beans.ClientType;
 import com.couponsystem.beans.Company;
 import com.couponsystem.beans.Coupon;
 import com.couponsystem.beans.CouponType;
+import com.couponsystem.connection.ConnectionPool;
 import com.couponsystem.connection.DBConnection;
 
 public class CompanyDBDAO implements CompanyDAO {
 
-	// private Connection pool;
+	private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
 	public CompanyDBDAO() {
-		// this.pool = ConnectionPool.getInstance().getConnection();
+
 	}
 
 	@Override

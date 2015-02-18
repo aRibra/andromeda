@@ -1,10 +1,14 @@
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 
+import com.couponsystem.ConnectionThread;
 import com.couponsystem.CouponSystem;
+import com.couponsystem.RemoverThread;
 import com.couponsystem.beans.*;
 import com.couponsystem.connection.ConnectionPool;
 import com.couponsystem.connection.DBConnection;
@@ -14,6 +18,28 @@ import com.couponsystem.facades.*;
 public class Test {
 
 	public static void main(String[] args) {
+
+		// *** CONNECTIONPOOL TEST ***//
+
+		ConnectionPool connectionPool = ConnectionPool.getInstance();
+
+		// RemoverThread remover = new RemoverThread(connectionPool);
+
+		// remover.start();
+
+		List<ConnectionThread> list = new ArrayList<>();
+
+		// for (int i = 0; i < 15; i++) {
+		// list.add(new ConnectionThread(connectionPool, i));
+		// list.get(i).start();
+		// }
+
+		System.out.println("Wenak 7abeebe wenak.");
+
+		// for (int i = 0; i < list.size(); i++) {
+		// list.get(i).stopRunning();
+		// }
+		// *** END CONNECTIONPOOL TEST ***//
 
 		// AdminDBDAO adminDbDao = new AdminDBDAO();
 		// System.out.println(adminDbDao.login("ibrahim", "root"));
@@ -27,17 +53,15 @@ public class Test {
 		// After we have determined what type of object the
 		// CouponSystemClientFacade is (admin, company or customer), we then use
 		// the related login method for that type of user
-		
-		ConnectionPool cp = ConnectionPool.getInstance();
-		
+
 		CouponSystem couponSystem = CouponSystem.getInstance();
-		
+
 		CouponSystemClientFacade client = couponSystem.login("ibrahim", "root",
 				ClientType.ADMIN);
-		
+
 		// just for testing purposes
 		AdminFacade adminClient = null;
-		
+
 		if (client instanceof AdminFacade) {
 			adminClient = (AdminFacade) client;
 		} else if (client instanceof CompanyFacade) {
