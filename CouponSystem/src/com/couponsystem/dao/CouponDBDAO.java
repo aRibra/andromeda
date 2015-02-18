@@ -25,7 +25,13 @@ public class CouponDBDAO implements CouponDAO {
 	@Override
 	public void createCoupon(Coupon coupon) {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
 		PreparedStatement preparedStatement = null;
 
 		String insertSQLQuery = "INSERT INTO COUPON"
@@ -59,7 +65,7 @@ public class CouponDBDAO implements CouponDAO {
 			if (preparedStatement != null) {
 				try {
 					preparedStatement.close();
-					connection.close();
+					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -71,7 +77,13 @@ public class CouponDBDAO implements CouponDAO {
 	@Override
 	public void removeCoupon(Coupon coupon) {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
 		PreparedStatement preparedStatement = null;
 
 		String deleteSQLQuery = "DELETE FROM COUPON WHERE ID = ?";
@@ -93,7 +105,7 @@ public class CouponDBDAO implements CouponDAO {
 			if (preparedStatement != null) {
 				try {
 					preparedStatement.close();
-					connection.close();
+					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -105,7 +117,13 @@ public class CouponDBDAO implements CouponDAO {
 	@Override
 	public void updateCoupon(Coupon coupon) {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
 		PreparedStatement preparedStatement = null;
 
 		String updateSQL = "UPDATE COUPON SET "
@@ -140,6 +158,7 @@ public class CouponDBDAO implements CouponDAO {
 			if (preparedStatement != null) {
 				try {
 					preparedStatement.close();
+					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -150,7 +169,13 @@ public class CouponDBDAO implements CouponDAO {
 	@Override
 	public Coupon getCoupon(int id) {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
 		PreparedStatement preparedStatement = null;
 
 		Coupon coupon = new Coupon();
@@ -189,7 +214,7 @@ public class CouponDBDAO implements CouponDAO {
 			if (connection != null) {
 				try {
 					preparedStatement.close();
-					connection.close();
+					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -206,7 +231,13 @@ public class CouponDBDAO implements CouponDAO {
 
 		// retrieves list of all coupons based on a specific type
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
 		PreparedStatement preparedStatement = null;
 
 		Collection<Coupon> couponList = new ArrayList<>();
@@ -247,7 +278,7 @@ public class CouponDBDAO implements CouponDAO {
 			if (connection != null) {
 				try {
 					preparedStatement.close();
-					connection.close();
+					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -263,7 +294,13 @@ public class CouponDBDAO implements CouponDAO {
 		// retrieves list of coupons for a specific company based on a specific
 		// type
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
 		PreparedStatement preparedStatement = null;
 
 		Collection<Coupon> couponList = new ArrayList<>();
@@ -304,7 +341,7 @@ public class CouponDBDAO implements CouponDAO {
 			if (connection != null) {
 				try {
 					preparedStatement.close();
-					connection.close();
+					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -317,7 +354,13 @@ public class CouponDBDAO implements CouponDAO {
 	@Override
 	public Collection<Coupon> getAllCoupons() {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
 		PreparedStatement preparedStatement = null;
 
 		List<Coupon> coupList = new ArrayList<>();
@@ -358,7 +401,7 @@ public class CouponDBDAO implements CouponDAO {
 			if (connection != null) {
 				try {
 					preparedStatement.close();
-					connection.close();
+					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}

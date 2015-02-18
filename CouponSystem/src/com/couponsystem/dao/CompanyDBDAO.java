@@ -26,7 +26,13 @@ public class CompanyDBDAO implements CompanyDAO {
 	@Override
 	public void createCompany(Company company) {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
 		PreparedStatement preparedStatement = null;
 
 		String insertSQLQuery = "INSERT INTO COMPANY"
@@ -54,7 +60,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			if (preparedStatement != null && connection != null) {
 				try {
 					preparedStatement.close();
-					connection.close();
+					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -65,7 +71,13 @@ public class CompanyDBDAO implements CompanyDAO {
 	@Override
 	public void removeCompany(Company company) {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
 		PreparedStatement preparedStatement = null;
 
 		String deleteSQLQuery = "DELETE FROM COMPANY WHERE ID = ?";
@@ -87,7 +99,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			if (preparedStatement != null && connection != null) {
 				try {
 					preparedStatement.close();
-					connection.close();
+					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -99,7 +111,13 @@ public class CompanyDBDAO implements CompanyDAO {
 	@Override
 	public void updateCompany(Company company) {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
 		PreparedStatement preparedStatement = null;
 
 		String updateSQLQuery = "UPDATE COMPANY SET COMP_NAME = ?, PASSWORD = ?, EMAIL = ? WHERE ID = ?";
@@ -136,7 +154,13 @@ public class CompanyDBDAO implements CompanyDAO {
 	@Override
 	public Company getCompany(int id) {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
 		PreparedStatement preparedStatement = null;
 
 		Company retrievedCompany = new Company();
@@ -170,7 +194,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			if (preparedStatement != null && connection != null) {
 				try {
 					preparedStatement.close();
-					connection.close();
+					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -182,7 +206,12 @@ public class CompanyDBDAO implements CompanyDAO {
 	@Override
 	public Collection<Company> getAllCompaines() {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 		PreparedStatement preparedStatement = null;
 
 		Collection<Company> companyList = new ArrayList<>();
@@ -208,10 +237,10 @@ public class CompanyDBDAO implements CompanyDAO {
 
 				companyList.add(company);
 
-				preparedStatement.close();
 			}
 
 			resultSet.close();
+			preparedStatement.close();
 
 		} catch (SQLException e) {
 
@@ -220,11 +249,7 @@ public class CompanyDBDAO implements CompanyDAO {
 		} finally {
 
 			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				connectionPool.releaseConnection(connection);
 			}
 		}
 		return companyList;
@@ -235,7 +260,12 @@ public class CompanyDBDAO implements CompanyDAO {
 	public Collection<Coupon> getCoupons(Company company) {
 
 		// returns coupons for a specific company
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 		PreparedStatement preparedStatement = null;
 
 		Collection<Coupon> couponList = new ArrayList<>();
@@ -266,6 +296,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 
 			resultSet.close();
+			preparedStatement.close();
 
 		} catch (SQLException e) {
 
@@ -274,12 +305,7 @@ public class CompanyDBDAO implements CompanyDAO {
 		} finally {
 
 			if (connection != null) {
-				try {
-					preparedStatement.close();
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				connectionPool.releaseConnection(connection);
 			}
 		}
 
@@ -290,8 +316,12 @@ public class CompanyDBDAO implements CompanyDAO {
 	public boolean login(String compName, String password) {
 
 		boolean okToLogin = false;
-		Connection connection = new DBConnection().getDBConnection();
-
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 		try {
 
 			Statement statement = connection.createStatement();
@@ -321,11 +351,7 @@ public class CompanyDBDAO implements CompanyDAO {
 		} finally {
 
 			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				connectionPool.releaseConnection(connection);
 
 				return okToLogin;
 			}

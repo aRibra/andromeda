@@ -25,7 +25,13 @@ public class CustomerDBDAO implements CustomerDAO {
 	@Override
 	public void createCustomer(Customer customer) {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
 		PreparedStatement preparedStatement = null;
 
 		String insertSQLQuery = "INSERT INTO CUSTOMER"
@@ -52,7 +58,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			if (preparedStatement != null && connection != null) {
 				try {
 					preparedStatement.close();
-					connection.close();
+					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -64,7 +70,13 @@ public class CustomerDBDAO implements CustomerDAO {
 	@Override
 	public void removeCustomer(Customer customer) {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
 		PreparedStatement preparedStatement = null;
 
 		String deleteSQLQuery = "DELETE FROM CUSTOMER WHERE ID = ?";
@@ -87,7 +99,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			if (preparedStatement != null && connection != null) {
 				try {
 					preparedStatement.close();
-					connection.close();
+					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -99,7 +111,13 @@ public class CustomerDBDAO implements CustomerDAO {
 	@Override
 	public void updateCustomer(Customer customer) {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
 		PreparedStatement preparedStatement = null;
 
 		String updateSQL = "UPDATE CUSTOMER SET CUST_NAME = ?, PASSWORD = ? WHERE ID = ?";
@@ -124,12 +142,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		} finally {
 
 			if (connection != null) {
-				try {
-
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				connectionPool.releaseConnection(connection);
 			}
 		}
 
@@ -138,7 +151,13 @@ public class CustomerDBDAO implements CustomerDAO {
 	@Override
 	public Customer getCustomer(int id) {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
 		PreparedStatement preparedStatement = null;
 
 		Customer customer = new Customer();
@@ -171,11 +190,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		} finally {
 
 			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				connectionPool.releaseConnection(connection);
 			}
 		}
 
@@ -188,7 +203,12 @@ public class CustomerDBDAO implements CustomerDAO {
 	@Override
 	public Collection<Customer> getAllCustomers() {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 
 		Collection<Customer> customersList = new ArrayList<>();
 
@@ -223,11 +243,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		} finally {
 
 			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				connectionPool.releaseConnection(connection);
 			}
 		}
 		return customersList;
@@ -239,7 +255,13 @@ public class CustomerDBDAO implements CustomerDAO {
 
 		// retrieve coupons for a specific customer
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
 		PreparedStatement preparedStatement = null;
 
 		Collection<Coupon> couponList = new ArrayList<>();
@@ -279,11 +301,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		} finally {
 
 			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				connectionPool.releaseConnection(connection);
 			}
 		}
 
@@ -293,7 +311,13 @@ public class CustomerDBDAO implements CustomerDAO {
 	@Override
 	public void purchaseCoupon(Coupon coupon, Customer customer) {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
 		PreparedStatement preparedStatement = null;
 
 		String insertSQL = "INSERT INTO CUSTOMER_COUPON (CUST_ID, COUPON_ID) VALUES(?,?)";
@@ -319,7 +343,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			if (preparedStatement != null && connection != null) {
 				try {
 					preparedStatement.close();
-					connection.close();
+					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -331,7 +355,13 @@ public class CustomerDBDAO implements CustomerDAO {
 	@Override
 	public Collection<Coupon> getAllPurchasedCoupons(Customer customer) {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
 		PreparedStatement preparedStatement = null;
 
 		Collection<Coupon> couponList = new ArrayList<>();
@@ -372,11 +402,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		} finally {
 
 			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				connectionPool.releaseConnection(connection);
 			}
 		}
 
@@ -387,7 +413,13 @@ public class CustomerDBDAO implements CustomerDAO {
 	public Collection<Coupon> getAllPurchasedCouponsByType(
 			CouponType couponType, Customer customer) {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
 		PreparedStatement preparedStatement = null;
 
 		Collection<Coupon> couponList = new ArrayList<>();
@@ -429,11 +461,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		} finally {
 
 			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				connectionPool.releaseConnection(connection);
 			}
 		}
 
@@ -444,7 +472,13 @@ public class CustomerDBDAO implements CustomerDAO {
 	public Collection<Coupon> getAllPurchasedCouponsByPrice(Double price,
 			Customer customer) {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
 		PreparedStatement preparedStatement = null;
 
 		Collection<Coupon> couponList = new ArrayList<>();
@@ -487,7 +521,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			if (preparedStatement != null && connection != null) {
 				try {
 					preparedStatement.close();
-					connection.close();
+					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -500,7 +534,13 @@ public class CustomerDBDAO implements CustomerDAO {
 	@Override
 	public boolean login(String custName, String password) {
 
-		Connection connection = new DBConnection().getDBConnection();
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
 		PreparedStatement preparedStatement = null;
 
 		// TODO: some sort of encyption should be added
@@ -530,11 +570,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		} finally {
 
 			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				connectionPool.releaseConnection(connection);
 			}
 		}
 		return false;
