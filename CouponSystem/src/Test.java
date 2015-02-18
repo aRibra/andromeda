@@ -23,22 +23,20 @@ public class Test {
 
 		ConnectionPool connectionPool = ConnectionPool.getInstance();
 
-		// RemoverThread remover = new RemoverThread(connectionPool);
+		RemoverThread remover = new RemoverThread(connectionPool);
 
-		// remover.start();
+		remover.start();
 
 		List<ConnectionThread> list = new ArrayList<>();
 
-		// for (int i = 0; i < 15; i++) {
-		// list.add(new ConnectionThread(connectionPool, i));
-		// list.get(i).start();
-		// }
+		for (int i = 0; i < 15; i++) {
+			list.add(new ConnectionThread(connectionPool, i));
+			list.get(i).start();
+		}
 
 		System.out.println("Wenak 7abeebe wenak.");
 
-		// for (int i = 0; i < list.size(); i++) {
-		// list.get(i).stopRunning();
-		// }
+		
 		// *** END CONNECTIONPOOL TEST ***//
 
 		// AdminDBDAO adminDbDao = new AdminDBDAO();
