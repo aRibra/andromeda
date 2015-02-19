@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.couponsystem.CouponDbNames;
 import com.couponsystem.beans.ClientType;
 import com.couponsystem.beans.Coupon;
 import com.couponsystem.beans.CouponType;
@@ -31,11 +32,13 @@ public class CustomerDBDAO implements CustomerDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
-		String insertSQLQuery = "INSERT INTO CUSTOMER"
-				+ "(CUST_NAME, PASSWORD, CLIENT_TYPE) VALUES" + "(?,?,?)";
+		String insertSQLQuery = "INSERT INTO " + CouponDbNames.CUSTOMER + "("
+				+ CouponDbNames.CUSTOMER_CUST_NAME + ", "
+				+ CouponDbNames.CUSTOMER_PASSWORD + ", "
+				+ CouponDbNames.CUSTOMER_CLIENT_TYPE + ") VALUES" + "(?,?,?)";
 
 		try {
 
@@ -76,10 +79,11 @@ public class CustomerDBDAO implements CustomerDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
-		String deleteSQLQuery = "DELETE FROM CUSTOMER WHERE ID = ?";
+		String deleteSQLQuery = "DELETE FROM " + CouponDbNames.CUSTOMER
+				+ " WHERE " + CouponDbNames.CUSTOMER_ID + " = ?";
 
 		try {
 			preparedStatement = connection.prepareStatement(deleteSQLQuery);
@@ -117,10 +121,13 @@ public class CustomerDBDAO implements CustomerDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
-		String updateSQL = "UPDATE CUSTOMER SET CUST_NAME = ?, PASSWORD = ? WHERE ID = ?";
+		String updateSQL = "UPDATE " + CouponDbNames.CUSTOMER + " SET "
+				+ CouponDbNames.CUSTOMER_CUST_NAME + " = ?, "
+				+ CouponDbNames.CUSTOMER_PASSWORD + " = ? WHERE "
+				+ CouponDbNames.CUSTOMER_ID + " = ?";
 
 		try {
 			preparedStatement = connection.prepareStatement(updateSQL);
@@ -157,12 +164,17 @@ public class CustomerDBDAO implements CustomerDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
 		Customer customer = new Customer();
 
-		String selectSQL = "SELECT ID, CUST_NAME, PASSWORD, CLIENT_TYPE FROM CUSTOMER WHERE ID = ?";
+		String selectSQL = "SELECT " + CouponDbNames.CUSTOMER_ID + ", "
+				+ CouponDbNames.CUSTOMER_CUST_NAME + ", "
+				+ CouponDbNames.CUSTOMER_PASSWORD + ", "
+				+ CouponDbNames.CUSTOMER_CLIENT_TYPE + " FROM "
+				+ CouponDbNames.CUSTOMER + " WHERE "
+				+ CouponDbNames.CUSTOMER_ID + " = ?";
 
 		try {
 
@@ -173,11 +185,13 @@ public class CustomerDBDAO implements CustomerDAO {
 
 			while (resultSet.next()) {
 
-				customer.setId(resultSet.getLong("ID"));
-				customer.setCustomerName(resultSet.getString("CUST_NAME"));
-				customer.setPassword(resultSet.getString("PASSWORD"));
+				customer.setId(resultSet.getLong(CouponDbNames.CUSTOMER_ID));
+				customer.setCustomerName(resultSet
+						.getString(CouponDbNames.CUSTOMER_CUST_NAME));
+				customer.setPassword(resultSet
+						.getString(CouponDbNames.CUSTOMER_PASSWORD));
 				customer.setClientType(ClientType.valueOf(resultSet
-						.getString("CLIENT_TYPE")));
+						.getString(CouponDbNames.CUSTOMER_CLIENT_TYPE)));
 
 			}
 
@@ -212,7 +226,11 @@ public class CustomerDBDAO implements CustomerDAO {
 
 		Collection<Customer> customersList = new ArrayList<>();
 
-		String selectSQLQuery = "SELECT ID, CUST_NAME, PASSWORD, CLIENT_TYPE FROM CUSTOMER";
+		String selectSQLQuery = "SELECT " + CouponDbNames.CUSTOMER_ID + ", "
+				+ CouponDbNames.CUSTOMER_CUST_NAME + ", "
+				+ CouponDbNames.CUSTOMER_PASSWORD + ", "
+				+ CouponDbNames.CUSTOMER_CLIENT_TYPE + " FROM "
+				+ CouponDbNames.CUSTOMER;
 
 		try {
 			PreparedStatement preparedStatement = null;
@@ -224,11 +242,13 @@ public class CustomerDBDAO implements CustomerDAO {
 
 				Customer customer = new Customer();
 
-				customer.setId(resultSet.getLong("ID"));
-				customer.setCustomerName(resultSet.getString("CUST_NAME"));
-				customer.setPassword(resultSet.getString("PASSWORD"));
+				customer.setId(resultSet.getLong(CouponDbNames.CUSTOMER_ID));
+				customer.setCustomerName(resultSet
+						.getString(CouponDbNames.CUSTOMER_CUST_NAME));
+				customer.setPassword(resultSet
+						.getString(CouponDbNames.CUSTOMER_PASSWORD));
 				customer.setClientType(ClientType.valueOf(resultSet
-						.getString("CLIENT_TYPE")));
+						.getString(CouponDbNames.CUSTOMER_CLIENT_TYPE)));
 
 				customersList.add(customer);
 
@@ -261,12 +281,17 @@ public class CustomerDBDAO implements CustomerDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
 		Collection<Coupon> couponList = new ArrayList<>();
 
-		String selectSQL = "SELECT CPN.* FROM COUPON CPN INNER JOIN CUSTOMER_COUPON CC ON CC.COUPON_ID = CPN.ID AND CC.CUST_ID = ?";
+		// "SELECT CPN.* FROM COUPON CPN INNER JOIN CUSTOMER_COUPON CC ON CC.COUPON_ID = CPN.ID AND CC.CUST_ID = ?"
+		String selectSQL = "SELECT CPN.* FROM " + CouponDbNames.COUPON
+				+ " CPN INNER JOIN " + CouponDbNames.CUSTOMER_COUPON
+				+ " CC ON CC." + CouponDbNames.CUSTOMER_COUPON_COUPON_ID
+				+ " = CPN." + CouponDbNames.COUPON_ID + " AND CC."
+				+ CouponDbNames.CUSTOMER_COUPON_CUST_ID + " = ?";
 
 		try {
 
@@ -279,14 +304,17 @@ public class CustomerDBDAO implements CustomerDAO {
 
 				Coupon coupon = new Coupon();
 
-				coupon.setId(resultSet.getLong("ID"));
-				coupon.setTitle(resultSet.getString("TITLE"));
-				coupon.setStartDate(resultSet.getDate("START_DATE"));
-				coupon.setEndDate(resultSet.getDate("END_DATE"));
-				coupon.setAmount(resultSet.getInt("AMOUNT"));
-				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
-				coupon.setMessage("MESSAGE");
-				coupon.setImage("IMAGE");
+				coupon.setId(resultSet.getLong(CouponDbNames.COUPON_ID));
+				coupon.setTitle(resultSet.getString(CouponDbNames.COUPON_TITLE));
+				coupon.setStartDate(resultSet
+						.getDate(CouponDbNames.COUPON_START_DATE));
+				coupon.setEndDate(resultSet
+						.getDate(CouponDbNames.COUPON_END_DATE));
+				coupon.setAmount(resultSet.getInt(CouponDbNames.COUPON_AMOUNT));
+				coupon.setType(CouponType.valueOf(resultSet
+						.getString(CouponDbNames.COUPON_TYPE)));
+				coupon.setMessage(CouponDbNames.COUPON_MESSAGE);
+				coupon.setImage(CouponDbNames.COUPON_IMAGE);
 
 				couponList.add(coupon);
 
@@ -317,10 +345,13 @@ public class CustomerDBDAO implements CustomerDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
-		String insertSQL = "INSERT INTO CUSTOMER_COUPON (CUST_ID, COUPON_ID) VALUES(?,?)";
+		// "INSERT INTO CUSTOMER_COUPON (CUST_ID, COUPON_ID) VALUES(?,?)"
+		String insertSQL = "INSERT INTO " + CouponDbNames.CUSTOMER_COUPON
+				+ " (" + CouponDbNames.CUSTOMER_COUPON_CUST_ID + ", "
+				+ CouponDbNames.CUSTOMER_COUPON_COUPON_ID + ") VALUES(?,?)";
 
 		try {
 
@@ -361,12 +392,17 @@ public class CustomerDBDAO implements CustomerDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
 		Collection<Coupon> couponList = new ArrayList<>();
 
-		String selectSQL = "SELECT CPN.* FROM COUPON CPN INNER JOIN CUSTOMER_COUPON CC ON CPN.ID = CC.COUPON_ID AND CC.CUST_ID = ?";
+		// "SELECT CPN.* FROM COUPON CPN INNER JOIN CUSTOMER_COUPON CC ON CPN.ID = CC.COUPON_ID AND CC.CUST_ID = ?"
+		String selectSQL = "SELECT CPN.* FROM " + CouponDbNames.COUPON
+				+ " CPN INNER JOIN " + CouponDbNames.CUSTOMER_COUPON
+				+ " CC ON CPN." + CouponDbNames.COUPON_ID + " = CC."
+				+ CouponDbNames.CUSTOMER_COUPON_COUPON_ID + " AND CC."
+				+ CouponDbNames.CUSTOMER_COUPON_CUST_ID + " = ?";
 
 		try {
 
@@ -379,15 +415,19 @@ public class CustomerDBDAO implements CustomerDAO {
 
 				Coupon coupon = new Coupon();
 
-				coupon.setId(resultSet.getLong("ID"));
-				coupon.setTitle(resultSet.getString("TITLE"));
-				coupon.setStartDate(resultSet.getDate("START_DATE"));
-				coupon.setEndDate(resultSet.getDate("END_DATE"));
-				coupon.setAmount(resultSet.getInt("AMOUNT"));
-				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
-				coupon.setMessage(resultSet.getString("MESSAGE"));
-				coupon.setPrice(resultSet.getDouble("PRICE"));
-				coupon.setImage(resultSet.getString("IMAGE"));
+				coupon.setId(resultSet.getLong(CouponDbNames.COUPON_ID));
+				coupon.setTitle(resultSet.getString(CouponDbNames.COUPON_TITLE));
+				coupon.setStartDate(resultSet
+						.getDate(CouponDbNames.COUPON_START_DATE));
+				coupon.setEndDate(resultSet
+						.getDate(CouponDbNames.COUPON_END_DATE));
+				coupon.setAmount(resultSet.getInt(CouponDbNames.COUPON_AMOUNT));
+				coupon.setType(CouponType.valueOf(resultSet
+						.getString(CouponDbNames.COUPON_TYPE)));
+				coupon.setMessage(resultSet
+						.getString(CouponDbNames.COUPON_MESSAGE));
+				coupon.setPrice(resultSet.getDouble(CouponDbNames.COUPON_PRICE));
+				coupon.setImage(resultSet.getString(CouponDbNames.COUPON_IMAGE));
 
 				couponList.add(coupon);
 
@@ -419,12 +459,18 @@ public class CustomerDBDAO implements CustomerDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
 		Collection<Coupon> couponList = new ArrayList<>();
 
-		String selectSQL = "SELECT cpn.* FROM COUPON cpn INNER JOIN customer_coupon cc ON cpn.ID = cc.COUPON_ID AND cc.CUST_ID = ? AND cpn.TYPE = ? ";
+		// "SELECT cpn.* FROM COUPON cpn INNER JOIN customer_coupon cc ON cpn.ID = cc.COUPON_ID AND cc.CUST_ID = ? AND cpn.TYPE = ? "
+		String selectSQL = "SELECT cpn.* FROM " + CouponDbNames.COUPON
+				+ " cpn INNER JOIN " + CouponDbNames.CUSTOMER_COUPON
+				+ " cc ON cpn." + CouponDbNames.COUPON_ID + " = cc."
+				+ CouponDbNames.CUSTOMER_COUPON_COUPON_ID + " AND cc."
+				+ CouponDbNames.CUSTOMER_COUPON_CUST_ID + " = ? AND cpn."
+				+ CouponDbNames.COUPON_TYPE + " = ? ";
 
 		try {
 
@@ -438,15 +484,19 @@ public class CustomerDBDAO implements CustomerDAO {
 
 				Coupon coupon = new Coupon();
 
-				coupon.setId(resultSet.getLong("ID"));
-				coupon.setTitle(resultSet.getString("TITLE"));
-				coupon.setStartDate(resultSet.getDate("START_DATE"));
-				coupon.setEndDate(resultSet.getDate("END_DATE"));
-				coupon.setAmount(resultSet.getInt("AMOUNT"));
-				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
-				coupon.setMessage(resultSet.getString("MESSAGE"));
-				coupon.setPrice(resultSet.getDouble("PRICE"));
-				coupon.setImage(resultSet.getString("IMAGE"));
+				coupon.setId(resultSet.getLong(CouponDbNames.COUPON_ID));
+				coupon.setTitle(resultSet.getString(CouponDbNames.COUPON_TITLE));
+				coupon.setStartDate(resultSet
+						.getDate(CouponDbNames.COUPON_START_DATE));
+				coupon.setEndDate(resultSet
+						.getDate(CouponDbNames.COUPON_END_DATE));
+				coupon.setAmount(resultSet.getInt(CouponDbNames.COUPON_AMOUNT));
+				coupon.setType(CouponType.valueOf(resultSet
+						.getString(CouponDbNames.COUPON_TYPE)));
+				coupon.setMessage(resultSet
+						.getString(CouponDbNames.COUPON_MESSAGE));
+				coupon.setPrice(resultSet.getDouble(CouponDbNames.COUPON_PRICE));
+				coupon.setImage(resultSet.getString(CouponDbNames.COUPON_IMAGE));
 
 				couponList.add(coupon);
 
@@ -478,12 +528,18 @@ public class CustomerDBDAO implements CustomerDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
 		Collection<Coupon> couponList = new ArrayList<>();
 
-		String selectSQL = "SELECT cpn.* FROM COUPON cpn INNER JOIN customer_coupon cc ON cpn.ID = cc.COUPON_ID AND cc.CUST_ID = ? AND cpn.PRICE = ?";
+		// "SELECT cpn.* FROM COUPON cpn INNER JOIN customer_coupon cc ON cpn.ID = cc.COUPON_ID AND cc.CUST_ID = ? AND cpn.PRICE = ?"
+		String selectSQL = "SELECT cpn.* FROM " + CouponDbNames.COUPON
+				+ " cpn INNER JOIN " + CouponDbNames.CUSTOMER_COUPON
+				+ " cc ON cpn." + CouponDbNames.COUPON_ID + " = cc."
+				+ CouponDbNames.CUSTOMER_COUPON_COUPON_ID + " AND cc."
+				+ CouponDbNames.CUSTOMER_COUPON_CUST_ID + " = ? AND cpn."
+				+ CouponDbNames.COUPON_PRICE + " = ?";
 
 		try {
 
@@ -498,15 +554,19 @@ public class CustomerDBDAO implements CustomerDAO {
 
 				Coupon coupon = new Coupon();
 
-				coupon.setId(resultSet.getLong("ID"));
-				coupon.setTitle(resultSet.getString("TITLE"));
-				coupon.setStartDate(resultSet.getDate("START_DATE"));
-				coupon.setEndDate(resultSet.getDate("END_DATE"));
-				coupon.setAmount(resultSet.getInt("AMOUNT"));
-				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
-				coupon.setMessage(resultSet.getString("MESSAGE"));
-				coupon.setPrice(resultSet.getDouble("PRICE"));
-				coupon.setImage(resultSet.getString("IMAGE"));
+				coupon.setId(resultSet.getLong(CouponDbNames.COUPON_ID));
+				coupon.setTitle(resultSet.getString(CouponDbNames.COUPON_TITLE));
+				coupon.setStartDate(resultSet
+						.getDate(CouponDbNames.COUPON_START_DATE));
+				coupon.setEndDate(resultSet
+						.getDate(CouponDbNames.COUPON_END_DATE));
+				coupon.setAmount(resultSet.getInt(CouponDbNames.COUPON_AMOUNT));
+				coupon.setType(CouponType.valueOf(resultSet
+						.getString(CouponDbNames.COUPON_TYPE)));
+				coupon.setMessage(resultSet
+						.getString(CouponDbNames.COUPON_MESSAGE));
+				coupon.setPrice(resultSet.getDouble(CouponDbNames.COUPON_PRICE));
+				coupon.setImage(resultSet.getString(CouponDbNames.COUPON_IMAGE));
 
 				couponList.add(coupon);
 
@@ -540,11 +600,14 @@ public class CustomerDBDAO implements CustomerDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
 		// TODO: some sort of encyption should be added
-		String selectSQL = "SELECT CUST_NAME, PASSWORD FROM CUSTOMER";
+		// "SELECT CUST_NAME, PASSWORD FROM CUSTOMER"
+		String selectSQL = "SELECT " + CouponDbNames.CUSTOMER_CUST_NAME + ", "
+				+ CouponDbNames.CUSTOMER_PASSWORD + " FROM "
+				+ CouponDbNames.CUSTOMER;
 
 		try {
 
@@ -553,8 +616,10 @@ public class CustomerDBDAO implements CustomerDAO {
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				String name = resultSet.getString("CUST_NAME");
-				String pwd = resultSet.getString("PASSWORD");
+				String name = resultSet
+						.getString(CouponDbNames.CUSTOMER_CUST_NAME);
+				String pwd = resultSet
+						.getString(CouponDbNames.CUSTOMER_PASSWORD);
 
 				if (custName.equals(name) && password.equals(pwd))
 					return true;

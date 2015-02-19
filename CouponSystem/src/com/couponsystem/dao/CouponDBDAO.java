@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.couponsystem.CouponDbNames;
 import com.couponsystem.beans.Company;
 import com.couponsystem.beans.Coupon;
 import com.couponsystem.beans.CouponType;
@@ -34,8 +35,15 @@ public class CouponDBDAO implements CouponDAO {
 
 		PreparedStatement preparedStatement = null;
 
-		String insertSQLQuery = "INSERT INTO COUPON"
-				+ "(ID, TITLE, START_DATE, END_DATE, AMOUNT, TYPE, MESSAGE, PRICE, IMAGE) VALUES"
+		String insertSQLQuery = "INSERT INTO " + CouponDbNames.COUPON + "("
+				+ CouponDbNames.COUPON_ID + ", " + CouponDbNames.COUPON_TITLE
+				+ ", " + CouponDbNames.COUPON_START_DATE + ", "
+				+ CouponDbNames.COUPON_END_DATE + ", "
+				+ CouponDbNames.COUPON_AMOUNT + ", "
+				+ CouponDbNames.COUPON_TYPE + ", "
+				+ CouponDbNames.COUPON_MESSAGE + ", "
+				+ CouponDbNames.COUPON_PRICE + ", "
+				+ CouponDbNames.COUPON_IMAGE + ") VALUES"
 				+ "(?,?,?,?,?,?,?,?,?)";
 
 		try {
@@ -86,7 +94,8 @@ public class CouponDBDAO implements CouponDAO {
 
 		PreparedStatement preparedStatement = null;
 
-		String deleteSQLQuery = "DELETE FROM COUPON WHERE ID = ?";
+		String deleteSQLQuery = "DELETE FROM " + CouponDbNames.COUPON
+				+ " WHERE " + CouponDbNames.COUPON_ID + " = ?";
 
 		try {
 			preparedStatement = connection.prepareStatement(deleteSQLQuery);
@@ -126,8 +135,16 @@ public class CouponDBDAO implements CouponDAO {
 
 		PreparedStatement preparedStatement = null;
 
-		String updateSQL = "UPDATE COUPON SET "
-				+ "TITLE = ?, START_DATE = ?, END_DATE = ?, AMOUNT = ?, TYPE = ?, MESSAGE = ?, PRICE = ?, IMAGE = ? WHERE ID = ?";
+		String updateSQL = "UPDATE " + CouponDbNames.COUPON + " SET "
+				+ CouponDbNames.COUPON_TITLE + " = ?, "
+				+ CouponDbNames.COUPON_START_DATE + " = ?, "
+				+ CouponDbNames.COUPON_END_DATE + " = ?, "
+				+ CouponDbNames.COUPON_AMOUNT + " = ?, "
+				+ CouponDbNames.COUPON_TYPE + " = ?, "
+				+ CouponDbNames.COUPON_MESSAGE + " = ?, "
+				+ CouponDbNames.COUPON_PRICE + " = ?, "
+				+ CouponDbNames.COUPON_IMAGE + " = ? WHERE "
+				+ CouponDbNames.COUPON_ID + " = ?";
 
 		try {
 			preparedStatement = connection.prepareStatement(updateSQL);
@@ -180,7 +197,17 @@ public class CouponDBDAO implements CouponDAO {
 
 		Coupon coupon = new Coupon();
 
-		String selectSQLQuery = "SELECT ID, TITLE, START_DATE, END_DATE, AMOUNT, TYPE, MESSAGE, PRICE, IMAGE FROM COUPON WHERE ID = ?";
+		// "SELECT ID, TITLE, START_DATE, END_DATE, AMOUNT, TYPE, MESSAGE, PRICE, IMAGE FROM COUPON WHERE ID = ?"
+		String selectSQLQuery = "SELECT " + CouponDbNames.COUPON_ID + ", "
+				+ CouponDbNames.COUPON_TITLE + ", "
+				+ CouponDbNames.COUPON_START_DATE + ", "
+				+ CouponDbNames.COUPON_END_DATE + ", "
+				+ CouponDbNames.COUPON_AMOUNT + ", "
+				+ CouponDbNames.COUPON_TYPE + ", "
+				+ CouponDbNames.COUPON_MESSAGE + ", "
+				+ CouponDbNames.COUPON_PRICE + ", "
+				+ CouponDbNames.COUPON_IMAGE + " FROM COUPON WHERE "
+				+ CouponDbNames.COUPON_ID + " = ?";
 
 		try {
 
@@ -191,17 +218,20 @@ public class CouponDBDAO implements CouponDAO {
 
 			while (resultSet.next()) {
 
-				coupon.setId(resultSet.getLong("ID"));
-				coupon.setTitle(resultSet.getString("TITLE"));
-				coupon.setStartDate(resultSet.getDate("START_DATE"));
-				coupon.setEndDate(resultSet.getDate("END_DATE"));
-				coupon.setAmount(resultSet.getInt("AMOUNT"));
-
+				coupon.setId(resultSet.getLong(CouponDbNames.COUPON_ID));
+				coupon.setTitle(resultSet.getString(CouponDbNames.COUPON_TITLE));
+				coupon.setStartDate(resultSet
+						.getDate(CouponDbNames.COUPON_START_DATE));
+				coupon.setEndDate(resultSet
+						.getDate(CouponDbNames.COUPON_END_DATE));
+				coupon.setAmount(resultSet.getInt(CouponDbNames.COUPON_AMOUNT));
 				// DONE - TODO: ENUM ERROR
-				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
-				coupon.setMessage(resultSet.getString("MESSAGE"));
-				coupon.setPrice(resultSet.getDouble("PRICE"));
-				coupon.setImage(resultSet.getString("IMAGE"));
+				coupon.setType(CouponType.valueOf(resultSet
+						.getString(CouponDbNames.COUPON_TYPE)));
+				coupon.setMessage(resultSet
+						.getString(CouponDbNames.COUPON_MESSAGE));
+				coupon.setPrice(resultSet.getDouble(CouponDbNames.COUPON_PRICE));
+				coupon.setImage(resultSet.getString(CouponDbNames.COUPON_IMAGE));
 
 			}
 
@@ -242,7 +272,9 @@ public class CouponDBDAO implements CouponDAO {
 
 		Collection<Coupon> couponList = new ArrayList<>();
 
-		String selectSQLQuery = "SELECT * FROM COUPON CPN WHERE CPN.TYPE = ?";
+		// "SELECT * FROM COUPON CPN WHERE CPN.TYPE = ?"
+		String selectSQLQuery = "SELECT * FROM " + CouponDbNames.COUPON
+				+ " CPN WHERE CPN." + CouponDbNames.COUPON_TYPE + " = ?";
 
 		try {
 
@@ -255,15 +287,19 @@ public class CouponDBDAO implements CouponDAO {
 
 				Coupon coupon = new Coupon();
 
-				coupon.setId(resultSet.getLong("ID"));
-				coupon.setTitle(resultSet.getString("TITLE"));
-				coupon.setStartDate(resultSet.getDate("START_DATE"));
-				coupon.setEndDate(resultSet.getDate("END_DATE"));
-				coupon.setAmount(resultSet.getInt("AMOUNT"));
-				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
-				coupon.setMessage(resultSet.getString("MESSAGE"));
-				coupon.setPrice(resultSet.getDouble("PRICE"));
-				coupon.setImage(resultSet.getString("IMAGE"));
+				coupon.setId(resultSet.getLong(CouponDbNames.COUPON_ID));
+				coupon.setTitle(resultSet.getString(CouponDbNames.COUPON_TITLE));
+				coupon.setStartDate(resultSet
+						.getDate(CouponDbNames.COUPON_START_DATE));
+				coupon.setEndDate(resultSet
+						.getDate(CouponDbNames.COUPON_END_DATE));
+				coupon.setAmount(resultSet.getInt(CouponDbNames.COUPON_AMOUNT));
+				coupon.setType(CouponType.valueOf(resultSet
+						.getString(CouponDbNames.COUPON_TYPE)));
+				coupon.setMessage(resultSet
+						.getString(CouponDbNames.COUPON_MESSAGE));
+				coupon.setPrice(resultSet.getDouble(CouponDbNames.COUPON_PRICE));
+				coupon.setImage(resultSet.getString(CouponDbNames.COUPON_IMAGE));
 
 				couponList.add(coupon);
 
@@ -305,7 +341,12 @@ public class CouponDBDAO implements CouponDAO {
 
 		Collection<Coupon> couponList = new ArrayList<>();
 
-		String selectSQLQuery = "SELECT * FROM COUPON cpn INNER JOIN company_coupon cc ON cpn.ID = cc.COUPON_ID AND cc.COMP_ID = ?";
+		// "SELECT * FROM COUPON cpn INNER JOIN company_coupon cc ON cpn.ID = cc.COUPON_ID AND cc.COMP_ID = ?"
+		String selectSQLQuery = "SELECT * FROM " + CouponDbNames.COUPON
+				+ " cpn INNER JOIN " + CouponDbNames.COMPANY_COUPON
+				+ " cc ON cpn." + CouponDbNames.COUPON_ID + " = cc."
+				+ CouponDbNames.COMPANY_COUPON_COUPON_ID + " AND cc."
+				+ CouponDbNames.COMPANY_COUPON_COMP_ID + " = ?";
 
 		try {
 
@@ -318,15 +359,19 @@ public class CouponDBDAO implements CouponDAO {
 
 				Coupon coupon = new Coupon();
 
-				coupon.setId(resultSet.getLong("ID"));
-				coupon.setTitle(resultSet.getString("TITLE"));
-				coupon.setStartDate(resultSet.getDate("START_DATE"));
-				coupon.setEndDate(resultSet.getDate("END_DATE"));
-				coupon.setAmount(resultSet.getInt("AMOUNT"));
-				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
-				coupon.setMessage(resultSet.getString("MESSAGE"));
-				coupon.setPrice(resultSet.getDouble("PRICE"));
-				coupon.setImage(resultSet.getString("IMAGE"));
+				coupon.setId(resultSet.getLong(CouponDbNames.COUPON_ID));
+				coupon.setTitle(resultSet.getString(CouponDbNames.COUPON_TITLE));
+				coupon.setStartDate(resultSet
+						.getDate(CouponDbNames.COUPON_START_DATE));
+				coupon.setEndDate(resultSet
+						.getDate(CouponDbNames.COUPON_END_DATE));
+				coupon.setAmount(resultSet.getInt(CouponDbNames.COUPON_AMOUNT));
+				coupon.setType(CouponType.valueOf(resultSet
+						.getString(CouponDbNames.COUPON_TYPE)));
+				coupon.setMessage(resultSet
+						.getString(CouponDbNames.COUPON_MESSAGE));
+				coupon.setPrice(resultSet.getDouble(CouponDbNames.COUPON_PRICE));
+				coupon.setImage(resultSet.getString(CouponDbNames.COUPON_IMAGE));
 
 				couponList.add(coupon);
 
@@ -365,7 +410,16 @@ public class CouponDBDAO implements CouponDAO {
 
 		List<Coupon> coupList = new ArrayList<>();
 
-		String selectSQLQuery = "SELECT ID, TITLE, START_DATE, END_DATE, AMOUNT, TYPE, MESSAGE, PRICE, IMAGE FROM COUPON";
+		// "SELECT ID, TITLE, START_DATE, END_DATE, AMOUNT, TYPE, MESSAGE, PRICE, IMAGE FROM COUPON"
+		String selectSQLQuery = "SELECT " + CouponDbNames.COUPON_ID + ", "
+				+ CouponDbNames.COUPON_TITLE + ", "
+				+ CouponDbNames.COUPON_START_DATE + ", "
+				+ CouponDbNames.COUPON_END_DATE + ", "
+				+ CouponDbNames.COUPON_AMOUNT + ", "
+				+ CouponDbNames.COUPON_TYPE + ", "
+				+ CouponDbNames.COUPON_MESSAGE + ", "
+				+ CouponDbNames.COUPON_PRICE + ", "
+				+ CouponDbNames.COUPON_IMAGE + " FROM " + CouponDbNames.COUPON;
 
 		try {
 
@@ -376,17 +430,17 @@ public class CouponDBDAO implements CouponDAO {
 			while (rs.next()) {
 				Coupon coupon = new Coupon();
 
-				coupon.setId(rs.getLong("ID"));
-				coupon.setTitle(rs.getString("TITLE"));
-				coupon.setStartDate(rs.getDate("START_DATE"));
-				coupon.setEndDate(rs.getDate("END_DATE"));
-				coupon.setAmount(rs.getInt("AMOUNT"));
-
+				coupon.setId(rs.getLong(CouponDbNames.COUPON_ID));
+				coupon.setTitle(rs.getString(CouponDbNames.COUPON_TITLE));
+				coupon.setStartDate(rs.getDate(CouponDbNames.COUPON_START_DATE));
+				coupon.setEndDate(rs.getDate(CouponDbNames.COUPON_END_DATE));
+				coupon.setAmount(rs.getInt(CouponDbNames.COUPON_AMOUNT));
 				// DONE - TODO: ENUM ERROR
-				coupon.setType(CouponType.valueOf(rs.getString("TYPE")));
-				coupon.setMessage(rs.getString("MESSAGE"));
-				coupon.setPrice(rs.getDouble("PRICE"));
-				coupon.setImage(rs.getString("IMAGE"));
+				coupon.setType(CouponType.valueOf(rs
+						.getString(CouponDbNames.COUPON_TYPE)));
+				coupon.setMessage(rs.getString(CouponDbNames.COUPON_MESSAGE));
+				coupon.setPrice(rs.getDouble(CouponDbNames.COUPON_PRICE));
+				coupon.setImage(rs.getString(CouponDbNames.COUPON_IMAGE));
 
 				coupList.add(coupon);
 

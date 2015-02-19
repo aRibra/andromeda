@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.couponsystem.CouponDbNames;
 import com.couponsystem.beans.ClientType;
 import com.couponsystem.beans.Company;
 import com.couponsystem.beans.Coupon;
@@ -35,9 +36,11 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		PreparedStatement preparedStatement = null;
 
-		String insertSQLQuery = "INSERT INTO COMPANY"
-				+ "(COMP_NAME, PASSWORD, EMAIL, CLIENT_TYPE) VALUES"
-				+ "(?,?,?,?)";
+		String insertSQLQuery = "INSERT INTO " + CouponDbNames.COMPANY + "("
+				+ CouponDbNames.COMPANY_COMP_NAME + ", "
+				+ CouponDbNames.COMPANY_PASSWORD + ", "
+				+ CouponDbNames.COMPANY_EMAIL + ", "
+				+ CouponDbNames.COMPANY_CLIENT_TYPE + ") VALUES" + "(?,?,?,?)";
 
 		try {
 			preparedStatement = connection.prepareStatement(insertSQLQuery);
@@ -80,7 +83,8 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		PreparedStatement preparedStatement = null;
 
-		String deleteSQLQuery = "DELETE FROM COMPANY WHERE ID = ?";
+		String deleteSQLQuery = "DELETE FROM " + CouponDbNames.COMPANY
+				+ " WHERE " + CouponDbNames.COMPANY_ID + " = ?";
 
 		try {
 			preparedStatement = connection.prepareStatement(deleteSQLQuery);
@@ -120,7 +124,11 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		PreparedStatement preparedStatement = null;
 
-		String updateSQLQuery = "UPDATE COMPANY SET COMP_NAME = ?, PASSWORD = ?, EMAIL = ? WHERE ID = ?";
+		String updateSQLQuery = "UPDATE " + CouponDbNames.COMPANY + " SET "
+				+ CouponDbNames.COMPANY_COMP_NAME + " = ?, "
+				+ CouponDbNames.COMPANY_PASSWORD + " = ?, "
+				+ CouponDbNames.COMPANY_EMAIL + " = ? WHERE "
+				+ CouponDbNames.COMPANY_ID + " = ?";
 
 		try {
 			preparedStatement = connection.prepareStatement(updateSQLQuery);
@@ -165,7 +173,13 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		Company retrievedCompany = new Company();
 
-		String selectSQLQuery = "SELECT ID, COMP_NAME, PASSWORD, EMAIL, CLIENT_TYPE FROM COMPANY WHERE ID = ?";
+		String selectSQLQuery = "SELECT " + CouponDbNames.COMPANY_ID + ", "
+				+ CouponDbNames.COMPANY_COMP_NAME + ", "
+				+ CouponDbNames.COMPANY_PASSWORD + ", "
+				+ CouponDbNames.COMPANY_EMAIL + ", "
+				+ CouponDbNames.COMPANY_CLIENT_TYPE + " FROM "
+				+ CouponDbNames.COMPANY + " WHERE " + CouponDbNames.COMPANY_ID
+				+ " = ?";
 
 		try {
 			preparedStatement = connection.prepareStatement(selectSQLQuery);
@@ -175,13 +189,16 @@ public class CompanyDBDAO implements CompanyDAO {
 
 			while (resultSet.next()) {
 
-				retrievedCompany.setId(resultSet.getLong("ID"));
+				retrievedCompany.setId(resultSet
+						.getLong(CouponDbNames.COMPANY_ID));
 				retrievedCompany.setCompanyName(resultSet
-						.getString("COMP_NAME"));
-				retrievedCompany.setPassword(resultSet.getString("PASSWORD"));
-				retrievedCompany.setEmail(resultSet.getString("EMAIL"));
+						.getString(CouponDbNames.COMPANY_COMP_NAME));
+				retrievedCompany.setPassword(resultSet
+						.getString(CouponDbNames.COMPANY_PASSWORD));
+				retrievedCompany.setEmail(resultSet
+						.getString(CouponDbNames.COMPANY_EMAIL));
 				retrievedCompany.setClientType(ClientType.valueOf(resultSet
-						.getString("CLIENT_TYPE")));
+						.getString(CouponDbNames.COMPANY_CLIENT_TYPE)));
 
 			}
 
@@ -216,7 +233,12 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		Collection<Company> companyList = new ArrayList<>();
 
-		String selectSQLQuery = "SELECT ID, COMP_NAME, PASSWORD, EMAIL, CLIENT_TYPE FROM COMPANY";
+		String selectSQLQuery = "SELECT " + CouponDbNames.COMPANY_ID + ", "
+				+ CouponDbNames.COMPANY_COMP_NAME + ", "
+				+ CouponDbNames.COMPANY_PASSWORD + ", "
+				+ CouponDbNames.COMPANY_EMAIL + ", "
+				+ CouponDbNames.COMPANY_CLIENT_TYPE + " FROM "
+				+ CouponDbNames.COMPANY;
 
 		try {
 
@@ -228,12 +250,15 @@ public class CompanyDBDAO implements CompanyDAO {
 
 				Company company = new Company();
 
-				company.setId(resultSet.getLong("ID"));
-				company.setCompanyName(resultSet.getString("COMP_NAME"));
-				company.setPassword(resultSet.getString("PASSWORD"));
-				company.setEmail(resultSet.getString("EMAIL"));
+				company.setId(resultSet.getLong(CouponDbNames.COMPANY_ID));
+				company.setCompanyName(resultSet
+						.getString(CouponDbNames.COMPANY_COMP_NAME));
+				company.setPassword(resultSet
+						.getString(CouponDbNames.COMPANY_PASSWORD));
+				company.setEmail(resultSet
+						.getString(CouponDbNames.COMPANY_EMAIL));
 				company.setClientType(ClientType.valueOf(resultSet
-						.getString("CLIENT_TYPE")));
+						.getString(CouponDbNames.COMPANY_CLIENT_TYPE)));
 
 				companyList.add(company);
 
@@ -270,7 +295,12 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		Collection<Coupon> couponList = new ArrayList<>();
 
-		String selectSQLQuery = "SELECT CPN.* FROM COUPON CPN INNER JOIN COMPANY_COUPON CC ON CPN.ID = CC.COUPON_ID AND CC.COMP_ID = ?";
+		String selectSQLQuery = "SELECT CPN.* FROM "
+				+ CouponDbNames.COMPANY_COUPON + " CPN INNER JOIN "
+				+ CouponDbNames.COMPANY_COUPON + " CC ON CPN."
+				+ CouponDbNames.COUPON_ID + " = CC."
+				+ CouponDbNames.COMPANY_COUPON_COUPON_ID + " AND CC."
+				+ CouponDbNames.COMPANY_COUPON_COMP_ID + " = ?";
 
 		try {
 
@@ -283,12 +313,15 @@ public class CompanyDBDAO implements CompanyDAO {
 
 				Coupon coupon = new Coupon();
 
-				coupon.setId(resultSet.getLong("ID"));
-				coupon.setTitle(resultSet.getString("TITLE"));
-				coupon.setStartDate(resultSet.getDate("START_DATE"));
-				coupon.setEndDate(resultSet.getDate("END_DATE"));
-				coupon.setAmount(resultSet.getInt("AMOUNT"));
-				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
+				coupon.setId(resultSet.getLong(CouponDbNames.COUPON_ID));
+				coupon.setTitle(resultSet.getString(CouponDbNames.COUPON_TITLE));
+				coupon.setStartDate(resultSet
+						.getDate(CouponDbNames.COUPON_START_DATE));
+				coupon.setEndDate(resultSet
+						.getDate(CouponDbNames.COUPON_START_DATE));
+				coupon.setAmount(resultSet.getInt(CouponDbNames.COUPON_AMOUNT));
+				coupon.setType(CouponType.valueOf(resultSet
+						.getString(CouponDbNames.COUPON_TYPE)));
 				coupon.setMessage("MESSAGE");
 				coupon.setImage("IMAGE");
 
@@ -326,14 +359,18 @@ public class CompanyDBDAO implements CompanyDAO {
 
 			Statement statement = connection.createStatement();
 
-			String selectSQLQuery = "SELECT COMP_NAME, PASSWORD FROM COMPANY";
+			String selectSQLQuery = "SELECT " + CouponDbNames.COMPANY_COMP_NAME
+					+ ", " + CouponDbNames.COMPANY_PASSWORD + " FROM "
+					+ CouponDbNames.COMPANY;
 
 			ResultSet resultSet = statement.executeQuery(selectSQLQuery);
 
 			while (resultSet.next()) {
 
-				String name = resultSet.getString("COMP_NAME");
-				String pwd = resultSet.getString("PASSWORD");
+				String name = resultSet
+						.getString(CouponDbNames.COMPANY_COMP_NAME);
+				String pwd = resultSet
+						.getString(CouponDbNames.COMPANY_PASSWORD);
 
 				if (compName.equals(name) && password.equals(pwd)) {
 					okToLogin = true;
