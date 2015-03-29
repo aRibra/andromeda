@@ -22,6 +22,7 @@ public class Test {
 		// *** CONNECTIONPOOL TEST ***//
 
 		ConnectionPool connectionPool = ConnectionPool.getInstance();
+		connectionPool.maxNumberOfConnections(20);
 
 		RemoverThread remover = new RemoverThread(connectionPool);
 
@@ -87,7 +88,6 @@ public class Test {
 		// CouponType t = CouponType.HEALTH;
 		// System.out.println(t.name());
 
-		// *** END CONNECTION TEST ***//
 
 		/*
 		 * 

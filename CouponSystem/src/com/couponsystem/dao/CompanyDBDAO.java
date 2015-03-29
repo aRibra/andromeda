@@ -23,6 +23,7 @@ public class CompanyDBDAO implements CompanyDAO {
 
 	}
 
+	//creating a new company
 	@Override
 	public void createCompany(Company company) {
 
@@ -68,6 +69,7 @@ public class CompanyDBDAO implements CompanyDAO {
 		}
 	}
 
+	//remove an existing company from the db
 	@Override
 	public void removeCompany(Company company) {
 
@@ -107,7 +109,8 @@ public class CompanyDBDAO implements CompanyDAO {
 		}
 
 	}
-
+	
+	// update company's details
 	@Override
 	public void updateCompany(Company company) {
 
@@ -151,6 +154,7 @@ public class CompanyDBDAO implements CompanyDAO {
 
 	}
 
+	// retrieve an existing company
 	@Override
 	public Company getCompany(int id) {
 
@@ -203,6 +207,7 @@ public class CompanyDBDAO implements CompanyDAO {
 		return retrievedCompany;
 	}
 
+	// retrieving all companies
 	@Override
 	public Collection<Company> getAllCompaines() {
 
@@ -255,7 +260,6 @@ public class CompanyDBDAO implements CompanyDAO {
 		return companyList;
 	}
 
-	// DONE TODO: IBRAHIM
 	@Override
 	public Collection<Coupon> getCoupons(Company company) {
 

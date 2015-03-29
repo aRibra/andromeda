@@ -225,7 +225,6 @@ public class CouponDBDAO implements CouponDAO {
 
 	}
 
-	// TODO: IBRAHIM get coupon by enum type???
 	@Override
 	public Collection<Coupon> getAllCouponsByType(CouponType type) {
 
