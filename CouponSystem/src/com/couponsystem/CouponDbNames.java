@@ -23,7 +23,7 @@ public class CouponDbNames {
 	public static final String COMPANY_EMAIL = "EMAIL";
 	public static final String COMPANY_CLIENT_TYPE = "CLIENT_TYPE";
 
-	public static final String CUSTOMER_ID = "CUSTOMER_ID";
+	public static final String CUSTOMER_ID = "ID";
 	public static final String CUSTOMER_CUST_NAME = "CUST_NAME";
 	public static final String CUSTOMER_PASSWORD = "PASSWORD";
 	public static final String CUSTOMER_CLIENT_TYPE = "CLIENT_TYPE";

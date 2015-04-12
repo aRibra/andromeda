@@ -1,3 +1,4 @@
+package com.couponsystem.test;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -6,9 +7,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
-import com.couponsystem.ConnectionThread;
 import com.couponsystem.CouponSystem;
-import com.couponsystem.RemoverThread;
 import com.couponsystem.beans.*;
 import com.couponsystem.connection.ConnectionPool;
 import com.couponsystem.connection.DBConnection;
@@ -22,21 +21,18 @@ public class Test {
 		// *** CONNECTIONPOOL TEST ***//
 
 		ConnectionPool connectionPool = ConnectionPool.getInstance();
+		//
+		// RemoverThread remover = new RemoverThread(connectionPool);
+		//
+		// remover.start();
+		//
+		// List<ConnectionThread> list = new ArrayList<>();
+		//
+		// for (int i = 0; i < 15; i++) {
+		// list.add(new ConnectionThread(connectionPool, i));
+		// list.get(i).start();
+		// }
 
-		RemoverThread remover = new RemoverThread(connectionPool);
-
-		remover.start();
-
-		List<ConnectionThread> list = new ArrayList<>();
-
-		for (int i = 0; i < 15; i++) {
-			list.add(new ConnectionThread(connectionPool, i));
-			list.get(i).start();
-		}
-
-		System.out.println("Wenak 7abeebe wenak.");
-
-		
 		// *** END CONNECTIONPOOL TEST ***//
 
 		// AdminDBDAO adminDbDao = new AdminDBDAO();
@@ -44,7 +40,7 @@ public class Test {
 
 		// *** CLIENTFACADE TEST ***//
 
-		// TODO: DONE BUT - some arrangements needed
+		// TODO: DONE
 		// will return CouponSystemClientFacade object then an if statement or a
 		// switch should be run to determine the type of the object, here its
 		// hard coded to AdminFacade which should be corrected later on.

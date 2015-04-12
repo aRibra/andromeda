@@ -85,9 +85,9 @@ public class Company {
 
 	@Override
 	public String toString() {
-		return "--(Company)--" + "\n" + "ID=" + id + "\n" + "CompanyName="
-				+ companyName + "\n" + "Password=" + password + "\n" + "Email="
-				+ email + "\n" + "Coupons=" + coupons + "\n" + "Client Type="
-				+ this.clientType + "\n" + "-----------";
+		return "-(Company)-" + " || " + "ID=" + id + " || " + "CompanyName="
+				+ companyName + " || " + "Password=" + password + " || "
+				+ "Email=" + email + " || " + "Coupons=" + coupons + " || "
+				+ "Client Type=" + this.clientType + "\n";
 	}
 }

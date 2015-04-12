@@ -104,10 +104,10 @@ public class Coupon {
 
 	@Override
 	public String toString() {
-		return "--(Coupon)--" + "\n" + "ID=" + id + "\n" + "Title=" + title
-				+ "\n" + "StartDate=" + startDate + "\n" + "EndDate=" + endDate
-				+ "\n" + "Amount=" + amount + "\n" + "Type=" + couponType
-				+ "\n" + "Message=" + message + "\n" + "Price=" + price + "\n"
-				+ "Image=" + image + "\n" + "-----------";
+		return "-(Coupon)-" + " || " + "ID=" + id + " || " + "Title=" + title
+				+ " || " + "StartDate=" + startDate + " || " + "EndDate="
+				+ endDate + " || " + "Amount=" + amount + " || " + "Type="
+				+ couponType + " || " + "Message=" + message + " || "
+				+ "Price=" + price + " || " + "Image=" + image + "\n";
 	}
 }
