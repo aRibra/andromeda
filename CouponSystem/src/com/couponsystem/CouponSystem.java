@@ -13,6 +13,7 @@ public class CouponSystem {
 	private CompanyDAO companyDao;
 	private CouponDAO couponDao;
 	private CustomerDAO customerDao;
+	private DailyCouponExpirationTask task;
 
 	private static CouponSystem couponSystem = new CouponSystem();
 
@@ -20,6 +21,7 @@ public class CouponSystem {
 		adminDao = new AdminDBDAO();
 		companyDao = new CompanyDBDAO();
 		customerDao = new CustomerDBDAO();
+		new Thread(task).run();
 	}
 
 	public static CouponSystem getInstance() {
