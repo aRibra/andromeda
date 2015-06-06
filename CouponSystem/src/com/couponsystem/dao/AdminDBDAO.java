@@ -19,7 +19,6 @@ public class AdminDBDAO implements AdminDAO {
 	@Override
 	public boolean login(String adminName, String password) {
 
-		// connectionPool.getConnection();
 		// make a new thread for every process
 
 		Connection connection = null;

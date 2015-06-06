@@ -17,7 +17,6 @@ public class RemoverThread extends Thread {
 		try {
 			sleep(5000);
 		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 

@@ -9,7 +9,7 @@ public class ConnectionPool {
 
 	private List<Connection> availableConnections, busyConnections;
 	private int initialNumberOfConnections = 10;
-	private int maxNumberOfConnections = 10;
+	private int maxNumberOfConnections;
 	private boolean connectionPending = false;
 	private boolean waitIfBusy = true;
 
@@ -123,6 +123,12 @@ public class ConnectionPool {
 
 	public List<Connection> getBusyConnections() {
 		return this.busyConnections;
+	}
+
+	public void maxNumberOfConnections(int maxNumberOfConnections) {
+		//sets max number of connections
+		this.maxNumberOfConnections = maxNumberOfConnections;
+		
 	}
 
 }
