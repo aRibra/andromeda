@@ -8,12 +8,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.couponsystem.CouponSystem;
 import com.couponsystem.beans.ClientType;
 import com.couponsystem.beans.Company;
 import com.couponsystem.beans.Coupon;
 import com.couponsystem.beans.CouponType;
 import com.couponsystem.connection.ConnectionPool;
 import com.couponsystem.connection.DBConnection;
+import com.couponsystem.exceptions.CouponSystemException;
 
 public class CompanyDBDAO implements CompanyDAO {
 
@@ -24,13 +26,14 @@ public class CompanyDBDAO implements CompanyDAO {
 	}
 
 	@Override
-	public void createCompany(Company company) {
+	public void createCompany(Company company) throws CouponSystemException {
 
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
 
 		PreparedStatement preparedStatement = null;
@@ -62,20 +65,22 @@ public class CompanyDBDAO implements CompanyDAO {
 					preparedStatement.close();
 					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
-					e.printStackTrace();
+					String stackTrace = CouponSystem.getStackTraceAsString(e);
+					throw new CouponSystemException(e.getMessage(), stackTrace);
 				}
 			}
 		}
 	}
 
 	@Override
-	public void removeCompany(Company company) {
+	public void removeCompany(Company company) throws CouponSystemException {
 
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
 
 		PreparedStatement preparedStatement = null;
@@ -92,7 +97,8 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		} catch (SQLException e) {
 
-			System.out.println(e.getMessage());
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 
@@ -101,7 +107,8 @@ public class CompanyDBDAO implements CompanyDAO {
 					preparedStatement.close();
 					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
-					e.printStackTrace();
+					String stackTrace = CouponSystem.getStackTraceAsString(e);
+					throw new CouponSystemException(e.getMessage(), stackTrace);
 				}
 			}
 		}
@@ -109,13 +116,14 @@ public class CompanyDBDAO implements CompanyDAO {
 	}
 
 	@Override
-	public void updateCompany(Company company) {
+	public void updateCompany(Company company) throws CouponSystemException {
 
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
 
 		PreparedStatement preparedStatement = null;
@@ -135,7 +143,8 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		} catch (SQLException e) {
 
-			System.out.println(e.getMessage());
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 
@@ -144,7 +153,8 @@ public class CompanyDBDAO implements CompanyDAO {
 					preparedStatement.close();
 					connection.close();
 				} catch (SQLException e) {
-					e.printStackTrace();
+					String stackTrace = CouponSystem.getStackTraceAsString(e);
+					throw new CouponSystemException(e.getMessage(), stackTrace);
 				}
 			}
 		}
@@ -152,13 +162,14 @@ public class CompanyDBDAO implements CompanyDAO {
 	}
 
 	@Override
-	public Company getCompany(int id) {
+	public Company getCompany(int id) throws CouponSystemException {
 
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
 
 		PreparedStatement preparedStatement = null;
@@ -187,7 +198,8 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		} catch (SQLException e) {
 
-			System.out.println(e.getMessage());
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 
@@ -196,7 +208,8 @@ public class CompanyDBDAO implements CompanyDAO {
 					preparedStatement.close();
 					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
-					e.printStackTrace();
+					String stackTrace = CouponSystem.getStackTraceAsString(e);
+					throw new CouponSystemException(e.getMessage(), stackTrace);
 				}
 			}
 		}
@@ -204,13 +217,14 @@ public class CompanyDBDAO implements CompanyDAO {
 	}
 
 	@Override
-	public Collection<Company> getAllCompaines() {
+	public Collection<Company> getAllCompaines() throws CouponSystemException {
 
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
 		PreparedStatement preparedStatement = null;
 
@@ -244,7 +258,8 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		} catch (SQLException e) {
 
-			System.out.println(e.getMessage());
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 
@@ -257,14 +272,16 @@ public class CompanyDBDAO implements CompanyDAO {
 
 	// DONE TODO: IBRAHIM
 	@Override
-	public Collection<Coupon> getCoupons(Company company) {
+	public Collection<Coupon> getCoupons(Company company)
+			throws CouponSystemException {
 
 		// returns coupons for a specific company
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
 		PreparedStatement preparedStatement = null;
 
@@ -285,8 +302,10 @@ public class CompanyDBDAO implements CompanyDAO {
 
 				coupon.setId(resultSet.getLong("ID"));
 				coupon.setTitle(resultSet.getString("TITLE"));
-				coupon.setStartDate(resultSet.getDate("START_DATE"));
-				coupon.setEndDate(resultSet.getDate("END_DATE"));
+				coupon.setStartDate(new java.util.Date(resultSet.getDate(
+						"START_DATE").getTime()));
+				coupon.setEndDate(new java.util.Date(resultSet.getDate(
+						"END_DATE").getTime()));
 				coupon.setAmount(resultSet.getInt("AMOUNT"));
 				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
 				coupon.setMessage("MESSAGE");
@@ -300,7 +319,8 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		} catch (SQLException e) {
 
-			System.out.println(e.getMessage());
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 
@@ -313,14 +333,16 @@ public class CompanyDBDAO implements CompanyDAO {
 	}
 
 	@Override
-	public boolean login(String compName, String password) {
+	public boolean login(String compName, String password)
+			throws CouponSystemException {
 
 		boolean okToLogin = false;
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
 		try {
 
@@ -346,7 +368,8 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		} catch (SQLException e) {
 
-			System.out.println(e.getMessage());
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 

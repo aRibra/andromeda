@@ -10,6 +10,7 @@ import com.couponsystem.dao.CouponDAO;
 import com.couponsystem.dao.CustomerDAO;
 import com.couponsystem.dao.CustomerDBDAO;
 import com.couponsystem.dao.CouponDBDAO;
+import com.couponsystem.exceptions.CouponSystemException;
 
 public class CustomerFacade implements CouponSystemClientFacade {
 
@@ -24,7 +25,7 @@ public class CustomerFacade implements CouponSystemClientFacade {
 	}
 
 	@Override
-	public boolean login(String name, String password, ClientType clientType) {
+	public boolean login(String name, String password, ClientType clientType) throws CouponSystemException {
 		// TODO: we have to do somthn' with the clientType
 		return customerDao.login(name, password);
 	}
@@ -34,24 +35,24 @@ public class CustomerFacade implements CouponSystemClientFacade {
 		customerDao.updateCustomer(customer);
 	}
 
-	public Collection<Coupon> getCoupons(Customer customer) {
+	public Collection<Coupon> getCoupons(Customer customer) throws CouponSystemException {
 		return customerDao.getCoupons(customer);
 	}
 
 	// DONE - TODO: write method
-	public void purchaseCoupon(Coupon coupon, Customer customer) {
+	public void purchaseCoupon(Coupon coupon, Customer customer) throws CouponSystemException {
 		customerDao.purchaseCoupon(coupon, customer);
 	}
 
 	// DONE - TODO: write method
-	public Collection<Coupon> getAllPurchasedCoupons(Customer customer) {
+	public Collection<Coupon> getAllPurchasedCoupons(Customer customer) throws CouponSystemException {
 		// get them for this precise user
 		return customerDao.getAllPurchasedCoupons(customer);
 	}
 
 	// DONE - TODO: write method
 	public Collection<Coupon> getAllPurchasedCouponsByType(
-			CouponType couponType, Customer customer) {
+			CouponType couponType, Customer customer) throws CouponSystemException {
 		// get them for this precise user
 		return customerDao.getAllPurchasedCouponsByType(couponType, customer);
 	}

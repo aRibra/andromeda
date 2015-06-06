@@ -2,6 +2,9 @@ package com.couponsystem.beans;
 
 import java.util.*;
 
+import com.couponsystem.CouponSystem;
+import com.couponsystem.exceptions.CouponSystemException;
+
 public class Company {
 
 	private long id;
@@ -18,10 +21,10 @@ public class Company {
 		this.clientType = ClientType.COMPANY;
 	}
 
-	public Company(String companyName, String password, String email) {
-		this.companyName = companyName;
-		this.password = password;
-		this.email = email;
+	public Company(String companyName, String password, String email) throws CouponSystemException {
+		setCompanyName(companyName);
+		setPassword(password);
+		setEmail(email);
 		this.coupons = new HashSet<Coupon>();
 		this.clientType = ClientType.COMPANY;
 	}
@@ -39,7 +42,13 @@ public class Company {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(long id) throws CouponSystemException {
+
+		if (id < 0 || id > Long.MAX_VALUE)
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error6"));
+
 		this.id = id;
 	}
 
@@ -47,7 +56,13 @@ public class Company {
 		return companyName;
 	}
 
-	public void setCompanyName(String compName) {
+	public void setCompanyName(String compName) throws CouponSystemException {
+		
+		if(compName == null || compName.isEmpty())
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error7"));
+		
 		this.companyName = compName;
 	}
 
@@ -55,7 +70,13 @@ public class Company {
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(String password) throws CouponSystemException {
+		
+		if(password == null || password.isEmpty())
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error8"));
+		
 		this.password = password;
 	}
 
@@ -63,7 +84,13 @@ public class Company {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public void setEmail(String email) throws CouponSystemException {
+		
+		if(email == null || email.isEmpty() || !email.contains("@"))
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error9"));
+		
 		this.email = email;
 	}
 

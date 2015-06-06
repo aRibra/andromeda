@@ -6,6 +6,7 @@ import com.couponsystem.beans.ClientType;
 import com.couponsystem.beans.Company;
 import com.couponsystem.beans.Customer;
 import com.couponsystem.dao.*;
+import com.couponsystem.exceptions.CouponSystemException;
 
 public class AdminFacade implements CouponSystemClientFacade {
 
@@ -24,23 +25,23 @@ public class AdminFacade implements CouponSystemClientFacade {
 		return adminDbDao.login(name, name);
 	}
 
-	public void createCompany(Company company) {
+	public void createCompany(Company company) throws CouponSystemException {
 		companyDbDao.createCompany(company);
 	}
 
-	public void removeCompany(Company company) {
+	public void removeCompany(Company company) throws CouponSystemException {
 		companyDbDao.removeCompany(company);
 	}
 
-	public void updateCompany(Company company) {
+	public void updateCompany(Company company) throws CouponSystemException {
 		companyDbDao.updateCompany(company);
 	}
 
-	public Company getCompany(int id) {
+	public Company getCompany(int id) throws CouponSystemException {
 		return companyDbDao.getCompany(id);
 	}
 
-	public Collection<Company> getAllCompaines() {
+	public Collection<Company> getAllCompaines() throws CouponSystemException {
 		return companyDbDao.getAllCompaines();
 	}
 
@@ -56,11 +57,11 @@ public class AdminFacade implements CouponSystemClientFacade {
 		customerDbDao.updateCustomer(customer);
 	}
 
-	public Customer getCustomer(int id) {
+	public Customer getCustomer(int id) throws CouponSystemException {
 		return customerDbDao.getCustomer(id);
 	}
 
-	public Collection<Customer> getAllCustomers() {
+	public Collection<Customer> getAllCustomers() throws CouponSystemException {
 		return customerDbDao.getAllCustomers();
 	}
 

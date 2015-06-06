@@ -1,6 +1,10 @@
 package com.couponsystem.beans;
 
-import java.sql.Date;
+import java.util.Date;
+import java.util.Calendar;
+
+import com.couponsystem.CouponSystem;
+import com.couponsystem.exceptions.CouponSystemException;
 
 public class Coupon {
 
@@ -19,14 +23,15 @@ public class Coupon {
 	}
 
 	public Coupon(String title, Date startDate, Date endDate, int amount,
-			CouponType type, String message, double price, String image) {
-		this.title = title;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.amount = amount;
-		this.couponType = type;
+			CouponType type, String message, double price, String image)
+			throws CouponSystemException {
+		setTitle(title);
+		setStartDate(startDate);
+		setEndDate(endDate);
+		setAmount(amount);
+		setType(type);
 		this.message = message;
-		this.price = price;
+		setPrice(price);
 		this.image = image;
 	}
 
@@ -34,7 +39,13 @@ public class Coupon {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(long id) throws CouponSystemException {
+
+		if (id < 0 || id > Long.MAX_VALUE)
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error10"));
+
 		this.id = id;
 	}
 
@@ -42,7 +53,13 @@ public class Coupon {
 		return title;
 	}
 
-	public void setTitle(String title) {
+	public void setTitle(String title) throws CouponSystemException {
+
+		if (title.isEmpty() || title == null)
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error11"));
+
 		this.title = title;
 	}
 
@@ -50,7 +67,20 @@ public class Coupon {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(Date startDate) throws CouponSystemException {
+
+		Date today = new Date();
+		Calendar todayCal = Calendar.getInstance();
+		todayCal.setTime(today);
+
+		Calendar startDateCal = Calendar.getInstance();
+		startDateCal.setTime(startDate);
+
+		if (startDateCal.before(todayCal))
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error12"));
+
 		this.startDate = startDate;
 	}
 
@@ -58,7 +88,20 @@ public class Coupon {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(Date endDate) throws CouponSystemException {
+
+		Date today = new Date();
+		Calendar todayCal = Calendar.getInstance();
+		todayCal.setTime(today);
+
+		Calendar endDateCal = Calendar.getInstance();
+		endDateCal.setTime(endDate);
+
+		if (endDateCal.before(todayCal))
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error13"));
+
 		this.endDate = endDate;
 	}
 
@@ -66,7 +109,13 @@ public class Coupon {
 		return amount;
 	}
 
-	public void setAmount(int amount) {
+	public void setAmount(int amount) throws CouponSystemException {
+
+		if (amount < 0 || amount > Integer.MAX_VALUE)
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error14"));
+
 		this.amount = amount;
 	}
 
@@ -74,7 +123,13 @@ public class Coupon {
 		return couponType;
 	}
 
-	public void setType(CouponType type) {
+	public void setType(CouponType type) throws CouponSystemException {
+
+		if (type == null)
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error15"));
+
 		this.couponType = type;
 	}
 
@@ -90,7 +145,13 @@ public class Coupon {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(double price) throws CouponSystemException {
+
+		if (amount < 0 || price > Double.MAX_VALUE)
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error16"));
+
 		this.price = price;
 	}
 

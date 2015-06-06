@@ -13,30 +13,30 @@ import com.couponsystem.beans.*;
 import com.couponsystem.connection.ConnectionPool;
 import com.couponsystem.connection.DBConnection;
 import com.couponsystem.dao.*;
+import com.couponsystem.exceptions.CouponSystemException;
 import com.couponsystem.facades.*;
 
 public class Test {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws CouponSystemException {
 
 		// *** CONNECTIONPOOL TEST ***//
 
-		ConnectionPool connectionPool = ConnectionPool.getInstance();
+		// ConnectionPool connectionPool = ConnectionPool.getInstance();
 
-		RemoverThread remover = new RemoverThread(connectionPool);
+		// RemoverThread remover = new RemoverThread(connectionPool);
 
-		remover.start();
+		// remover.start();
 
-		List<ConnectionThread> list = new ArrayList<>();
-
-		for (int i = 0; i < 15; i++) {
-			list.add(new ConnectionThread(connectionPool, i));
-			list.get(i).start();
-		}
+		// List<ConnectionThread> list = new ArrayList<>();
+		//
+		// for (int i = 0; i < 15; i++) {
+		// list.add(new ConnectionThread(connectionPool, i));
+		// list.get(i).start();
+		// }
 
 		System.out.println("Wenak 7abeebe wenak.");
 
-		
 		// *** END CONNECTIONPOOL TEST ***//
 
 		// AdminDBDAO adminDbDao = new AdminDBDAO();
@@ -129,13 +129,13 @@ public class Test {
 		Calendar cal = Calendar.getInstance();
 		Date startDate, endDate;
 
-		cal.set(Calendar.YEAR, 2015);
+		cal.set(Calendar.YEAR, 2016);
 		cal.set(Calendar.MONTH, Calendar.JANUARY);
 		cal.set(Calendar.DAY_OF_MONTH, 1);
 
 		startDate = new Date(cal.getTime().getTime());
 
-		cal.set(Calendar.YEAR, 2015);
+		cal.set(Calendar.YEAR, 2016);
 		cal.set(Calendar.MONTH, Calendar.FEBRUARY);
 		cal.set(Calendar.DAY_OF_MONTH, 25);
 
@@ -150,6 +150,9 @@ public class Test {
 				.getAllCouponsByType(CouponType.HEALTH);
 		System.out.println(col);
 		System.out.println(coupondb.getCoupon(6));
+
+		c.setId(99);
+		coupondb.removeCoupon(c);
 
 		System.out.println("*****************");
 
@@ -171,7 +174,7 @@ public class Test {
 
 		CustomerDBDAO customerDb = new CustomerDBDAO();
 
-		Customer c3 = new Customer("Mcdonald's", "1234");
+		Customer c3 = new Customer("Mcdonald's", "1234", ClientType.CUSTOMER);
 
 		// customerDb.createCustomer(c);
 
@@ -199,6 +202,8 @@ public class Test {
 		 * 
 		 * 
 		 */
+
+		couponSystem.shutdownCouponSystem();
 
 	}
 }

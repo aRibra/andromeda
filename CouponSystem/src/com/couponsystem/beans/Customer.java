@@ -2,6 +2,9 @@ package com.couponsystem.beans;
 
 import java.util.*;
 
+import com.couponsystem.CouponSystem;
+import com.couponsystem.exceptions.CouponSystemException;
+
 public class Customer {
 
 	private long id;
@@ -15,11 +18,12 @@ public class Customer {
 		this.clientType = ClientType.CUSTOMER;
 	}
 
-	public Customer(String custName, String password) {
-		this.customerName = custName;
-		this.password = password;
+	public Customer(String custName, String password, ClientType clientType)
+			throws CouponSystemException {
+		setCustomerName(custName);
+		setPassword(password);
 		this.coupons = new HashSet<Coupon>();
-		this.clientType = ClientType.CUSTOMER;
+		setClientType(clientType);
 	}
 
 	public Customer(String custName, String password, Set<Coupon> coupons) {
@@ -33,7 +37,13 @@ public class Customer {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(long id) throws CouponSystemException {
+
+		if (id < 0 || id > Long.MAX_VALUE)
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error17"));
+
 		this.id = id;
 	}
 
@@ -41,7 +51,13 @@ public class Customer {
 		return customerName;
 	}
 
-	public void setCustomerName(String custName) {
+	public void setCustomerName(String custName) throws CouponSystemException {
+
+		if (custName == null || custName.isEmpty())
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error18"));
+
 		this.customerName = custName;
 	}
 
@@ -49,7 +65,14 @@ public class Customer {
 		return clientType;
 	}
 
-	public void setClientType(ClientType clientType) {
+	public void setClientType(ClientType clientType)
+			throws CouponSystemException {
+
+		if (clientType == null)
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error19"));
+
 		this.clientType = clientType;
 	}
 
@@ -57,7 +80,13 @@ public class Customer {
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(String password) throws CouponSystemException {
+
+		if (password == null || password.isEmpty())
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error20"));
+
 		this.password = password;
 	}
 

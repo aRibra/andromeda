@@ -7,12 +7,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.couponsystem.CouponSystem;
 import com.couponsystem.beans.ClientType;
 import com.couponsystem.beans.Coupon;
 import com.couponsystem.beans.CouponType;
 import com.couponsystem.beans.Customer;
 import com.couponsystem.connection.ConnectionPool;
 import com.couponsystem.connection.DBConnection;
+import com.couponsystem.exceptions.CouponSystemException;
 
 public class CustomerDBDAO implements CustomerDAO {
 
@@ -31,7 +33,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
 		String insertSQLQuery = "INSERT INTO CUSTOMER"
@@ -76,7 +78,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
 		String deleteSQLQuery = "DELETE FROM CUSTOMER WHERE ID = ?";
@@ -117,7 +119,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
 		String updateSQL = "UPDATE CUSTOMER SET CUST_NAME = ?, PASSWORD = ? WHERE ID = ?";
@@ -149,7 +151,7 @@ public class CustomerDBDAO implements CustomerDAO {
 	}
 
 	@Override
-	public Customer getCustomer(int id) {
+	public Customer getCustomer(int id) throws CouponSystemException {
 
 		Connection connection = null;
 		try {
@@ -157,7 +159,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
 		Customer customer = new Customer();
@@ -201,13 +203,14 @@ public class CustomerDBDAO implements CustomerDAO {
 	// DONE - TODO: company collection??????? should be Customer. Yes, u r right
 	// bitch!
 	@Override
-	public Collection<Customer> getAllCustomers() {
+	public Collection<Customer> getAllCustomers() throws CouponSystemException {
 
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
 
 		Collection<Customer> customersList = new ArrayList<>();
@@ -238,7 +241,8 @@ public class CustomerDBDAO implements CustomerDAO {
 
 		} catch (SQLException e) {
 
-			e.printStackTrace();
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 
@@ -251,17 +255,19 @@ public class CustomerDBDAO implements CustomerDAO {
 
 	// DONE - TODO: IBRAHIM
 	@Override
-	public Collection<Coupon> getCoupons(Customer customer) {
+	public Collection<Coupon> getCoupons(Customer customer)
+			throws CouponSystemException {
 
 		// retrieve coupons for a specific customer
 
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
 		Collection<Coupon> couponList = new ArrayList<>();
@@ -281,8 +287,10 @@ public class CustomerDBDAO implements CustomerDAO {
 
 				coupon.setId(resultSet.getLong("ID"));
 				coupon.setTitle(resultSet.getString("TITLE"));
-				coupon.setStartDate(resultSet.getDate("START_DATE"));
-				coupon.setEndDate(resultSet.getDate("END_DATE"));
+				coupon.setStartDate(new java.util.Date(resultSet.getDate(
+						"START_DATE").getTime()));
+				coupon.setEndDate(new java.util.Date(resultSet.getDate(
+						"END_DATE").getTime()));
 				coupon.setAmount(resultSet.getInt("AMOUNT"));
 				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
 				coupon.setMessage("MESSAGE");
@@ -296,7 +304,8 @@ public class CustomerDBDAO implements CustomerDAO {
 
 		} catch (SQLException e) {
 
-			System.out.println(e.getMessage());
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 
@@ -309,15 +318,17 @@ public class CustomerDBDAO implements CustomerDAO {
 	}
 
 	@Override
-	public void purchaseCoupon(Coupon coupon, Customer customer) {
+	public void purchaseCoupon(Coupon coupon, Customer customer)
+			throws CouponSystemException {
 
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
 		String insertSQL = "INSERT INTO CUSTOMER_COUPON (CUST_ID, COUPON_ID) VALUES(?,?)";
@@ -336,7 +347,8 @@ public class CustomerDBDAO implements CustomerDAO {
 
 		} catch (SQLException e) {
 
-			System.out.println(e.getMessage());
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 
@@ -345,7 +357,8 @@ public class CustomerDBDAO implements CustomerDAO {
 					preparedStatement.close();
 					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
-					e.printStackTrace();
+					String stackTrace = CouponSystem.getStackTraceAsString(e);
+					throw new CouponSystemException(e.getMessage(), stackTrace);
 				}
 			}
 		}
@@ -353,15 +366,17 @@ public class CustomerDBDAO implements CustomerDAO {
 	}
 
 	@Override
-	public Collection<Coupon> getAllPurchasedCoupons(Customer customer) {
+	public Collection<Coupon> getAllPurchasedCoupons(Customer customer)
+			throws CouponSystemException {
 
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
 		Collection<Coupon> couponList = new ArrayList<>();
@@ -381,8 +396,10 @@ public class CustomerDBDAO implements CustomerDAO {
 
 				coupon.setId(resultSet.getLong("ID"));
 				coupon.setTitle(resultSet.getString("TITLE"));
-				coupon.setStartDate(resultSet.getDate("START_DATE"));
-				coupon.setEndDate(resultSet.getDate("END_DATE"));
+				coupon.setStartDate(new java.util.Date(resultSet.getDate(
+						"START_DATE").getTime()));
+				coupon.setEndDate(new java.util.Date(resultSet.getDate(
+						"END_DATE").getTime()));
 				coupon.setAmount(resultSet.getInt("AMOUNT"));
 				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
 				coupon.setMessage(resultSet.getString("MESSAGE"));
@@ -397,7 +414,8 @@ public class CustomerDBDAO implements CustomerDAO {
 
 		} catch (SQLException e) {
 
-			System.out.println(e.getMessage());
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 
@@ -411,15 +429,17 @@ public class CustomerDBDAO implements CustomerDAO {
 
 	@Override
 	public Collection<Coupon> getAllPurchasedCouponsByType(
-			CouponType couponType, Customer customer) {
+			CouponType couponType, Customer customer)
+			throws CouponSystemException {
 
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
 		Collection<Coupon> couponList = new ArrayList<>();
@@ -440,8 +460,10 @@ public class CustomerDBDAO implements CustomerDAO {
 
 				coupon.setId(resultSet.getLong("ID"));
 				coupon.setTitle(resultSet.getString("TITLE"));
-				coupon.setStartDate(resultSet.getDate("START_DATE"));
-				coupon.setEndDate(resultSet.getDate("END_DATE"));
+				coupon.setStartDate(new java.util.Date(resultSet.getDate(
+						"START_DATE").getTime()));
+				coupon.setEndDate(new java.util.Date(resultSet.getDate(
+						"END_DATE").getTime()));
 				coupon.setAmount(resultSet.getInt("AMOUNT"));
 				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
 				coupon.setMessage(resultSet.getString("MESSAGE"));
@@ -456,7 +478,8 @@ public class CustomerDBDAO implements CustomerDAO {
 
 		} catch (SQLException e) {
 
-			System.out.println(e.getMessage());
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 
@@ -470,15 +493,16 @@ public class CustomerDBDAO implements CustomerDAO {
 
 	@Override
 	public Collection<Coupon> getAllPurchasedCouponsByPrice(Double price,
-			Customer customer) {
+			Customer customer) throws CouponSystemException {
 
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
 		Collection<Coupon> couponList = new ArrayList<>();
@@ -500,8 +524,10 @@ public class CustomerDBDAO implements CustomerDAO {
 
 				coupon.setId(resultSet.getLong("ID"));
 				coupon.setTitle(resultSet.getString("TITLE"));
-				coupon.setStartDate(resultSet.getDate("START_DATE"));
-				coupon.setEndDate(resultSet.getDate("END_DATE"));
+				coupon.setStartDate(new java.util.Date(resultSet.getDate(
+						"START_DATE").getTime()));
+				coupon.setEndDate(new java.util.Date(resultSet.getDate(
+						"END_DATE").getTime()));
 				coupon.setAmount(resultSet.getInt("AMOUNT"));
 				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
 				coupon.setMessage(resultSet.getString("MESSAGE"));
@@ -514,7 +540,8 @@ public class CustomerDBDAO implements CustomerDAO {
 
 		} catch (SQLException e) {
 
-			System.out.println(e.getMessage());
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 
@@ -523,7 +550,8 @@ public class CustomerDBDAO implements CustomerDAO {
 					preparedStatement.close();
 					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
-					e.printStackTrace();
+					String stackTrace = CouponSystem.getStackTraceAsString(e);
+					throw new CouponSystemException(e.getMessage(), stackTrace);
 				}
 			}
 		}
@@ -532,15 +560,17 @@ public class CustomerDBDAO implements CustomerDAO {
 	}
 
 	@Override
-	public boolean login(String custName, String password) {
+	public boolean login(String custName, String password)
+			throws CouponSystemException {
 
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
-		
+
 		PreparedStatement preparedStatement = null;
 
 		// TODO: some sort of encyption should be added
@@ -565,7 +595,8 @@ public class CustomerDBDAO implements CustomerDAO {
 
 		} catch (SQLException e) {
 
-			System.out.println(e.getMessage());
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 

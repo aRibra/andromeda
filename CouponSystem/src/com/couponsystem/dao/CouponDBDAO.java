@@ -1,6 +1,7 @@
 package com.couponsystem.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,11 +9,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.couponsystem.CouponSystem;
 import com.couponsystem.beans.Company;
 import com.couponsystem.beans.Coupon;
 import com.couponsystem.beans.CouponType;
 import com.couponsystem.connection.ConnectionPool;
 import com.couponsystem.connection.DBConnection;
+import com.couponsystem.exceptions.CouponSystemException;
 
 public class CouponDBDAO implements CouponDAO {
 
@@ -23,34 +26,36 @@ public class CouponDBDAO implements CouponDAO {
 	}
 
 	@Override
-	public void createCoupon(Coupon coupon) {
+	public void createCoupon(Coupon coupon) throws CouponSystemException {
 
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
 
 		PreparedStatement preparedStatement = null;
 
 		String insertSQLQuery = "INSERT INTO COUPON"
-				+ "(ID, TITLE, START_DATE, END_DATE, AMOUNT, TYPE, MESSAGE, PRICE, IMAGE) VALUES"
-				+ "(?,?,?,?,?,?,?,?,?)";
+				+ "(TITLE, START_DATE, END_DATE, AMOUNT, TYPE, MESSAGE, PRICE, IMAGE) VALUES"
+				+ "(?,?,?,?,?,?,?,?)";
 
 		try {
 			preparedStatement = connection.prepareStatement(insertSQLQuery);
-			preparedStatement.setLong(1, coupon.getId());
-			preparedStatement.setString(2, coupon.getTitle());
-			preparedStatement.setDate(3, coupon.getStartDate());
-			preparedStatement.setDate(4, coupon.getEndDate());
-			preparedStatement.setInt(5, coupon.getAmount());
+			preparedStatement.setString(1, coupon.getTitle());
+			preparedStatement.setDate(2, new Date(coupon.getStartDate()
+					.getTime()));
+			preparedStatement.setDate(3,
+					new Date(coupon.getEndDate().getTime()));
+			preparedStatement.setInt(4, coupon.getAmount());
 
 			// DONE - TODO: ERROR - set ENUMS ???
-			preparedStatement.setString(6, coupon.getType().name());
-			preparedStatement.setString(7, coupon.getMessage());
-			preparedStatement.setDouble(8, coupon.getPrice());
-			preparedStatement.setString(9, coupon.getImage());
+			preparedStatement.setString(5, coupon.getType().name());
+			preparedStatement.setString(6, coupon.getMessage());
+			preparedStatement.setDouble(7, coupon.getPrice());
+			preparedStatement.setString(8, coupon.getImage());
 
 			preparedStatement.executeUpdate();
 
@@ -58,7 +63,8 @@ public class CouponDBDAO implements CouponDAO {
 
 		} catch (SQLException e) {
 
-			System.out.println(e.getMessage());
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 
@@ -67,7 +73,10 @@ public class CouponDBDAO implements CouponDAO {
 					preparedStatement.close();
 					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
-					e.printStackTrace();
+
+					String stackTrace = CouponSystem.getStackTraceAsString(e);
+					throw new CouponSystemException(e.getMessage(), stackTrace);
+
 				}
 			}
 		}
@@ -75,39 +84,70 @@ public class CouponDBDAO implements CouponDAO {
 	}
 
 	@Override
-	public void removeCoupon(Coupon coupon) {
+	public void removeCoupon(Coupon coupon) throws CouponSystemException {
 
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
+
 		}
 
 		PreparedStatement preparedStatement = null;
-
-		String deleteSQLQuery = "DELETE FROM COUPON WHERE ID = ?";
+		PreparedStatement preparedStatement3 = null;
+		PreparedStatement preparedStatement2 = null;
 
 		try {
+			// Delete Customer_Coupon join
+
+			String deleteSQLQuery = "DELETE FROM customer_coupon WHERE COUPON_ID = ?";
+
 			preparedStatement = connection.prepareStatement(deleteSQLQuery);
 			preparedStatement.setLong(1, coupon.getId());
 			preparedStatement.executeUpdate();
+
+			System.out.println("Record: " + coupon.getId()
+					+ " is deleted from customer_coupon table!");
+
+			// Delete Company_Coupon join
+
+			String deleteSQLQuery2 = "DELETE FROM company_coupon WHERE COUPON_ID = ?";
+
+			preparedStatement2 = connection.prepareStatement(deleteSQLQuery2);
+			preparedStatement2.setLong(1, coupon.getId());
+			preparedStatement2.executeUpdate();
+
+			System.out.println("Record: " + coupon.getId()
+					+ " is deleted from company_coupon table!");
+
+			String deleteSQLQuery3 = "DELETE FROM COUPON WHERE ID = ?";
+
+			preparedStatement3 = connection.prepareStatement(deleteSQLQuery3);
+			preparedStatement3.setLong(1, coupon.getId());
+			preparedStatement3.executeUpdate();
 
 			System.out.println("Record: " + coupon.getId()
 					+ " is deleted from COUPON table!");
 
 		} catch (SQLException e) {
 
-			System.out.println(e.getMessage());
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 
 			if (preparedStatement != null) {
 				try {
 					preparedStatement.close();
+					preparedStatement2.close();
+					preparedStatement3.close();
 					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
-					e.printStackTrace();
+					String stackTrace = CouponSystem.getStackTraceAsString(e);
+					throw new CouponSystemException(e.getMessage(), stackTrace);
 				}
 			}
 		}
@@ -115,13 +155,14 @@ public class CouponDBDAO implements CouponDAO {
 	}
 
 	@Override
-	public void updateCoupon(Coupon coupon) {
+	public void updateCoupon(Coupon coupon) throws CouponSystemException {
 
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
 
 		PreparedStatement preparedStatement = null;
@@ -133,8 +174,10 @@ public class CouponDBDAO implements CouponDAO {
 			preparedStatement = connection.prepareStatement(updateSQL);
 
 			preparedStatement.setString(1, coupon.getTitle());
-			preparedStatement.setDate(2, coupon.getStartDate());
-			preparedStatement.setDate(3, coupon.getEndDate());
+			preparedStatement.setDate(2, new Date(coupon.getStartDate()
+					.getTime()));
+			preparedStatement.setDate(3,
+					new Date(coupon.getEndDate().getTime()));
 			preparedStatement.setInt(4, coupon.getAmount());
 
 			// DONE - TODO: ERROR - set ENUMS ???
@@ -151,7 +194,8 @@ public class CouponDBDAO implements CouponDAO {
 
 		} catch (SQLException e) {
 
-			System.out.println(e.getMessage());
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 
@@ -160,20 +204,22 @@ public class CouponDBDAO implements CouponDAO {
 					preparedStatement.close();
 					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
-					e.printStackTrace();
+					String stackTrace = CouponSystem.getStackTraceAsString(e);
+					throw new CouponSystemException(e.getMessage(), stackTrace);
 				}
 			}
 		}
 	}
 
 	@Override
-	public Coupon getCoupon(int id) {
+	public Coupon getCoupon(int id) throws CouponSystemException {
 
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
 
 		PreparedStatement preparedStatement = null;
@@ -193,8 +239,10 @@ public class CouponDBDAO implements CouponDAO {
 
 				coupon.setId(resultSet.getLong("ID"));
 				coupon.setTitle(resultSet.getString("TITLE"));
-				coupon.setStartDate(resultSet.getDate("START_DATE"));
-				coupon.setEndDate(resultSet.getDate("END_DATE"));
+				coupon.setStartDate(new java.util.Date(resultSet.getDate(
+						"START_DATE").getTime()));
+				coupon.setEndDate(new java.util.Date(resultSet.getDate(
+						"END_DATE").getTime()));
 				coupon.setAmount(resultSet.getInt("AMOUNT"));
 
 				// DONE - TODO: ENUM ERROR
@@ -207,7 +255,8 @@ public class CouponDBDAO implements CouponDAO {
 
 		} catch (SQLException e) {
 
-			System.out.println(e.getMessage());
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 
@@ -216,7 +265,8 @@ public class CouponDBDAO implements CouponDAO {
 					preparedStatement.close();
 					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
-					e.printStackTrace();
+					String stackTrace = CouponSystem.getStackTraceAsString(e);
+					throw new CouponSystemException(e.getMessage(), stackTrace);
 				}
 			}
 		}
@@ -225,17 +275,19 @@ public class CouponDBDAO implements CouponDAO {
 
 	}
 
-	// TODO: IBRAHIM get coupon by enum type???
+	// TODO: DONE IBRAHIM get coupon by enum type???
 	@Override
-	public Collection<Coupon> getAllCouponsByType(CouponType type) {
+	public Collection<Coupon> getAllCouponsByType(CouponType type)
+			throws CouponSystemException {
 
 		// retrieves list of all coupons based on a specific type
 
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
 
 		PreparedStatement preparedStatement = null;
@@ -257,8 +309,10 @@ public class CouponDBDAO implements CouponDAO {
 
 				coupon.setId(resultSet.getLong("ID"));
 				coupon.setTitle(resultSet.getString("TITLE"));
-				coupon.setStartDate(resultSet.getDate("START_DATE"));
-				coupon.setEndDate(resultSet.getDate("END_DATE"));
+				coupon.setStartDate(new java.util.Date(resultSet.getDate(
+						"START_DATE").getTime()));
+				coupon.setEndDate(new java.util.Date(resultSet.getDate(
+						"END_DATE").getTime()));
 				coupon.setAmount(resultSet.getInt("AMOUNT"));
 				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
 				coupon.setMessage(resultSet.getString("MESSAGE"));
@@ -271,7 +325,8 @@ public class CouponDBDAO implements CouponDAO {
 
 		} catch (SQLException e) {
 
-			System.out.println(e.getMessage());
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 
@@ -280,7 +335,8 @@ public class CouponDBDAO implements CouponDAO {
 					preparedStatement.close();
 					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
-					e.printStackTrace();
+					String stackTrace = CouponSystem.getStackTraceAsString(e);
+					throw new CouponSystemException(e.getMessage(), stackTrace);
 				}
 			}
 		}
@@ -289,7 +345,8 @@ public class CouponDBDAO implements CouponDAO {
 	}
 
 	@Override
-	public Collection<Coupon> getCompanyCouponsByType(Company company) {
+	public Collection<Coupon> getCompanyCouponsByType(Company company)
+			throws CouponSystemException {
 
 		// retrieves list of coupons for a specific company based on a specific
 		// type
@@ -297,8 +354,9 @@ public class CouponDBDAO implements CouponDAO {
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
 
 		PreparedStatement preparedStatement = null;
@@ -320,8 +378,10 @@ public class CouponDBDAO implements CouponDAO {
 
 				coupon.setId(resultSet.getLong("ID"));
 				coupon.setTitle(resultSet.getString("TITLE"));
-				coupon.setStartDate(resultSet.getDate("START_DATE"));
-				coupon.setEndDate(resultSet.getDate("END_DATE"));
+				coupon.setStartDate(new java.util.Date(resultSet.getDate(
+						"START_DATE").getTime()));
+				coupon.setEndDate(new java.util.Date(resultSet.getDate(
+						"END_DATE").getTime()));
 				coupon.setAmount(resultSet.getInt("AMOUNT"));
 				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
 				coupon.setMessage(resultSet.getString("MESSAGE"));
@@ -334,7 +394,8 @@ public class CouponDBDAO implements CouponDAO {
 
 		} catch (SQLException e) {
 
-			System.out.println(e.getMessage());
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 
@@ -343,7 +404,8 @@ public class CouponDBDAO implements CouponDAO {
 					preparedStatement.close();
 					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
-					e.printStackTrace();
+					String stackTrace = CouponSystem.getStackTraceAsString(e);
+					throw new CouponSystemException(e.getMessage(), stackTrace);
 				}
 			}
 		}
@@ -352,13 +414,14 @@ public class CouponDBDAO implements CouponDAO {
 	}
 
 	@Override
-	public Collection<Coupon> getAllCoupons() {
+	public Collection<Coupon> getAllCoupons() throws CouponSystemException {
 
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
 
 		PreparedStatement preparedStatement = null;
@@ -378,8 +441,10 @@ public class CouponDBDAO implements CouponDAO {
 
 				coupon.setId(rs.getLong("ID"));
 				coupon.setTitle(rs.getString("TITLE"));
-				coupon.setStartDate(rs.getDate("START_DATE"));
-				coupon.setEndDate(rs.getDate("END_DATE"));
+				coupon.setStartDate(new java.util.Date(rs.getDate("START_DATE")
+						.getTime()));
+				coupon.setEndDate(new java.util.Date(rs.getDate("END_DATE")
+						.getTime()));
 				coupon.setAmount(rs.getInt("AMOUNT"));
 
 				// DONE - TODO: ENUM ERROR
@@ -393,8 +458,9 @@ public class CouponDBDAO implements CouponDAO {
 			}
 
 		} catch (SQLException e) {
-			// we have to remove all printStackTrace() stmnts
-			e.printStackTrace();
+			// DONE :D ^_^ we have to remove all printStackTrace() stmnts
+			String stackTrace = CouponSystem.getStackTraceAsString(e);
+			throw new CouponSystemException(e.getMessage(), stackTrace);
 
 		} finally {
 
@@ -403,7 +469,8 @@ public class CouponDBDAO implements CouponDAO {
 					preparedStatement.close();
 					connectionPool.releaseConnection(connection);
 				} catch (SQLException e) {
-					e.printStackTrace();
+					String stackTrace = CouponSystem.getStackTraceAsString(e);
+					throw new CouponSystemException(e.getMessage(), stackTrace);
 				}
 			}
 		}
