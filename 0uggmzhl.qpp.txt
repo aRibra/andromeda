@@ -1,0 +1,53 @@
+﻿Merge branch 'master' of https://github.com/spac3hit/andromeda
+
+Conflicts:
+	CouponSystem/bin/Test.class
+	CouponSystem/bin/com/couponsystem/beans/Admin.class
+	CouponSystem/bin/com/couponsystem/beans/Company.class
+	CouponSystem/bin/com/couponsystem/beans/Coupon.class
+	CouponSystem/bin/com/couponsystem/beans/Customer.class
+	CouponSystem/bin/com/couponsystem/connection/ConnectionPool.class
+	CouponSystem/bin/com/couponsystem/connection/DBConnection.class
+	CouponSystem/bin/com/couponsystem/dao/AdminDBDAO.class
+	CouponSystem/bin/com/couponsystem/dao/CompanyDAO.class
+	CouponSystem/bin/com/couponsystem/dao/CompanyDBDAO.class
+	CouponSystem/bin/com/couponsystem/dao/CouponDAO.class
+	CouponSystem/bin/com/couponsystem/dao/CouponDBDAO.class
+	CouponSystem/bin/com/couponsystem/dao/CustomerDAO.class
+	CouponSystem/bin/com/couponsystem/dao/CustomerDBDAO.class
+	CouponSystem/bin/com/couponsystem/facades/AdminFacade.class
+	CouponSystem/bin/com/couponsystem/facades/CompanyFacade.class
+	CouponSystem/bin/com/couponsystem/facades/CouponSystemClientFacade.class
+	CouponSystem/bin/com/couponsystem/facades/CustomerFacade.class
+	CouponSystem/src/Test.java
+	CouponSystem/src/com/couponsystem/dao/CompanyDBDAO.java
+	CouponSystem/src/com/couponsystem/dao/CouponDBDAO.java
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch and 'origin/master' have diverged,
+# and have 1 and 2 different commits each, respectively.
+#   (use "git pull" to merge the remote branch into yours)
+#
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	modified:   CouponSystem/src/com/couponsystem/RemoverThread.java
+#	modified:   CouponSystem/src/com/couponsystem/connection/ConnectionPool.java
+#	modified:   CouponSystem/src/com/couponsystem/connection/DBConnection.java
+#	modified:   CouponSystem/src/com/couponsystem/dao/AdminDBDAO.java
+#
+# Untracked files:
+#	CouponSystem/src/CouponSystemExceptionsProperties.java
+#	CouponSystem/src/com/couponsystem/dailytask/
+#	CouponSystem/src/com/couponsystem/exceptions/
+#	CouponSystem/src/resources/
+#
+

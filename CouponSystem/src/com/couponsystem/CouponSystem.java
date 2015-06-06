@@ -46,8 +46,9 @@ public class CouponSystem {
 					.get("couponsystem.exception.error1"));
 		}
 
-		dailyCouponExpirationTask = new DailyCouponExpirationTask();
-		dailyCouponExpirationTask.run();
+		Thread dailyCouponExpirationTask = new Thread(
+				new DailyCouponExpirationTask());
+		dailyCouponExpirationTask.start();
 	}
 
 	public static CouponSystem getInstance() {
