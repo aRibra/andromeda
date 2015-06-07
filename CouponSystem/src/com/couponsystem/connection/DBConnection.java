@@ -19,7 +19,7 @@ public class DBConnection {
 
 		try {
 			String host = "jdbc:mysql://localhost:3306/Coupon_DB";
-			connection = DriverManager.getConnection(host, "root", "");
+			connection = DriverManager.getConnection(host, "root", "root");
 
 		} catch (SQLException e) {
 			System.out.println("Connection Failed! Check output console");

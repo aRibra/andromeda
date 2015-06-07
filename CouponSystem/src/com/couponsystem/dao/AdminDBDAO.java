@@ -5,8 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.couponsystem.beans.Admin;
+import com.couponsystem.beans.ClientType;
+import com.couponsystem.beans.CouponType;
 import com.couponsystem.connection.ConnectionPool;
 import com.couponsystem.connection.DBConnection;
+import com.couponsystem.helper.classes.ClientBucket;
 
 public class AdminDBDAO implements AdminDAO {
 
@@ -17,18 +21,20 @@ public class AdminDBDAO implements AdminDAO {
 	}
 
 	@Override
-	public boolean login(String adminName, String password) {
+	public Admin login(String adminName, String password) {
+		// TODO: return Admin object - change selectSQL query to return all
+		// admin data
 
-		// make a new thread for every process
-
+		Admin admin = null;
 		Connection connection = null;
+
 		try {
 			connection = connectionPool.getConnection();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 
-		String selectSQL = "SELECT ADMIN_NAME, PASSWORD FROM ADMIN";
+		String selectSQL = "SELECT ID, ADMIN_NAME, CLIENT_TYPE, PASSWORD FROM ADMIN";
 
 		try {
 			PreparedStatement preparedStatement = null;
@@ -37,11 +43,17 @@ public class AdminDBDAO implements AdminDAO {
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
+
+				long id = resultSet.getLong("ID");
 				String name = resultSet.getString("ADMIN_NAME");
 				String pwd = resultSet.getString("PASSWORD");
+				ClientType type = ClientType.valueOf(resultSet
+						.getString("CLIENT_TYPE"));
 
 				if (adminName.equals(name) && password.equals(pwd))
-					return true;
+					admin = new Admin(id, name);
+
+				return admin;
 
 			}
 
@@ -57,7 +69,6 @@ public class AdminDBDAO implements AdminDAO {
 				connectionPool.releaseConnection(connection);
 			}
 		}
-		return false;
+		return null;
 	}
-
 }

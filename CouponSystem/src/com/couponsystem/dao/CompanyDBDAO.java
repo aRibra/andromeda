@@ -46,7 +46,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			preparedStatement = connection.prepareStatement(insertSQLQuery);
 
 			preparedStatement.setString(1, company.getCompanyName());
-			preparedStatement.setString(2, company.getPassword());
+			preparedStatement.setString(2, company.getClientPassword());
 			preparedStatement.setString(3, company.getEmail());
 			preparedStatement.setString(4, company.getClientType().name());
 
@@ -89,10 +89,10 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		try {
 			preparedStatement = connection.prepareStatement(deleteSQLQuery);
-			preparedStatement.setLong(1, company.getId());
+			preparedStatement.setLong(1, company.getClientId());
 			preparedStatement.executeUpdate();
 
-			System.out.println("Record: " + company.getId()
+			System.out.println("Record: " + company.getClientId()
 					+ " is deleted from COMPANY table!");
 
 		} catch (SQLException e) {
@@ -133,12 +133,12 @@ public class CompanyDBDAO implements CompanyDAO {
 		try {
 			preparedStatement = connection.prepareStatement(updateSQLQuery);
 			preparedStatement.setString(1, company.getCompanyName());
-			preparedStatement.setString(2, company.getPassword());
+			preparedStatement.setString(2, company.getClientPassword());
 			preparedStatement.setString(3, company.getEmail());
-			preparedStatement.setLong(4, company.getId());
+			preparedStatement.setLong(4, company.getClientId());
 			preparedStatement.executeUpdate();
 
-			System.out.println("Company record ID: " + company.getId()
+			System.out.println("Company record ID: " + company.getClientId()
 					+ " was updated! ");
 
 		} catch (SQLException e) {
@@ -186,10 +186,11 @@ public class CompanyDBDAO implements CompanyDAO {
 
 			while (resultSet.next()) {
 
-				retrievedCompany.setId(resultSet.getLong("ID"));
+				retrievedCompany.setClientId(resultSet.getLong("ID"));
 				retrievedCompany.setCompanyName(resultSet
 						.getString("COMP_NAME"));
-				retrievedCompany.setPassword(resultSet.getString("PASSWORD"));
+				retrievedCompany.setClientPassword(resultSet
+						.getString("PASSWORD"));
 				retrievedCompany.setEmail(resultSet.getString("EMAIL"));
 				retrievedCompany.setClientType(ClientType.valueOf(resultSet
 						.getString("CLIENT_TYPE")));
@@ -242,9 +243,9 @@ public class CompanyDBDAO implements CompanyDAO {
 
 				Company company = new Company();
 
-				company.setId(resultSet.getLong("ID"));
+				company.setClientId(resultSet.getLong("ID"));
 				company.setCompanyName(resultSet.getString("COMP_NAME"));
-				company.setPassword(resultSet.getString("PASSWORD"));
+				company.setClientPassword(resultSet.getString("PASSWORD"));
 				company.setEmail(resultSet.getString("EMAIL"));
 				company.setClientType(ClientType.valueOf(resultSet
 						.getString("CLIENT_TYPE")));
@@ -292,7 +293,7 @@ public class CompanyDBDAO implements CompanyDAO {
 		try {
 
 			preparedStatement = connection.prepareStatement(selectSQLQuery);
-			preparedStatement.setLong(1, company.getId());
+			preparedStatement.setLong(1, company.getClientId());
 
 			ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -333,33 +334,41 @@ public class CompanyDBDAO implements CompanyDAO {
 	}
 
 	@Override
-	public boolean login(String compName, String password)
+	public Company login(String compName, String password)
 			throws CouponSystemException {
+		// TODO: return Company object - change selectSQL query to return all
+		// company data
 
 		boolean okToLogin = false;
+		Company company = null;
 		Connection connection = null;
+
 		try {
 			connection = connectionPool.getConnection();
 		} catch (SQLException e) {
 			String stackTrace = CouponSystem.getStackTraceAsString(e);
 			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
+
 		try {
 
 			Statement statement = connection.createStatement();
 
-			String selectSQLQuery = "SELECT COMP_NAME, PASSWORD FROM COMPANY";
+			String selectSQLQuery = "SELECT ID, COMP_NAME, EMAIL, CLIENT_TYPE, PASSWORD FROM COMPANY";
 
 			ResultSet resultSet = statement.executeQuery(selectSQLQuery);
 
 			while (resultSet.next()) {
 
+				long id = resultSet.getLong("ID");
 				String name = resultSet.getString("COMP_NAME");
+				String email = resultSet.getString("EMAIL");
 				String pwd = resultSet.getString("PASSWORD");
 
 				if (compName.equals(name) && password.equals(pwd)) {
+					company = new Company(id, name, email);
 					okToLogin = true;
-					break;
+					return company;
 				}
 			}
 
@@ -376,10 +385,9 @@ public class CompanyDBDAO implements CompanyDAO {
 			if (connection != null) {
 				connectionPool.releaseConnection(connection);
 
-				return okToLogin;
 			}
 		}
 
-		return okToLogin;
+		return company;
 	}
 }

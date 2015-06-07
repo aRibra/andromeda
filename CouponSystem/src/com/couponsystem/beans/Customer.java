@@ -5,60 +5,64 @@ import java.util.*;
 import com.couponsystem.CouponSystem;
 import com.couponsystem.exceptions.CouponSystemException;
 
-public class Customer {
+public class Customer extends Client {
 
-	private long id;
-	private String customerName;
-	private String password;
 	private Collection<Coupon> coupons;
-	private ClientType clientType;
 
 	public Customer() {
 		this.coupons = new HashSet<Coupon>();
 		this.clientType = ClientType.CUSTOMER;
 	}
 
-	public Customer(String custName, String password, ClientType clientType)
-			throws CouponSystemException {
-		setCustomerName(custName);
-		setPassword(password);
+	public Customer(long id, String customerName) throws CouponSystemException {
+		setClientId(id);
+		setClientName(customerName);
 		this.coupons = new HashSet<Coupon>();
-		setClientType(clientType);
+		this.clientType = ClientType.CUSTOMER;
 	}
 
-	public Customer(String custName, String password, Set<Coupon> coupons) {
-		this.customerName = custName;
-		this.password = password;
+	public Customer(String custName, String password, ClientType clientType)
+			throws CouponSystemException {
+		setClientName(custName);
+		setClientPassword(password);
+		setClientType(clientType);
+		this.coupons = new HashSet<Coupon>();
+	}
+
+	public Customer(String custName, String password, Set<Coupon> coupons)
+			throws CouponSystemException {
+		setClientName(custName);
+		setClientPassword(password);
 		this.coupons = coupons;
 		this.clientType = ClientType.CUSTOMER;
 	}
 
-	public long getId() {
-		return id;
+	public long getClientId() {
+		return this.clientId;
 	}
 
-	public void setId(long id) throws CouponSystemException {
+	public void setClientId(long id) throws CouponSystemException {
 
 		if (id < 0 || id > Long.MAX_VALUE)
 			throw new CouponSystemException(
 					CouponSystem.couponSystemExceptions
 							.get("couponsystem.exception.error17"));
 
-		this.id = id;
+		this.clientId = id;
 	}
 
 	public String getCustomerName() {
-		return customerName;
+		return this.clientName;
 	}
 
-	public void setCustomerName(String custName) throws CouponSystemException {
+	public void setClientName(String custName) throws CouponSystemException {
 
 		if (custName == null || custName.isEmpty())
 			throw new CouponSystemException(
 					CouponSystem.couponSystemExceptions
 							.get("couponsystem.exception.error18"));
 
-		this.customerName = custName;
+		this.clientName = custName;
 	}
 
 	public ClientType getClientType() {
@@ -76,18 +80,18 @@ public class Customer {
 		this.clientType = clientType;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getClientPassword() {
+		return clientPassword;
 	}
 
-	public void setPassword(String password) throws CouponSystemException {
+	public void setClientPassword(String password) throws CouponSystemException {
 
 		if (password == null || password.isEmpty())
 			throw new CouponSystemException(
 					CouponSystem.couponSystemExceptions
 							.get("couponsystem.exception.error20"));
 
-		this.password = password;
+		this.clientPassword = password;
 	}
 
 	public Collection<Coupon> getCoupons() {
@@ -100,9 +104,9 @@ public class Customer {
 
 	@Override
 	public String toString() {
-		return "--(Customer)--" + "\n" + "ID=" + id + "\n" + "CustomerName="
-				+ customerName + "\n" + "Password=" + password + "\n"
-				+ "Coupons=" + coupons + "\n" + "Client Type="
-				+ this.clientType + "\n" + "-----------";
+		return "--(Customer)--" + "\n" + "ID=" + this.clientId + "\n"
+				+ "CustomerName=" + this.clientName + "\n" + "Password="
+				+ this.clientPassword + "\n" + "Coupons=" + this.coupons + "\n"
+				+ "Client Type=" + this.clientType + "\n" + "-----------";
 	}
 }

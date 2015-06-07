@@ -368,7 +368,7 @@ public class CouponDBDAO implements CouponDAO {
 		try {
 
 			preparedStatement = connection.prepareStatement(selectSQLQuery);
-			preparedStatement.setLong(1, company.getId());
+			preparedStatement.setLong(1, company.getClientId());
 
 			ResultSet resultSet = preparedStatement.executeQuery();
 

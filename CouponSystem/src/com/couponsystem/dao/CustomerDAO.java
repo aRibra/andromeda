@@ -1,9 +1,12 @@
 package com.couponsystem.dao;
 
-import java.util.*;
+import java.util.Collection;
 
-import com.couponsystem.beans.*;
+import com.couponsystem.beans.Coupon;
+import com.couponsystem.beans.CouponType;
+import com.couponsystem.beans.Customer;
 import com.couponsystem.exceptions.CouponSystemException;
+import com.couponsystem.helper.classes.ClientBucket;
 
 public interface CustomerDAO {
 
@@ -17,18 +20,23 @@ public interface CustomerDAO {
 
 	public Collection<Customer> getAllCustomers() throws CouponSystemException;
 
-	public Collection<Coupon> getCoupons(Customer customer) throws CouponSystemException;
+	public Collection<Coupon> getCoupons(Customer customer)
+			throws CouponSystemException;
 
-	public void purchaseCoupon(Coupon coupon, Customer customer) throws CouponSystemException;
+	public void purchaseCoupon(Coupon coupon, Customer customer)
+			throws CouponSystemException;
 
-	public Collection<Coupon> getAllPurchasedCoupons(Customer customer) throws CouponSystemException;
+	public Collection<Coupon> getAllPurchasedCoupons(Customer customer)
+			throws CouponSystemException;
 
 	public Collection<Coupon> getAllPurchasedCouponsByType(
-			CouponType couponType, Customer customer) throws CouponSystemException;
+			CouponType couponType, Customer customer)
+			throws CouponSystemException;
 
 	public Collection<Coupon> getAllPurchasedCouponsByPrice(Double price,
 			Customer customer) throws CouponSystemException;
 
-	public boolean login(String companyName, String password) throws CouponSystemException;
+	public Customer login(String companyName, String password)
+			throws CouponSystemException;
 
 }

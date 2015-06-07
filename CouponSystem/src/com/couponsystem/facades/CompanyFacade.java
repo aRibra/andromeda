@@ -2,6 +2,7 @@ package com.couponsystem.facades;
 
 import java.util.Collection;
 
+import com.couponsystem.beans.Admin;
 import com.couponsystem.beans.ClientType;
 import com.couponsystem.beans.Company;
 import com.couponsystem.beans.Coupon;
@@ -10,6 +11,7 @@ import com.couponsystem.dao.CouponDAO;
 import com.couponsystem.dao.CouponDBDAO;
 import com.couponsystem.dao.CompanyDBDAO;
 import com.couponsystem.exceptions.CouponSystemException;
+import com.couponsystem.helper.classes.ClientBucket;
 
 public class CompanyFacade implements CouponSystemClientFacade {
 
@@ -22,10 +24,15 @@ public class CompanyFacade implements CouponSystemClientFacade {
 	}
 
 	@Override
-	public boolean login(String name, String password, ClientType clientType)
-			throws CouponSystemException {
-		// TODO: we have to do somthn' with the clientType
-		return companyDbDao.login(name, name);
+	public ClientBucket login(String name, String password,
+			ClientType clientType) throws CouponSystemException {
+
+		Company company = companyDbDao.login(name, password);
+		ClientBucket clientBucket = new ClientBucket(new CompanyFacade(),
+				company);
+
+		return clientBucket;
+
 	}
 
 	public void createCoupon(Coupon coupon) throws CouponSystemException {

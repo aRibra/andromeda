@@ -44,7 +44,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			preparedStatement = connection.prepareStatement(insertSQLQuery);
 
 			preparedStatement.setString(1, customer.getCustomerName());
-			preparedStatement.setString(2, customer.getPassword());
+			preparedStatement.setString(2, customer.getClientPassword());
 			preparedStatement.setString(3, customer.getClientType().name());
 
 			preparedStatement.executeUpdate();
@@ -86,10 +86,10 @@ public class CustomerDBDAO implements CustomerDAO {
 		try {
 			preparedStatement = connection.prepareStatement(deleteSQLQuery);
 
-			preparedStatement.setLong(1, customer.getId());
+			preparedStatement.setLong(1, customer.getClientId());
 			preparedStatement.executeUpdate();
 
-			System.out.println("Record: " + customer.getId()
+			System.out.println("Record: " + customer.getClientId()
 					+ " is deleted from CUSTOMER table!");
 
 		} catch (SQLException e) {
@@ -128,11 +128,11 @@ public class CustomerDBDAO implements CustomerDAO {
 			preparedStatement = connection.prepareStatement(updateSQL);
 
 			preparedStatement.setString(1, customer.getCustomerName());
-			preparedStatement.setString(2, customer.getPassword());
-			preparedStatement.setLong(3, customer.getId());
+			preparedStatement.setString(2, customer.getClientPassword());
+			preparedStatement.setLong(3, customer.getClientId());
 			preparedStatement.executeUpdate();
 
-			System.out.println("CUSTOMER record ID: " + customer.getId()
+			System.out.println("CUSTOMER record ID: " + customer.getClientId()
 					+ " was updated! ");
 
 			preparedStatement.close();
@@ -175,9 +175,9 @@ public class CustomerDBDAO implements CustomerDAO {
 
 			while (resultSet.next()) {
 
-				customer.setId(resultSet.getLong("ID"));
-				customer.setCustomerName(resultSet.getString("CUST_NAME"));
-				customer.setPassword(resultSet.getString("PASSWORD"));
+				customer.setClientId(resultSet.getLong("ID"));
+				customer.setClientName(resultSet.getString("CUST_NAME"));
+				customer.setClientPassword(resultSet.getString("PASSWORD"));
 				customer.setClientType(ClientType.valueOf(resultSet
 						.getString("CLIENT_TYPE")));
 
@@ -227,9 +227,9 @@ public class CustomerDBDAO implements CustomerDAO {
 
 				Customer customer = new Customer();
 
-				customer.setId(resultSet.getLong("ID"));
-				customer.setCustomerName(resultSet.getString("CUST_NAME"));
-				customer.setPassword(resultSet.getString("PASSWORD"));
+				customer.setClientId(resultSet.getLong("ID"));
+				customer.setClientName(resultSet.getString("CUST_NAME"));
+				customer.setClientPassword(resultSet.getString("PASSWORD"));
 				customer.setClientType(ClientType.valueOf(resultSet
 						.getString("CLIENT_TYPE")));
 
@@ -277,7 +277,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		try {
 
 			preparedStatement = connection.prepareStatement(selectSQL);
-			preparedStatement.setLong(1, customer.getId());
+			preparedStatement.setLong(1, customer.getClientId());
 
 			ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -338,7 +338,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			preparedStatement = connection.prepareStatement(insertSQL);
 
 			preparedStatement.setLong(1, coupon.getId());
-			preparedStatement.setLong(2, customer.getId());
+			preparedStatement.setLong(2, customer.getClientId());
 
 			preparedStatement.executeUpdate();
 
@@ -386,7 +386,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		try {
 
 			preparedStatement = connection.prepareStatement(selectSQL);
-			preparedStatement.setLong(1, customer.getId());
+			preparedStatement.setLong(1, customer.getClientId());
 
 			ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -449,7 +449,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		try {
 
 			preparedStatement = connection.prepareStatement(selectSQL);
-			preparedStatement.setLong(1, customer.getId());
+			preparedStatement.setLong(1, customer.getClientId());
 			preparedStatement.setString(2, couponType.name());
 
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -513,7 +513,7 @@ public class CustomerDBDAO implements CustomerDAO {
 
 			preparedStatement = connection.prepareStatement(selectSQL);
 
-			preparedStatement.setLong(1, customer.getId());
+			preparedStatement.setLong(1, customer.getClientId());
 			preparedStatement.setDouble(2, price);
 
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -560,10 +560,14 @@ public class CustomerDBDAO implements CustomerDAO {
 	}
 
 	@Override
-	public boolean login(String custName, String password)
+	public Customer login(String custName, String password)
 			throws CouponSystemException {
+		// TODO: return Customer object - change selectSQL query to return all
+		// customer data
 
+		Customer customer = null;
 		Connection connection = null;
+		
 		try {
 			connection = connectionPool.getConnection();
 		} catch (SQLException e) {
@@ -574,7 +578,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		PreparedStatement preparedStatement = null;
 
 		// TODO: some sort of encyption should be added
-		String selectSQL = "SELECT CUST_NAME, PASSWORD FROM CUSTOMER";
+		String selectSQL = "SELECT ID, CUST_NAME, PASSWORD FROM CUSTOMER";
 
 		try {
 
@@ -583,11 +587,14 @@ public class CustomerDBDAO implements CustomerDAO {
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
+				
+				long id = resultSet.getLong("ID");
 				String name = resultSet.getString("CUST_NAME");
 				String pwd = resultSet.getString("PASSWORD");
 
 				if (custName.equals(name) && password.equals(pwd))
-					return true;
+					customer = new Customer(id, name);
+					return customer;
 
 			}
 
@@ -604,7 +611,7 @@ public class CustomerDBDAO implements CustomerDAO {
 				connectionPool.releaseConnection(connection);
 			}
 		}
-		return false;
+		return null;
 	}
 
 }

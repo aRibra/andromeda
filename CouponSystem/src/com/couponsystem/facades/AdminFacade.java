@@ -2,27 +2,34 @@ package com.couponsystem.facades;
 
 import java.util.Collection;
 
+import com.couponsystem.beans.Admin;
 import com.couponsystem.beans.ClientType;
 import com.couponsystem.beans.Company;
 import com.couponsystem.beans.Customer;
 import com.couponsystem.dao.*;
 import com.couponsystem.exceptions.CouponSystemException;
+import com.couponsystem.helper.classes.ClientBucket;
 
 public class AdminFacade implements CouponSystemClientFacade {
 
 	private CompanyDAO companyDbDao;
 	private CustomerDAO customerDbDao;
-	private AdminDAO adminDbDao;
+	private AdminDBDAO adminDbDao;
 
 	public AdminFacade() {
+		adminDbDao = new AdminDBDAO();
 		companyDbDao = new CompanyDBDAO();
 		customerDbDao = new CustomerDBDAO();
 	}
 
 	@Override
-	public boolean login(String name, String password, ClientType clientType) {
+	public ClientBucket login(String name, String password, ClientType clientType) {
 		// TODO: we have to do somthn' with the clientType
-		return adminDbDao.login(name, name);
+		
+		Admin admin = adminDbDao.login(name, password);
+		ClientBucket clientBucket = new ClientBucket(new AdminFacade(), admin);
+		
+		return clientBucket;
 	}
 
 	public void createCompany(Company company) throws CouponSystemException {

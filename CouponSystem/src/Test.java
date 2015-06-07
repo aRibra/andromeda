@@ -1,20 +1,13 @@
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.List;
 
-import com.couponsystem.ConnectionThread;
 import com.couponsystem.CouponSystem;
-import com.couponsystem.RemoverThread;
 import com.couponsystem.beans.*;
-import com.couponsystem.connection.ConnectionPool;
-import com.couponsystem.connection.DBConnection;
 import com.couponsystem.dao.*;
 import com.couponsystem.exceptions.CouponSystemException;
 import com.couponsystem.facades.*;
+import com.couponsystem.helper.classes.ClientBucket;
 
 public class Test {
 
@@ -54,21 +47,29 @@ public class Test {
 
 		CouponSystem couponSystem = CouponSystem.getInstance();
 
-		CouponSystemClientFacade client = couponSystem.login("ibrahim", "root",
-				ClientType.ADMIN);
+		ClientBucket clientBucket = couponSystem.login("Wall Mart", "1234",
+				ClientType.CUSTOMER);
 
-		// just for testing purposes
-		AdminFacade adminClient = null;
+		AdminFacade adminFacade = null;
+		CompanyFacade companyFacade = null;
+		CustomerFacade customerFacade = null;
 
-		if (client instanceof AdminFacade) {
-			adminClient = (AdminFacade) client;
-		} else if (client instanceof CompanyFacade) {
-			CompanyFacade companyClient = (CompanyFacade) client;
-		} else if (client instanceof CustomerFacade) {
-			CustomerFacade custometFacade = (CustomerFacade) client;
+		Admin admin = null;
+		Company company = null;
+		Customer customer = null;
+
+		if (clientBucket.getFacade() instanceof AdminFacade) {
+			adminFacade = (AdminFacade) clientBucket.getFacade();
+		} else if (clientBucket.getFacade() instanceof CompanyFacade) {
+			companyFacade = (CompanyFacade) clientBucket.getFacade();
+			company = (Company) clientBucket.getClient();
+		} else if (clientBucket.getFacade() instanceof CustomerFacade) {
+			customerFacade = (CustomerFacade) clientBucket.getFacade();
+			customer = (Customer) clientBucket.getClient();
 		}
 
-		System.out.println(adminClient.getCustomer(3));
+		System.out.println(".--.--.--.--.--.--.--.--.--.--.--."
+				+ customerFacade.getAllPurchasedCoupons(customer));
 
 		System.out
 				.println("*******admin-client-retrieved-a-customer**********");
@@ -182,9 +183,9 @@ public class Test {
 
 		// customerDb.removeCustomer(c);
 
-		c3.setCustomerName("Wall Mart");
+		c3.setClientName("Wall Mart");
 
-		c3.setId(2);
+		c3.setClientId(2);
 
 		customerDb.updateCustomer(c3);
 

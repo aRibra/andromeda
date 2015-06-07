@@ -3,6 +3,7 @@ package com.couponsystem.facades;
 import java.util.Collection;
 
 import com.couponsystem.beans.ClientType;
+import com.couponsystem.beans.Company;
 import com.couponsystem.beans.Coupon;
 import com.couponsystem.beans.CouponType;
 import com.couponsystem.beans.Customer;
@@ -11,6 +12,7 @@ import com.couponsystem.dao.CustomerDAO;
 import com.couponsystem.dao.CustomerDBDAO;
 import com.couponsystem.dao.CouponDBDAO;
 import com.couponsystem.exceptions.CouponSystemException;
+import com.couponsystem.helper.classes.ClientBucket;
 
 public class CustomerFacade implements CouponSystemClientFacade {
 
@@ -25,9 +27,15 @@ public class CustomerFacade implements CouponSystemClientFacade {
 	}
 
 	@Override
-	public boolean login(String name, String password, ClientType clientType) throws CouponSystemException {
-		// TODO: we have to do somthn' with the clientType
-		return customerDao.login(name, password);
+	public ClientBucket login(String name, String password,
+			ClientType clientType) throws CouponSystemException {
+
+		Customer customer = customerDao.login(name, password);
+		ClientBucket clientBucket = new ClientBucket(new CustomerFacade(),
+				customer);
+
+		return clientBucket;
+
 	}
 
 	public void updateCustomer(Customer customer) {
@@ -35,24 +43,28 @@ public class CustomerFacade implements CouponSystemClientFacade {
 		customerDao.updateCustomer(customer);
 	}
 
-	public Collection<Coupon> getCoupons(Customer customer) throws CouponSystemException {
+	public Collection<Coupon> getCoupons(Customer customer)
+			throws CouponSystemException {
 		return customerDao.getCoupons(customer);
 	}
 
 	// DONE - TODO: write method
-	public void purchaseCoupon(Coupon coupon, Customer customer) throws CouponSystemException {
+	public void purchaseCoupon(Coupon coupon, Customer customer)
+			throws CouponSystemException {
 		customerDao.purchaseCoupon(coupon, customer);
 	}
 
 	// DONE - TODO: write method
-	public Collection<Coupon> getAllPurchasedCoupons(Customer customer) throws CouponSystemException {
+	public Collection<Coupon> getAllPurchasedCoupons(Customer customer)
+			throws CouponSystemException {
 		// get them for this precise user
 		return customerDao.getAllPurchasedCoupons(customer);
 	}
 
 	// DONE - TODO: write method
 	public Collection<Coupon> getAllPurchasedCouponsByType(
-			CouponType couponType, Customer customer) throws CouponSystemException {
+			CouponType couponType, Customer customer)
+			throws CouponSystemException {
 		// get them for this precise user
 		return customerDao.getAllPurchasedCouponsByType(couponType, customer);
 	}
