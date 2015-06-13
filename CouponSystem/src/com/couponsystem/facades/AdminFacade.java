@@ -2,6 +2,7 @@ package com.couponsystem.facades;
 
 import java.util.Collection;
 
+import com.couponsystem.CouponSystem;
 import com.couponsystem.beans.Admin;
 import com.couponsystem.beans.ClientType;
 import com.couponsystem.beans.Company;
@@ -23,12 +24,20 @@ public class AdminFacade implements CouponSystemClientFacade {
 	}
 
 	@Override
-	public ClientBucket login(String name, String password, ClientType clientType) {
+	public ClientBucket login(String name, String password,
+			ClientType clientType) throws CouponSystemException {
 		// TODO: we have to do somthn' with the clientType
-		
+
 		Admin admin = adminDbDao.login(name, password);
+
+		if (admin == null) {
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error19"));
+		}
+
 		ClientBucket clientBucket = new ClientBucket(new AdminFacade(), admin);
-		
+
 		return clientBucket;
 	}
 

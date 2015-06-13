@@ -368,12 +368,13 @@ public class CompanyDBDAO implements CompanyDAO {
 				if (compName.equals(name) && password.equals(pwd)) {
 					company = new Company(id, name, email);
 					okToLogin = true;
-					return company;
 				}
 			}
 
 			resultSet.close();
 			statement.close();
+
+			return company;
 
 		} catch (SQLException e) {
 
@@ -388,6 +389,5 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		}
 
-		return company;
 	}
 }

@@ -2,6 +2,7 @@ package com.couponsystem.facades;
 
 import java.util.Collection;
 
+import com.couponsystem.CouponSystem;
 import com.couponsystem.beans.Admin;
 import com.couponsystem.beans.ClientType;
 import com.couponsystem.beans.Company;
@@ -28,6 +29,13 @@ public class CompanyFacade implements CouponSystemClientFacade {
 			ClientType clientType) throws CouponSystemException {
 
 		Company company = companyDbDao.login(name, password);
+
+		if (company == null) {
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error19"));
+		}
+
 		ClientBucket clientBucket = new ClientBucket(new CompanyFacade(),
 				company);
 

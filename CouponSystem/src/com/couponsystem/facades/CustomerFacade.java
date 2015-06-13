@@ -2,6 +2,7 @@ package com.couponsystem.facades;
 
 import java.util.Collection;
 
+import com.couponsystem.CouponSystem;
 import com.couponsystem.beans.ClientType;
 import com.couponsystem.beans.Company;
 import com.couponsystem.beans.Coupon;
@@ -31,6 +32,13 @@ public class CustomerFacade implements CouponSystemClientFacade {
 			ClientType clientType) throws CouponSystemException {
 
 		Customer customer = customerDao.login(name, password);
+
+		if (customer == null) {
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error19"));
+		}
+
 		ClientBucket clientBucket = new ClientBucket(new CustomerFacade(),
 				customer);
 

@@ -567,7 +567,7 @@ public class CustomerDBDAO implements CustomerDAO {
 
 		Customer customer = null;
 		Connection connection = null;
-		
+
 		try {
 			connection = connectionPool.getConnection();
 		} catch (SQLException e) {
@@ -587,18 +587,20 @@ public class CustomerDBDAO implements CustomerDAO {
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				
+
 				long id = resultSet.getLong("ID");
 				String name = resultSet.getString("CUST_NAME");
 				String pwd = resultSet.getString("PASSWORD");
 
-				if (custName.equals(name) && password.equals(pwd))
+				if (custName.equals(name) && password.equals(pwd)) {
 					customer = new Customer(id, name);
-					return customer;
+				}
 
 			}
 
 			preparedStatement.close();
+
+			return customer;
 
 		} catch (SQLException e) {
 
@@ -611,7 +613,6 @@ public class CustomerDBDAO implements CustomerDAO {
 				connectionPool.releaseConnection(connection);
 			}
 		}
-		return null;
 	}
 
 }

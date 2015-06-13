@@ -28,6 +28,8 @@ public class AdminDBDAO implements AdminDAO {
 		Admin admin = null;
 		Connection connection = null;
 
+		PreparedStatement preparedStatement = null;
+		
 		try {
 			connection = connectionPool.getConnection();
 		} catch (SQLException e1) {
@@ -37,7 +39,7 @@ public class AdminDBDAO implements AdminDAO {
 		String selectSQL = "SELECT ID, ADMIN_NAME, CLIENT_TYPE, PASSWORD FROM ADMIN";
 
 		try {
-			PreparedStatement preparedStatement = null;
+			
 			preparedStatement = connection.prepareStatement(selectSQL);
 
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -52,12 +54,12 @@ public class AdminDBDAO implements AdminDAO {
 
 				if (adminName.equals(name) && password.equals(pwd))
 					admin = new Admin(id, name);
-
-				return admin;
-
+			
 			}
-
+			
 			preparedStatement.close();
+			
+			return admin;
 
 		} catch (SQLException e) {
 
@@ -66,6 +68,7 @@ public class AdminDBDAO implements AdminDAO {
 		} finally {
 
 			if (connection != null) {
+				
 				connectionPool.releaseConnection(connection);
 			}
 		}
