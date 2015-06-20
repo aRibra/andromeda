@@ -32,7 +32,7 @@
 
 	<!-- <filter-mapping> -->
 	<!-- <filter-name>LoginFilter</filter-name> -->
-	<!-- <url-pattern>/rest/login-service/login/*</url-pattern> -->
+	<!-- <url-pattern>/rest/*</url-pattern> -->
 	<!-- </filter-mapping> -->
 
 	<!-- <filter> -->

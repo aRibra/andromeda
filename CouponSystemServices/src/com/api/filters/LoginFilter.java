@@ -56,7 +56,8 @@ public class LoginFilter implements Filter {
 
 		if (request.getMethod().equals("GET")
 				|| request.getMethod().equals("get")) {
-			response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+			//response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+			//response.setHeader(arg0, arg1); [error code : SC_METHOD_NOT_ALLOWED]
 		} else {
 
 			String clientType = request.getParameter("client-type");
