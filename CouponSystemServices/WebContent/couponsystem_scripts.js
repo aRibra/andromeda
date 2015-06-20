@@ -2,6 +2,19 @@
  * CouponSystem Scripts
  */
 
+function setDates() {
+
+	var now = new Date();
+	var year = now.getFullYear();
+	var month = now.getMonth();
+	var day = now.getDate();
+
+	$(".day").attr("min", day);
+	$(".month").attr("min", month);
+	$(".year").attr("min", year);
+
+}
+
 function createCompanyRequest() {
 
 	var formData = $('form[name="create_company_form"]').serialize();
@@ -76,7 +89,7 @@ function getAllCompaines() {
 
 					var header = "<table border ='1'> <tr> <th>ID</th> <th>Company Name</th> <th>Email</th> <th>Client Type </th> <th>Remove Company</th> <th>Update Company</th> </tr> </table>";
 					$('#get_allcompanies_result').append(header);
-					
+
 					var content = "";
 
 					$
@@ -109,15 +122,15 @@ function getAllCompaines() {
 												+ "<td>"
 												+ element.clientType
 												+ "</td>"
-												
+
 												+ "<td>"
-												
+
 												+ "<input type='button' onclick='removeCompany("
 												+ element.clientId
 												+ ")' value='Remove Company' />"
-												
+
 												+ "</td>"
-												
+
 												+ "<td>"
 												+ "<input id='update_button"
 												+ element.clientId
@@ -127,11 +140,9 @@ function getAllCompaines() {
 												+ "</td>"
 												+ "</tr>"
 												+ "</table>" + "</form>";
-										$('#get_allcompanies_result').append(content);
+										$('#get_allcompanies_result').append(
+												content);
 									});
-
-					
-					
 
 				},
 				error : function(jqXHR, textStatus, errorThrown) {
@@ -144,7 +155,7 @@ function getAllCompaines() {
 
 function removeCompany(id) {
 
-	formData = "COMP_ID="+id;
+	formData = "COMP_ID=" + id;
 
 	$.ajax({
 		url : "rest/admin_service/remove_company",
@@ -262,7 +273,8 @@ function getAllCustomers() {
 
 	var formData = $('form[name="get_allcustomers_form"]').serialize();
 
-	$.ajax({
+	$
+			.ajax({
 				url : "rest/admin_service/get_all_customers",
 				type : "POST",
 				data : formData,
@@ -272,10 +284,12 @@ function getAllCustomers() {
 
 					var header = "<table border ='1'> <tr> <th>ID</th> <th>Customer Name</th> <th>Client Type </th> <th>Remove Customer</th> <th>Update Customer</th> </tr> </table>";
 					$('#get_allcustomers_result').append(header);
-					
+
 					var content = "";
-					
-					$.each(data.customer,
+
+					$
+							.each(
+									data.customer,
 									function(index, element) {
 
 										content = "";
@@ -299,11 +313,11 @@ function getAllCustomers() {
 												+ element.clientType
 												+ "</td>"
 												+ "<td>"
-												
+
 												+ "<input type='button' onclick='removeCustomer("
 												+ element.clientId
 												+ ")' value='Remove Customer' />"
-												
+
 												+ "</td>"
 												+ "<td>"
 												+ "<input id='customer_update_button"
@@ -314,10 +328,10 @@ function getAllCustomers() {
 												+ "</td>"
 												+ "</tr>"
 												+ "</table>" + "</form>";
-										
-										$('#get_allcustomers_result').append(content);
-									});
 
+										$('#get_allcustomers_result').append(
+												content);
+									});
 
 				},
 				error : function(jqXHR, textStatus, errorThrown) {
@@ -342,8 +356,7 @@ function unlockReadOnlyForCsutomer(id) {
 
 function removeCustomer(id) {
 
-	
-	var formData = "CUSTOMER_ID="+id;
+	var formData = "CUSTOMER_ID=" + id;
 
 	$.ajax({
 		url : "rest/admin_service/remove_customer",
@@ -365,7 +378,7 @@ function removeCustomer(id) {
 }
 
 function updateCustomer(id) {
-	
+
 	var formName = "form[name=update_customer_form" + id + "]";
 	formData = $(formName).serialize();
 

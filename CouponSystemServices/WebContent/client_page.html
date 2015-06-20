@@ -7,12 +7,12 @@
 
 
 <script src="couponsystem_scripts.js">
-	
 </script>
+
 
 <title>Coupon System - Client Page</title>
 </head>
-<body>
+<body onload="setDates()">
 
 	<h1>Client Page</h1>
 
@@ -38,7 +38,7 @@
 		<h2>Get Company</h2>
 		<form name="get_company_form">
 
-			<br /> Company ID: &nbsp; <input type="number" name="COMP_ID" /> <br />
+			<br /> Company ID: &nbsp; <input type="number" name="COMP_ID" min="0"/> <br />
 			<input type ="button" value="Get Company" onclick="getCompanyRequest()" />
 
 			<div id="get_company_result"></div>
@@ -100,6 +100,32 @@
 	<div id="company-div">
 
 		<h1>Company Space</h1>
+		
+		<br />
+		<h2>Create Coupon</h2>
+		<form name="create_company_form" method="POST" action="rest/company_service/create_coupon">
+		 
+			<br /> Coupon tile: &nbsp; <input type="text" name="TITLE" />
+			
+			<br /> Coupon Start Date:&nbsp;Year:<input type="number" name="START_DATE_YEAR" class="year" min="???"  max="3000"> 
+					Month:<input type="number" name="START_DATE_MONTH" class="month" min="???" max="12">
+					Day:<input type="number" name="START_DATE_DAY" class="day" min="???" max="31">
+			
+			<br /> Coupon End Date:&nbsp;Year:<input type="number" name="END_DATE_YEAR" class="year"  min="???" max="3000"> 
+				Month:<input type="number" name="END_DATE_MONTH" class="month" min="???" max="12">
+				Day:<input type="number" name="END_DATE_DAY" class="day" min="???" max="31">
+			
+			<br /> Coupon Amount: &nbsp; <input type="number" name="AMOUNT" min="0"/>
+			<br /> Coupon Type:&nbsp;<input type="text" name="TYPE" /> 
+			<br /> Coupon Message:&nbsp;<input type="text" name="MESSAGE" /> 
+			<br /> Coupon Price: &nbsp; <input type="number" name="PRICE" min="0"/>
+			<br /> Coupon Image:&nbsp;<input type="text" name="IMAGE" /> 
+			
+			<br /> <input type="submit" value="Create Coupon" onclick="createCoupon()" />
+
+		</form>
+
+		<hr />
 
 	</div>
 
