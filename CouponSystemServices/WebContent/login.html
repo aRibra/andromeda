@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<!-- LOG IN PAGE -->
+
+	<div id="login_div">
+
+		<form method="post" action="rest/login-service/login">
+			
+			<input type="hidden" id="login" name="login" value="login" />
+			
+			Client Type:
+			<br /> <input type="radio" name="client-type" id="type" value="ADMIN"/> &nbsp; Admin
+			<br /> <input type="radio" name="client-type" id="type" value="COMPANY"/> &nbsp; Company
+			<br /> <input type="radio" name="client-type" id="type" value="CUSTOMER"/> &nbsp; Customer
+			
+			<br /> Name: &nbsp; <input type="text" name="clientName" id="name" />  
+			<br /> Password:&nbsp;<input type="password" name="clientPassword" id="password" /> 
+			<br /> <input type="submit" value="Log In" />
+			
+		</form>
+
+	</div>
+
+</body>
+</html>
