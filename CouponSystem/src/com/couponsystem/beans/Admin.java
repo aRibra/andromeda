@@ -1,10 +1,15 @@
 package com.couponsystem.beans;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.couponsystem.CouponSystem;
 import com.couponsystem.exceptions.CouponSystemException;
 
+@XmlRootElement
 public class Admin extends Client {
 
+	
 	private ClientType clientType;
 
 	public Admin(long adminId, String adminName) {

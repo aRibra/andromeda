@@ -73,7 +73,7 @@ public class CompanyDBDAO implements CompanyDAO {
 	}
 
 	@Override
-	public void removeCompany(Company company) throws CouponSystemException {
+	public void removeCompany(int id) throws CouponSystemException {
 
 		Connection connection = null;
 		try {
@@ -89,10 +89,10 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		try {
 			preparedStatement = connection.prepareStatement(deleteSQLQuery);
-			preparedStatement.setLong(1, company.getClientId());
+			preparedStatement.setLong(1, id);
 			preparedStatement.executeUpdate();
 
-			System.out.println("Record: " + company.getClientId()
+			System.out.println("Record: " + id
 					+ " is deleted from COMPANY table!");
 
 		} catch (SQLException e) {
@@ -128,14 +128,13 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		PreparedStatement preparedStatement = null;
 
-		String updateSQLQuery = "UPDATE COMPANY SET COMP_NAME = ?, PASSWORD = ?, EMAIL = ? WHERE ID = ?";
+		String updateSQLQuery = "UPDATE COMPANY SET COMP_NAME = ?, EMAIL = ? WHERE ID = ?";
 
 		try {
 			preparedStatement = connection.prepareStatement(updateSQLQuery);
 			preparedStatement.setString(1, company.getCompanyName());
-			preparedStatement.setString(2, company.getClientPassword());
-			preparedStatement.setString(3, company.getEmail());
-			preparedStatement.setLong(4, company.getClientId());
+			preparedStatement.setString(2, company.getEmail());
+			preparedStatement.setLong(3, company.getClientId());
 			preparedStatement.executeUpdate();
 
 			System.out.println("Company record ID: " + company.getClientId()
@@ -176,7 +175,7 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		Company retrievedCompany = new Company();
 
-		String selectSQLQuery = "SELECT ID, COMP_NAME, PASSWORD, EMAIL, CLIENT_TYPE FROM COMPANY WHERE ID = ?";
+		String selectSQLQuery = "SELECT ID, COMP_NAME, EMAIL, CLIENT_TYPE FROM COMPANY WHERE ID = ?";
 
 		try {
 			preparedStatement = connection.prepareStatement(selectSQLQuery);
@@ -189,8 +188,6 @@ public class CompanyDBDAO implements CompanyDAO {
 				retrievedCompany.setClientId(resultSet.getLong("ID"));
 				retrievedCompany.setCompanyName(resultSet
 						.getString("COMP_NAME"));
-				retrievedCompany.setClientPassword(resultSet
-						.getString("PASSWORD"));
 				retrievedCompany.setEmail(resultSet.getString("EMAIL"));
 				retrievedCompany.setClientType(ClientType.valueOf(resultSet
 						.getString("CLIENT_TYPE")));
@@ -231,7 +228,7 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		Collection<Company> companyList = new ArrayList<>();
 
-		String selectSQLQuery = "SELECT ID, COMP_NAME, PASSWORD, EMAIL, CLIENT_TYPE FROM COMPANY";
+		String selectSQLQuery = "SELECT ID, COMP_NAME, EMAIL, CLIENT_TYPE FROM COMPANY";
 
 		try {
 
@@ -245,7 +242,6 @@ public class CompanyDBDAO implements CompanyDAO {
 
 				company.setClientId(resultSet.getLong("ID"));
 				company.setCompanyName(resultSet.getString("COMP_NAME"));
-				company.setClientPassword(resultSet.getString("PASSWORD"));
 				company.setEmail(resultSet.getString("EMAIL"));
 				company.setClientType(ClientType.valueOf(resultSet
 						.getString("CLIENT_TYPE")));
@@ -273,7 +269,7 @@ public class CompanyDBDAO implements CompanyDAO {
 
 	// DONE TODO: IBRAHIM
 	@Override
-	public Collection<Coupon> getCoupons(Company company)
+	public Collection<Coupon> getCoupons(int companyId)
 			throws CouponSystemException {
 
 		// returns coupons for a specific company
@@ -293,7 +289,7 @@ public class CompanyDBDAO implements CompanyDAO {
 		try {
 
 			preparedStatement = connection.prepareStatement(selectSQLQuery);
-			preparedStatement.setLong(1, company.getClientId());
+			preparedStatement.setLong(1, companyId);
 
 			ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -368,6 +364,7 @@ public class CompanyDBDAO implements CompanyDAO {
 				if (compName.equals(name) && password.equals(pwd)) {
 					company = new Company(id, name, email);
 					okToLogin = true;
+					return company;
 				}
 			}
 

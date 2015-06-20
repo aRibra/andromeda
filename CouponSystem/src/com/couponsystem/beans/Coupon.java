@@ -3,9 +3,12 @@ package com.couponsystem.beans;
 import java.util.Date;
 import java.util.Calendar;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.couponsystem.CouponSystem;
 import com.couponsystem.exceptions.CouponSystemException;
 
+@XmlRootElement
 public class Coupon {
 
 	private long id;
@@ -69,17 +72,10 @@ public class Coupon {
 
 	public void setStartDate(Date startDate) throws CouponSystemException {
 
-		Date today = new Date();
-		Calendar todayCal = Calendar.getInstance();
-		todayCal.setTime(today);
-
-		Calendar startDateCal = Calendar.getInstance();
-		startDateCal.setTime(startDate);
-
-		if (startDateCal.before(todayCal))
+		if (startDate == null)
 			throw new CouponSystemException(
 					CouponSystem.couponSystemExceptions
-							.get("couponsystem.exception.error12"));
+							.get("couponsystem.exception.error20"));
 
 		this.startDate = startDate;
 	}
@@ -90,17 +86,10 @@ public class Coupon {
 
 	public void setEndDate(Date endDate) throws CouponSystemException {
 
-		Date today = new Date();
-		Calendar todayCal = Calendar.getInstance();
-		todayCal.setTime(today);
-
-		Calendar endDateCal = Calendar.getInstance();
-		endDateCal.setTime(endDate);
-
-		if (endDateCal.before(todayCal))
+		if (endDate == null)
 			throw new CouponSystemException(
 					CouponSystem.couponSystemExceptions
-							.get("couponsystem.exception.error13"));
+							.get("couponsystem.exception.error21"));
 
 		this.endDate = endDate;
 	}

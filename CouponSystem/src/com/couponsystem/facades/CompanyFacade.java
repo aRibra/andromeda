@@ -61,9 +61,9 @@ public class CompanyFacade implements CouponSystemClientFacade {
 
 	}
 
-	public Collection<Coupon> getCoupons(Company company)
+	public Collection<Coupon> getCoupons(int companyId)
 			throws CouponSystemException {
-		return companyDbDao.getCoupons(company);
+		return companyDbDao.getCoupons(companyId);
 	}
 
 	public Collection<Coupon> getCouponByType(Company company)

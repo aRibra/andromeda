@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,6 +28,23 @@ public class CouponDBDAO implements CouponDAO {
 
 	@Override
 	public void createCoupon(Coupon coupon) throws CouponSystemException {
+
+		// Before creating Check coupon start and end dates are not before
+		// today.
+
+		java.util.Date today = new java.util.Date();
+		Calendar todayCal = Calendar.getInstance();
+		todayCal.setTime(today);
+
+		Calendar startDateCal = Calendar.getInstance();
+		Calendar endDateCal = Calendar.getInstance();
+		startDateCal.setTime(coupon.getStartDate());
+		endDateCal.setTime(coupon.getEndDate());
+
+		if (startDateCal.before(todayCal) || endDateCal.before(todayCal))
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error12"));
 
 		Connection connection = null;
 		try {
@@ -156,6 +174,27 @@ public class CouponDBDAO implements CouponDAO {
 
 	@Override
 	public void updateCoupon(Coupon coupon) throws CouponSystemException {
+
+		// Before updating Check coupon start and end dates are not before
+		// today.
+
+		java.util.Date today = new java.util.Date();
+		Calendar todayCal = Calendar.getInstance();
+		todayCal.setTime(today);
+
+		Calendar startDateCal = Calendar.getInstance();
+		Calendar endDateCal = Calendar.getInstance();
+		startDateCal.setTime(coupon.getStartDate());
+		endDateCal.setTime(coupon.getEndDate());
+
+		if (startDateCal.before(todayCal))
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error12"));
+		else if (endDateCal.before(todayCal))
+			throw new CouponSystemException(
+					CouponSystem.couponSystemExceptions
+							.get("couponsystem.exception.error13"));
 
 		Connection connection = null;
 		try {

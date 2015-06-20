@@ -70,7 +70,7 @@ public class CustomerDBDAO implements CustomerDAO {
 	}
 
 	@Override
-	public void removeCustomer(Customer customer) {
+	public void removeCustomer(int id) {
 
 		Connection connection = null;
 		try {
@@ -86,10 +86,10 @@ public class CustomerDBDAO implements CustomerDAO {
 		try {
 			preparedStatement = connection.prepareStatement(deleteSQLQuery);
 
-			preparedStatement.setLong(1, customer.getClientId());
+			preparedStatement.setLong(1, id);
 			preparedStatement.executeUpdate();
 
-			System.out.println("Record: " + customer.getClientId()
+			System.out.println("Record: " + id
 					+ " is deleted from CUSTOMER table!");
 
 		} catch (SQLException e) {
@@ -215,7 +215,7 @@ public class CustomerDBDAO implements CustomerDAO {
 
 		Collection<Customer> customersList = new ArrayList<>();
 
-		String selectSQLQuery = "SELECT ID, CUST_NAME, PASSWORD, CLIENT_TYPE FROM CUSTOMER";
+		String selectSQLQuery = "SELECT ID, CUST_NAME, CLIENT_TYPE FROM CUSTOMER";
 
 		try {
 			PreparedStatement preparedStatement = null;
@@ -229,7 +229,6 @@ public class CustomerDBDAO implements CustomerDAO {
 
 				customer.setClientId(resultSet.getLong("ID"));
 				customer.setClientName(resultSet.getString("CUST_NAME"));
-				customer.setClientPassword(resultSet.getString("PASSWORD"));
 				customer.setClientType(ClientType.valueOf(resultSet
 						.getString("CLIENT_TYPE")));
 

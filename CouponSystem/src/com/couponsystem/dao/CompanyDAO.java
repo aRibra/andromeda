@@ -9,7 +9,7 @@ public interface CompanyDAO {
 
 	public void createCompany(Company company) throws CouponSystemException;
 
-	public void removeCompany(Company company) throws CouponSystemException;
+	public void removeCompany(int id) throws CouponSystemException;
 
 	public void updateCompany(Company company) throws CouponSystemException;
 
@@ -17,8 +17,10 @@ public interface CompanyDAO {
 
 	public Collection<Company> getAllCompaines() throws CouponSystemException;
 
-	public Collection<Coupon> getCoupons(Company company) throws CouponSystemException;
+	public Collection<Coupon> getCoupons(int companyId)
+			throws CouponSystemException;
 
-	public Company login(String companyName, String password) throws CouponSystemException;
+	public Company login(String companyName, String password)
+			throws CouponSystemException;
 
 }

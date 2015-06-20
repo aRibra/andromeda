@@ -1,8 +1,12 @@
 package com.couponsystem.beans;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.couponsystem.CouponSystem;
 import com.couponsystem.exceptions.CouponSystemException;
 
+@XmlRootElement
 public class Client {
 
 	protected long clientId;

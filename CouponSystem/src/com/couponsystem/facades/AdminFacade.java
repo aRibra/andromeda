@@ -45,8 +45,8 @@ public class AdminFacade implements CouponSystemClientFacade {
 		companyDbDao.createCompany(company);
 	}
 
-	public void removeCompany(Company company) throws CouponSystemException {
-		companyDbDao.removeCompany(company);
+	public void removeCompany(int id) throws CouponSystemException {
+		companyDbDao.removeCompany(id);
 	}
 
 	public void updateCompany(Company company) throws CouponSystemException {
@@ -65,8 +65,8 @@ public class AdminFacade implements CouponSystemClientFacade {
 		customerDbDao.createCustomer(customer);
 	}
 
-	public void removeCustomer(Customer customer) {
-		customerDbDao.removeCustomer(customer);
+	public void removeCustomer(int id) {
+		customerDbDao.removeCustomer(id);
 	}
 
 	public void updateCustomer(Customer customer) {

@@ -2,9 +2,13 @@ package com.couponsystem.beans;
 
 import java.util.*;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.couponsystem.CouponSystem;
 import com.couponsystem.exceptions.CouponSystemException;
 
+@XmlRootElement
 public class Customer extends Client {
 
 	private Collection<Coupon> coupons;
@@ -14,6 +18,13 @@ public class Customer extends Client {
 		this.clientType = ClientType.CUSTOMER;
 	}
 
+	public Customer(String customerName, String password) throws CouponSystemException {
+		setClientName(customerName);
+		setClientPassword(password);
+		this.coupons = new HashSet<Coupon>();
+		this.clientType = ClientType.CUSTOMER;
+	}
+	
 	public Customer(long id, String customerName) throws CouponSystemException {
 		setClientId(id);
 		setClientName(customerName);

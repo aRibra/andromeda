@@ -1,10 +1,16 @@
 package com.couponsystem.beans;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.couponsystem.CouponSystem;
 import com.couponsystem.exceptions.CouponSystemException;
 
+@XmlRootElement
 public class Company extends Client {
 
 	private String email;
