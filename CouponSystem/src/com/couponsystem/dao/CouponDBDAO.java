@@ -384,7 +384,7 @@ public class CouponDBDAO implements CouponDAO {
 	}
 
 	@Override
-	public Collection<Coupon> getCompanyCouponsByType(Company company)
+	public Collection<Coupon> getCompanyCouponsByType(long id, CouponType type)
 			throws CouponSystemException {
 
 		// retrieves list of coupons for a specific company based on a specific
@@ -402,12 +402,13 @@ public class CouponDBDAO implements CouponDAO {
 
 		Collection<Coupon> couponList = new ArrayList<>();
 
-		String selectSQLQuery = "SELECT * FROM COUPON cpn INNER JOIN company_coupon cc ON cpn.ID = cc.COUPON_ID AND cc.COMP_ID = ?";
+		String selectSQLQuery = "SELECT * FROM COUPON cpn INNER JOIN company_coupon cc ON cpn.ID = cc.COUPON_ID AND cc.COMP_ID = ? AND cpn.type = ?";
 
 		try {
 
 			preparedStatement = connection.prepareStatement(selectSQLQuery);
-			preparedStatement.setLong(1, company.getClientId());
+			preparedStatement.setLong(1, id);
+			preparedStatement.setString(2, type.name());
 
 			ResultSet resultSet = preparedStatement.executeQuery();
 

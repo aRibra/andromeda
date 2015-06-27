@@ -18,13 +18,14 @@ public class Customer extends Client {
 		this.clientType = ClientType.CUSTOMER;
 	}
 
-	public Customer(String customerName, String password) throws CouponSystemException {
+	public Customer(String customerName, String password)
+			throws CouponSystemException {
 		setClientName(customerName);
 		setClientPassword(password);
 		this.coupons = new HashSet<Coupon>();
 		this.clientType = ClientType.CUSTOMER;
 	}
-	
+
 	public Customer(long id, String customerName) throws CouponSystemException {
 		setClientId(id);
 		setClientName(customerName);

@@ -43,18 +43,16 @@ public class AdminService {
 			@FormParam("EMAIL") String email) throws JSONException,
 			CouponSystemException {
 
-		// AdminFacade adminFacade = null;
-		// ClientBucket clientBucket = null;
 		Company company = new Company(companyName, password, email);
 
-		// HttpSession session = request.getSession(true);
-		// clientBucket = (ClientBucket) session.getAttribute("clientBucket");
-		//
-		// adminFacade = (AdminFacade) clientBucket.getFacade();
-		// adminFacade.createCompany(company);
+		AdminFacade adminFacade = null;
+		ClientBucket clientBucket = null;
 
-		AdminFacade admin = new AdminFacade();
-		admin.createCompany(company);
+		HttpSession session = request.getSession(false);
+
+		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
+		adminFacade = (AdminFacade) clientBucket.getFacade();
+		adminFacade.createCompany(company);
 
 		JSONObject jsonResponse = new JSONObject();
 		jsonResponse.put("success", true);
@@ -69,15 +67,14 @@ public class AdminService {
 	public Company getCompany(@FormParam("COMP_ID") String companyId)
 			throws JSONException, CouponSystemException {
 
-		// HttpSession session = request.getSession(true);
-		// clientBucket = (ClientBucket) session.getAttribute("clientBucket");
-		//
-		// adminFacade = (AdminFacade) clientBucket.getFacade();
-		// adminFacade.createCompany(company);
+		AdminFacade adminFacade = null;
+		ClientBucket clientBucket = null;
 
-		AdminFacade admin = new AdminFacade();
+		HttpSession session = request.getSession(true);
+		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
+		adminFacade = (AdminFacade) clientBucket.getFacade();
 
-		Company company = admin.getCompany(Integer.parseInt(companyId));
+		Company company = adminFacade.getCompany(Integer.parseInt(companyId));
 
 		return company;
 	}
@@ -88,15 +85,14 @@ public class AdminService {
 	public Collection<Company> getAllCompaines() throws JSONException,
 			CouponSystemException {
 
-		// HttpSession session = request.getSession(true);
-		// clientBucket = (ClientBucket) session.getAttribute("clientBucket");
-		//
-		// adminFacade = (AdminFacade) clientBucket.getFacade();
-		// adminFacade.createCompany(company);
+		AdminFacade adminFacade = null;
+		ClientBucket clientBucket = null;
 
-		AdminFacade admin = new AdminFacade();
+		HttpSession session = request.getSession(true);
+		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
+		adminFacade = (AdminFacade) clientBucket.getFacade();
 
-		Collection<Company> companies = admin.getAllCompaines();
+		Collection<Company> companies = adminFacade.getAllCompaines();
 
 		return companies;
 	}
@@ -107,14 +103,14 @@ public class AdminService {
 	public JSONObject removeCompany(@FormParam("COMP_ID") int companyId)
 			throws JSONException, CouponSystemException {
 
-		// HttpSession session = request.getSession(true);
-		// clientBucket = (ClientBucket) session.getAttribute("clientBucket");
-		//
-		// adminFacade = (AdminFacade) clientBucket.getFacade();
-		// adminFacade.createCompany(company);
+		AdminFacade adminFacade = null;
+		ClientBucket clientBucket = null;
 
-		AdminFacade admin = new AdminFacade();
-		admin.removeCompany(companyId);
+		HttpSession session = request.getSession(true);
+		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
+		adminFacade = (AdminFacade) clientBucket.getFacade();
+
+		adminFacade.removeCompany(companyId);
 
 		JSONObject jsonResponse = new JSONObject();
 		jsonResponse.put("success", true);
@@ -131,17 +127,17 @@ public class AdminService {
 			@FormParam("EMAIL") String email) throws JSONException,
 			CouponSystemException {
 
-		// HttpSession session = request.getSession(true);
-		// clientBucket = (ClientBucket) session.getAttribute("clientBucket");
-		//
-		// adminFacade = (AdminFacade) clientBucket.getFacade();
-		// adminFacade.createCompany(company);
+		AdminFacade adminFacade = null;
+		ClientBucket clientBucket = null;
 
-		AdminFacade admin = new AdminFacade();
+		HttpSession session = request.getSession(true);
+		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
+
+		adminFacade = (AdminFacade) clientBucket.getFacade();
 
 		Company company = new Company(id, companyName, email);
 		company.setClientId(id);
-		admin.updateCompany(company);
+		adminFacade.updateCompany(company);
 
 		JSONObject jsonResponse = new JSONObject();
 		jsonResponse.put("success", true);
@@ -158,15 +154,15 @@ public class AdminService {
 			@FormParam("PASSWORD") String password) throws JSONException,
 			CouponSystemException {
 
-		// HttpSession session = request.getSession(true);
-		// clientBucket = (ClientBucket) session.getAttribute("clientBucket");
-		//
-		// adminFacade = (AdminFacade) clientBucket.getFacade();
-		// adminFacade.createCompany(company);
+		AdminFacade adminFacade = null;
+		ClientBucket clientBucket = null;
 
-		AdminFacade admin = new AdminFacade();
+		HttpSession session = request.getSession(true);
+		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
+		adminFacade = (AdminFacade) clientBucket.getFacade();
+
 		Customer customer = new Customer(customerName, password);
-		admin.createCustomer(customer);
+		adminFacade.createCustomer(customer);
 
 		JSONObject jsonResponse = new JSONObject();
 		jsonResponse.put("success", true);
@@ -181,14 +177,14 @@ public class AdminService {
 	public Customer getCustomer(@FormParam("CUSTOMER_ID") int id)
 			throws JSONException, CouponSystemException {
 
-		// HttpSession session = request.getSession(true);
-		// clientBucket = (ClientBucket) session.getAttribute("clientBucket");
-		//
-		// adminFacade = (AdminFacade) clientBucket.getFacade();
-		// adminFacade.createCompany(company);
+		AdminFacade adminFacade = null;
+		ClientBucket clientBucket = null;
 
-		AdminFacade admin = new AdminFacade();
-		Customer customer = admin.getCustomer(id);
+		HttpSession session = request.getSession(true);
+		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
+		adminFacade = (AdminFacade) clientBucket.getFacade();
+
+		Customer customer = adminFacade.getCustomer(id);
 
 		return customer;
 	}
@@ -199,14 +195,14 @@ public class AdminService {
 	public JSONObject removeCustomer(@FormParam("CUSTOMER_ID") int id)
 			throws JSONException, CouponSystemException {
 
-		// HttpSession session = request.getSession(true);
-		// clientBucket = (ClientBucket) session.getAttribute("clientBucket");
-		//
-		// adminFacade = (AdminFacade) clientBucket.getFacade();
-		// adminFacade.createCompany(company);
+		AdminFacade adminFacade = null;
+		ClientBucket clientBucket = null;
 
-		AdminFacade admin = new AdminFacade();
-		admin.removeCustomer(id);
+		HttpSession session = request.getSession(true);
+		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
+		adminFacade = (AdminFacade) clientBucket.getFacade();
+
+		adminFacade.removeCustomer(id);
 
 		JSONObject jsonResponse = new JSONObject();
 		jsonResponse.put("success", true);
@@ -221,15 +217,14 @@ public class AdminService {
 	public Collection<Customer> getAllCustomers() throws JSONException,
 			CouponSystemException {
 
-		// HttpSession session = request.getSession(true);
-		// clientBucket = (ClientBucket) session.getAttribute("clientBucket");
-		//
-		// adminFacade = (AdminFacade) clientBucket.getFacade();
-		// adminFacade.createCompany(company);
+		AdminFacade adminFacade = null;
+		ClientBucket clientBucket = null;
 
-		AdminFacade admin = new AdminFacade();
+		HttpSession session = request.getSession(true);
+		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
+		adminFacade = (AdminFacade) clientBucket.getFacade();
 
-		Collection<Customer> customers = admin.getAllCustomers();
+		Collection<Customer> customers = adminFacade.getAllCustomers();
 
 		return customers;
 	}
@@ -247,17 +242,16 @@ public class AdminService {
 			@FormParam("CUSTOMER_NAME") String customerName)
 			throws JSONException, CouponSystemException {
 
-		// HttpSession session = request.getSession(true);
-		// clientBucket = (ClientBucket) session.getAttribute("clientBucket");
-		//
-		// adminFacade = (AdminFacade) clientBucket.getFacade();
-		// adminFacade.createCompany(company);
+		AdminFacade adminFacade = null;
+		ClientBucket clientBucket = null;
 
-		AdminFacade admin = new AdminFacade();
+		HttpSession session = request.getSession(true);
+		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
+		adminFacade = (AdminFacade) clientBucket.getFacade();
 
 		Customer customer = new Customer(id, customerName);
 		customer.setClientId(id);
-		admin.updateCustomer(customer);
+		adminFacade.updateCustomer(customer);
 
 		JSONObject jsonResponse = new JSONObject();
 		jsonResponse.put("success", true);

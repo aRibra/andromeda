@@ -7,6 +7,7 @@ import com.couponsystem.beans.Admin;
 import com.couponsystem.beans.ClientType;
 import com.couponsystem.beans.Company;
 import com.couponsystem.beans.Coupon;
+import com.couponsystem.beans.CouponType;
 import com.couponsystem.dao.CompanyDAO;
 import com.couponsystem.dao.CouponDAO;
 import com.couponsystem.dao.CouponDBDAO;
@@ -67,9 +68,9 @@ public class CompanyFacade implements CouponSystemClientFacade {
 	}
 
 	// TODO: should pass id, couponType paramters
-	public Collection<Coupon> getCouponByType(Company company)
+	public Collection<Coupon> getCouponByType(long id, CouponType type)
 			throws CouponSystemException {
-		return couponDbDao.getCompanyCouponsByType(company);
+		return couponDbDao.getCompanyCouponsByType(id, type);
 	}
 
 }

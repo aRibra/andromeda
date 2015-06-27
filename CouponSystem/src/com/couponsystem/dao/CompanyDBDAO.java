@@ -5,8 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 import com.couponsystem.CouponSystem;
 import com.couponsystem.beans.ClientType;
@@ -267,7 +271,6 @@ public class CompanyDBDAO implements CompanyDAO {
 		return companyList;
 	}
 
-	// DONE TODO: IBRAHIM
 	@Override
 	public Collection<Coupon> getCoupons(int companyId)
 			throws CouponSystemException {
@@ -284,7 +287,7 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		Collection<Coupon> couponList = new ArrayList<>();
 
-		String selectSQLQuery = "SELECT CPN.* FROM COUPON CPN INNER JOIN COMPANY_COUPON CC ON CPN.ID = CC.COUPON_ID AND CC.COMP_ID = ?";
+		String selectSQLQuery = "SELECT CPN.ID, CPN.TITLE, DATE_FORMAT(CPN.START_DATE, \"%d/%l/%Y\") AS START_DATE, DATE_FORMAT(CPN.END_DATE, \"%d/%l/%Y\") AS END_DATE, CPN.AMOUNT, CPN.TYPE, CPN.PRICE, CPN.MESSAGE, CPN.IMAGE  FROM COUPON CPN INNER JOIN COMPANY_COUPON CC ON CPN.ID = CC.COUPON_ID AND CC.COMP_ID = ?";
 
 		try {
 
@@ -293,19 +296,28 @@ public class CompanyDBDAO implements CompanyDAO {
 
 			ResultSet resultSet = preparedStatement.executeQuery();
 
+			DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy",
+					Locale.ENGLISH);
+
 			while (resultSet.next()) {
 
 				Coupon coupon = new Coupon();
 
 				coupon.setId(resultSet.getLong("ID"));
 				coupon.setTitle(resultSet.getString("TITLE"));
-				coupon.setStartDate(new java.util.Date(resultSet.getDate(
-						"START_DATE").getTime()));
-				coupon.setEndDate(new java.util.Date(resultSet.getDate(
-						"END_DATE").getTime()));
+
+				java.util.Date date = dateFormatter.parse(resultSet
+						.getString("START_DATE"));
+				
+				coupon.setStartDate(date);
+
+				date = dateFormatter.parse(resultSet.getString("END_DATE"));
+				coupon.setEndDate(date);
+
 				coupon.setAmount(resultSet.getInt("AMOUNT"));
 				coupon.setType(CouponType.valueOf(resultSet.getString("TYPE")));
-				coupon.setMessage("MESSAGE");
+				coupon.setPrice(resultSet.getDouble("PRICE"));
+				coupon.setMessage(resultSet.getString("MESSAGE"));
 				coupon.setImage("IMAGE");
 
 				couponList.add(coupon);
@@ -319,6 +331,8 @@ public class CompanyDBDAO implements CompanyDAO {
 			String stackTrace = CouponSystem.getStackTraceAsString(e);
 			throw new CouponSystemException(e.getMessage(), stackTrace);
 
+		} catch (ParseException e) {
+			e.printStackTrace();
 		} finally {
 
 			if (connection != null) {
@@ -332,7 +346,7 @@ public class CompanyDBDAO implements CompanyDAO {
 	@Override
 	public Company login(String compName, String password)
 			throws CouponSystemException {
-		// TODO: return Company object - change selectSQL query to return all
+		// TODOs: return Company object - change selectSQL query to return all
 		// company data
 
 		boolean okToLogin = false;

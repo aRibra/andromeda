@@ -9,9 +9,6 @@ import com.couponsystem.exceptions.CouponSystemException;
 @XmlRootElement
 public class Admin extends Client {
 
-	
-	private ClientType clientType;
-
 	public Admin(long adminId, String adminName) {
 		this.clientId = adminId;
 		this.clientName = adminName;

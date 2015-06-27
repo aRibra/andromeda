@@ -40,43 +40,18 @@ public class SessionFilter implements Filter {
 		HttpSession session = ((HttpServletRequest) req).getSession(false);
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
-		
-		 String uri = request.getRequestURI();
-		 String logIn = request.getParameter("login") == null ? "" : request
-		 .getParameter("login");
-		 response.setHeader("Cache-Control",
-		 "private, no-store, no-cache, must-revalidate");
-		
-		 if (uri.equals("/CouponSystemServices/login.html") && session !=
-		 null) {
-		
-		 // TODO: if session attribute is set and user is logged in,
-		 // redirect to client page with his info.
-		
-		 if (session.getAttribute("loggedIn").equals(Boolean.TRUE)) {
-		 // TODO: here return json object
-		 // TODO: and if client requested another services he cant do, an
-		 // error message should appea.
-		 response.sendRedirect(request.getContextPath()
-		 + "/client_page.html");
-		 }
-		
-		 } else if (uri.equals("/CouponSystemServices/login.html")
-		 && session == null) {
-		
-		 chain.doFilter(req, res);
-		
-		 } else if (logIn.equals("login")) {
-		
-		 chain.doFilter(req, res);
-		
-		 } else if (session == null) {
-		 response.sendRedirect(request.getContextPath() + "/login.html");
-		 }
 
-		System.out.println("before hand ...");
-		chain.doFilter(request, response);
-		System.out.println("after hand ...");
+		
+		if (session == null && request.getRequestURI().contains("/rest/login-service")) {
+			chain.doFilter(req, res);
+		} else if (session != null && request.getRequestURI().contains("/rest/login-service")) {
+			response.sendRedirect(request.getContextPath() + "/client_page.html");
+		} else if (session == null) {
+			response.sendRedirect(request.getContextPath() + "/login.html");
+		} else if(session != null) {
+			chain.doFilter(req, res);
+		}
+		
 	}
 
 	/**

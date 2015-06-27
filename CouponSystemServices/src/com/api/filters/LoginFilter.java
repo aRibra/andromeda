@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.couponsystem.beans.ClientType;
+import com.couponsystem.helper.classes.ClientBucket;
+
 /**
  * Servlet Filter implementation class LoginFilter
  */
@@ -43,35 +46,52 @@ public class LoginFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 
-		// TODO: // send success=false message in json
-		// JSONObject jo = new JSONObject();
-		// jo.put("firstName", "John");
-		// jo.put("lastName", "Doe");
-		//
-		// JSONArray ja = new JSONArray();
-		// ja.put(jo);
-		//
-		// JSONObject mainObj = new JSONObject();
-		// mainObj.put("employees", ja);
+		System.out.println("in login");
 
-		if (request.getMethod().equals("GET")
-				|| request.getMethod().equals("get")) {
-			//response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-			//response.setHeader(arg0, arg1); [error code : SC_METHOD_NOT_ALLOWED]
-		} else {
+		if (session == null) {
+			chain.doFilter(req, res);
 
-			String clientType = request.getParameter("client-type");
-			String clientName = request.getParameter("clientName");
-			String clientPassword = request.getParameter("clientPassword");
+		} else if (session != null
+				&& request.getRequestURI().contains("client_page.html")) {
+			chain.doFilter(req, res);
+		} else if (session != null) {
 
-			if (clientType.isEmpty() || clientName.isEmpty()
-					|| clientPassword.isEmpty()) {
-				response.sendRedirect(request.getContextPath() + "/login.html");
+			String uri = request.getRequestURI();
+			ClientType clientType = null;
+
+			ClientBucket clientBucket = (ClientBucket) session
+					.getAttribute("clientBucket");
+			clientType = clientBucket.getClient().getClientType();
+
+			switch (clientType) {
+			case ADMIN:
+				if (uri.contains("/admin_service")) {
+					chain.doFilter(req, res);
+				}
+				response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+				break;
+
+			case COMPANY:
+				if (uri.contains("/company_service")) {
+					chain.doFilter(req, res);
+				}
+				response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+				break;
+
+			case CUSTOMER:
+				if (uri.contains("/customer_service")) {
+					chain.doFilter(req, res);
+				}
+				response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+				break;
+
+			default:
+				response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+				break;
 			}
 
-			chain.doFilter(req, res);
-			
 		}
+
 	}
 
 	/**

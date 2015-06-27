@@ -19,6 +19,6 @@ public interface CouponDAO {
 
 	public Collection<Coupon> getAllCouponsByType(CouponType type) throws CouponSystemException;
 
-	public Collection<Coupon> getCompanyCouponsByType(Company company) throws CouponSystemException;
+	public Collection<Coupon> getCompanyCouponsByType(long id, CouponType type) throws CouponSystemException;
 
 }

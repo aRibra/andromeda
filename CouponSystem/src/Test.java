@@ -112,7 +112,7 @@ public class Test {
 
 		Company comp = cdb.getCompany(2);
 
-		System.out.println(coupondb.getCompanyCouponsByType(comp));
+		//System.out.println(coupondb.getCompanyCouponsByType(comp));
 
 		cdb.updateCompany(comp);
 

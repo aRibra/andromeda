@@ -56,20 +56,20 @@ public class CustomerFacade implements CouponSystemClientFacade {
 		return customerDao.getCoupons(customer);
 	}
 
-	// DONE - TODO: write method
+	
 	public void purchaseCoupon(Coupon coupon, Customer customer)
 			throws CouponSystemException {
 		customerDao.purchaseCoupon(coupon, customer);
 	}
-
-	// DONE - TODO: write method
+	
+	
 	public Collection<Coupon> getAllPurchasedCoupons(Customer customer)
 			throws CouponSystemException {
 		// get them for this precise user
 		return customerDao.getAllPurchasedCoupons(customer);
 	}
 
-	// DONE - TODO: write method
+	
 	public Collection<Coupon> getAllPurchasedCouponsByType(
 			CouponType couponType, Customer customer)
 			throws CouponSystemException {

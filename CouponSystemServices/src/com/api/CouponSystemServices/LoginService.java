@@ -14,6 +14,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+
 import com.couponsystem.CouponSystem;
 import com.couponsystem.beans.*;
 import com.couponsystem.exceptions.CouponSystemException;
@@ -36,28 +39,26 @@ public class LoginService {
 	@POST
 	@Path("/login")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Coupon login(@FormParam("client-type") String clientType,
+	public JSONObject login(@FormParam("client-type") String clientType,
 			@FormParam("clientName") String clientName,
 			@FormParam("clientPassword") String clientPassword)
-			throws CouponSystemException {
+			throws CouponSystemException, JSONException {
 
-		// TODO: Login Filter, if reached to here that means that the client has
-		// session
-
+		
 		ClientBucket clientBucket = null;
 
 		// try {
 
 		clientBucket = couponSystem.login(clientName, clientPassword,
 				ClientType.valueOf(clientType));
-
+		
 		if (clientBucket != null) {
 			HttpSession session = request.getSession(true);
 			session.setAttribute("clientBucket", clientBucket);
 			session.setAttribute("loggedIn", Boolean.TRUE);
 
 		}
-
+		
 		AdminFacade adminFacade = null;
 		CompanyFacade companyFacade = null;
 		CustomerFacade customerFacade = null;
@@ -80,9 +81,11 @@ public class LoginService {
 
 		}
 
-		// test this with json
+		JSONObject jsonResponse = new JSONObject();
+		jsonResponse.put("success", true);
+		jsonResponse.put("message", "You have been logged in successfully");
 
-		return companyFacade.getCoupon(78);
+		return jsonResponse;
 
 		// } catch (CouponSystemException e) {
 		// return e.getMaessage();

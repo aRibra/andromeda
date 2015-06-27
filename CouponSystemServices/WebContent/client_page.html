@@ -7,6 +7,7 @@
 
 
 <script src="couponsystem_scripts.js">
+	
 </script>
 
 
@@ -38,32 +39,34 @@
 		<h2>Get Company</h2>
 		<form name="get_company_form">
 
-			<br /> Company ID: &nbsp; <input type="number" name="COMP_ID" min="0"/> <br />
-			<input type ="button" value="Get Company" onclick="getCompanyRequest()" />
+			<br /> Company ID: &nbsp; <input type="number" name="COMP_ID"
+				min="0" /> <br /> <input type="button" value="Get Company"
+				onclick="getCompanyRequest()" />
 
 			<div id="get_company_result"></div>
 
 		</form>
-		
+
 		<hr />
-		
+
 		<h2>Get All Companies</h2>
 		<form name="get_allcompanies_form">
 
-			<input type ="button" value="Get All Companies" onclick="getAllCompaines()" />
-
-			<br/><div id="get_allcompanies_result"></div>
+			<input type="button" value="Get All Companies"
+				onclick="getAllCompaines()" /> <br />
+			<div id="get_allcompanies_result"></div>
 
 		</form>
-		
+
 		<hr />
-		
+
 		<h2>Create Customer</h2>
 		<form name="create_customer_form">
 
-		<br /> Customer Name: &nbsp; <input type="text" name="CUSTOMER_NAME" />
+			<br /> Customer Name: &nbsp; <input type="text" name="CUSTOMER_NAME" />
 			<br /> Password:&nbsp;<input type="password" name="PASSWORD" /> <br />
-			<input type ="button" value="Creat Customer" onclick="createCustomer()" />
+			<input type="button" value="Creat Customer"
+				onclick="createCustomer()" />
 
 		</form>
 
@@ -72,60 +75,115 @@
 		<br />
 		<h2>Get Customer Info</h2>
 		<form name="get_customer_form">
-			
-			<br /> Customer ID: &nbsp; <input type="number" name="CUSTOMER_ID" /> <br />
-			<input type ="button" value="Get Customer" onclick="getCustomer()" />
+
+			<br /> Customer ID: &nbsp; <input type="number" name="CUSTOMER_ID" />
+			<br /> <input type="button" value="Get Customer"
+				onclick="getCustomer()" />
 
 			<div id="get_customer_result"></div>
 
 		</form>
-			
+
 		<hr />
-		
+
 		<h2>Get All Customers</h2>
 		<form name="get_allcustomers_form">
 
-			<input type ="button" value="Get All Customers" onclick="getAllCustomers()" />
-			
-			<br/><div id="get_allcustomers_result"></div>
+			<input type="button" value="Get All Customers"
+				onclick="getAllCustomers()" /> <br />
+			<div id="get_allcustomers_result"></div>
 
 		</form>
 
 
-
+		<br />
 
 
 	</div>
 
+	<hr />
+
 	<div id="company-div">
 
 		<h1>Company Space</h1>
-		
+
 		<br />
 		<h2>Create Coupon</h2>
-		<form name="create_company_form" method="POST" action="rest/company_service/create_coupon">
-		 
-			<br /> Coupon tile: &nbsp; <input type="text" name="TITLE" />
-			
-			<br /> Coupon Start Date:&nbsp;Year:<input type="number" name="START_DATE_YEAR" class="year" min="???"  max="3000"> 
-					Month:<input type="number" name="START_DATE_MONTH" class="month" min="???" max="12">
-					Day:<input type="number" name="START_DATE_DAY" class="day" min="???" max="31">
-			
-			<br /> Coupon End Date:&nbsp;Year:<input type="number" name="END_DATE_YEAR" class="year"  min="???" max="3000"> 
-				Month:<input type="number" name="END_DATE_MONTH" class="month" min="???" max="12">
-				Day:<input type="number" name="END_DATE_DAY" class="day" min="???" max="31">
-			
-			<br /> Coupon Amount: &nbsp; <input type="number" name="AMOUNT" min="0"/>
-			<br /> Coupon Type:&nbsp;<input type="text" name="TYPE" /> 
-			<br /> Coupon Message:&nbsp;<input type="text" name="MESSAGE" /> 
-			<br /> Coupon Price: &nbsp; <input type="number" name="PRICE" min="0"/>
-			<br /> Coupon Image:&nbsp;<input type="text" name="IMAGE" /> 
-			
-			<br /> <input type="submit" value="Create Coupon" onclick="createCoupon()" />
+		<form name="create_company_form" method="POST"
+			action="rest/company_service/create_coupon">
+
+			<br /> Coupon tile: &nbsp; <input type="text" name="TITLE" /> <br />
+			Coupon Start Date:&nbsp;Year:<input type="number"
+				name="START_DATE_YEAR" class="year" min="???" max="3000">
+			Month:<input type="number" name="START_DATE_MONTH" class="month"
+				min="???" max="12"> Day:<input type="number"
+				name="START_DATE_DAY" class="day" max="31"> <br /> Coupon
+			End Date:&nbsp;Year:<input type="number" name="END_DATE_YEAR"
+				class="year" min="???" max="3000"> Month:<input
+				type="number" name="END_DATE_MONTH" class="month" min="???" max="12">
+			Day:<input type="number" name="END_DATE_DAY" class="day" max="31">
+
+			<br /> Coupon Amount: &nbsp; <input type="number" name="AMOUNT"
+				min="0" /> <br /> Coupon Type:&nbsp;<input type="text" name="TYPE" />
+			<br /> Coupon Message:&nbsp;<input type="text" name="MESSAGE" /> <br />
+			Coupon Price: &nbsp; <input type="number" name="PRICE" min="0" /> <br />
+			Coupon Image:&nbsp;<input type="text" name="IMAGE" /> <br /> <input
+				type="submit" value="Create Coupon" />
 
 		</form>
 
 		<hr />
+
+		<h2>Get Coupon</h2>
+		<form name="get_coupon_form">
+
+			<br /> Company ID: &nbsp; <input type="number" name="COUPON_ID"
+				min="0" /> <br /> <input type="button" value="Get Coupon"
+				onclick="getCoupon()" />
+
+			<div id="get_coupon_result"></div>
+
+		</form>
+
+
+		<hr />
+
+		<h2>Get All Coupons</h2>
+		<form name="get_allcoupons_form">
+
+			<input type="button" value="Get All Coupons"
+				onclick="getAllCoupons()" /> <br />
+			<div id="get_allcoupons_result"></div>
+
+		</form>
+
+		<hr />
+
+		<h2>Get All Company Coupons</h2>
+		<form name="get_coupons_by_type_form">
+
+
+			<!-- CHANGE PARAMETER VALUE AND GET COMPANY ID FROM SESSION -->
+
+			<input type="text" name="COMP_ID" value="1"  />
+
+			<select name="TYPE" >
+				<option value="RESTURANTS">RESTURANTS</option>
+				<option value="ELECTRICITY">ELECTRICITY</option>
+				<option value="FOOD">FOOD</option>
+				<option value="HEALTH">HEALTH</option>
+
+				<option value="SPORTS">SPORTS</option>
+				<option value="CAMPING">CAMPING</option>
+				<option value="TRAVELLING">TRAVELLING</option>
+				<option value="HOTELS">HOTELS</option>
+			</select> <input type="button" value="Get Coupons by Type"
+				onclick="getCompanyCouponsByType()" />
+
+			<div id="get_coupons_by_type_result"></div>
+
+		</form>
+
 
 	</div>
 
