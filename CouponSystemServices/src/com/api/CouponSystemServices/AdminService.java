@@ -40,8 +40,7 @@ public class AdminService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public JSONObject createCompany(@FormParam("COMP_NAME") String companyName,
 			@FormParam("PASSWORD") String password,
-			@FormParam("EMAIL") String email) throws JSONException,
-			CouponSystemException {
+			@FormParam("EMAIL") String email) throws CouponSystemException, JSONException {
 
 		Company company = new Company(companyName, password, email);
 
@@ -70,7 +69,7 @@ public class AdminService {
 		AdminFacade adminFacade = null;
 		ClientBucket clientBucket = null;
 
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(false);
 		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
 		adminFacade = (AdminFacade) clientBucket.getFacade();
 
@@ -88,7 +87,7 @@ public class AdminService {
 		AdminFacade adminFacade = null;
 		ClientBucket clientBucket = null;
 
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(false);
 		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
 		adminFacade = (AdminFacade) clientBucket.getFacade();
 
@@ -106,7 +105,7 @@ public class AdminService {
 		AdminFacade adminFacade = null;
 		ClientBucket clientBucket = null;
 
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(false);
 		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
 		adminFacade = (AdminFacade) clientBucket.getFacade();
 
@@ -130,7 +129,7 @@ public class AdminService {
 		AdminFacade adminFacade = null;
 		ClientBucket clientBucket = null;
 
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(false);
 		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
 
 		adminFacade = (AdminFacade) clientBucket.getFacade();
@@ -157,7 +156,7 @@ public class AdminService {
 		AdminFacade adminFacade = null;
 		ClientBucket clientBucket = null;
 
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(false);
 		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
 		adminFacade = (AdminFacade) clientBucket.getFacade();
 
@@ -180,7 +179,7 @@ public class AdminService {
 		AdminFacade adminFacade = null;
 		ClientBucket clientBucket = null;
 
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(false);
 		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
 		adminFacade = (AdminFacade) clientBucket.getFacade();
 
@@ -198,7 +197,7 @@ public class AdminService {
 		AdminFacade adminFacade = null;
 		ClientBucket clientBucket = null;
 
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(false);
 		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
 		adminFacade = (AdminFacade) clientBucket.getFacade();
 
@@ -220,7 +219,7 @@ public class AdminService {
 		AdminFacade adminFacade = null;
 		ClientBucket clientBucket = null;
 
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(false);
 		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
 		adminFacade = (AdminFacade) clientBucket.getFacade();
 
@@ -245,7 +244,7 @@ public class AdminService {
 		AdminFacade adminFacade = null;
 		ClientBucket clientBucket = null;
 
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(false);
 		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
 		adminFacade = (AdminFacade) clientBucket.getFacade();
 

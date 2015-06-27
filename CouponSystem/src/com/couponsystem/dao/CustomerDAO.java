@@ -16,7 +16,7 @@ public interface CustomerDAO {
 
 	public void updateCustomer(Customer customer);
 
-	public Customer getCustomer(int id) throws CouponSystemException;
+	public Customer getCustomer(long customerId) throws CouponSystemException;
 
 	public Collection<Customer> getAllCustomers() throws CouponSystemException;
 

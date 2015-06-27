@@ -67,7 +67,8 @@ public class LoginService {
 
 		String queryId = String.valueOf(clientBucket.getClient().getClientId());
 		String queryName = clientBucket.getClient().getClientName();
-		String queryClientType = clientBucket.getClient().getClientType().name();
+		String queryClientType = clientBucket.getClient().getClientType()
+				.name();
 
 		JSONObject jsonResponse = new JSONObject();
 		jsonResponse.put("success", true);
@@ -91,5 +92,19 @@ public class LoginService {
 				+ "/client_page.html?response=" + jsonResponse.toString());
 		return "";
 
+	}
+
+	@POST
+	@Path("/logout")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String logOut() throws IOException {
+
+		HttpSession session = request.getSession(false);
+		if (session != null)
+			session.invalidate();
+
+		response.sendRedirect(request.getContextPath() + "/login.html");
+
+		return "";
 	}
 }

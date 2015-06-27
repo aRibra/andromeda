@@ -56,11 +56,11 @@ public class CompanyService {
 		CompanyFacade companyFacade = null;
 		ClientBucket clientBucket = null;
 
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(false);
 		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
-
+		
 		companyFacade = (CompanyFacade) clientBucket.getFacade();
-
+		
 		Calendar cal = Calendar.getInstance();
 		Date startDate, endDate;
 
@@ -96,13 +96,13 @@ public class CompanyService {
 	@POST
 	@Path("/get_coupon")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Coupon getCompany(@FormParam("COUPON_ID") String couponId)
+	public Coupon getCoupon(@FormParam("COUPON_ID") String couponId)
 			throws JSONException, CouponSystemException {
 
 		CompanyFacade companyFacade = null;
 		ClientBucket clientBucket = null;
 
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(false);
 		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
 		companyFacade = (CompanyFacade) clientBucket.getFacade();
 
@@ -114,18 +114,17 @@ public class CompanyService {
 	@POST
 	@Path("/get_all_coupons")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Coupon> getAllCompaines() throws JSONException,
+	public Collection<Coupon> getAllCoupons(@FormParam("COMP_ID") int companyId) throws JSONException,
 			CouponSystemException {
 
-		// HttpSession session = request.getSession(true);
-		// clientBucket = (ClientBucket) session.getAttribute("clientBucket");
-		//
-		// adminFacade = (AdminFacade) clientBucket.getFacade();
-		// adminFacade.createCompany(company);
+		CompanyFacade companyFacade = null;
+		ClientBucket clientBucket = null;
 
-		CompanyFacade companyFacade = new CompanyFacade();
+		HttpSession session = request.getSession(false);
+		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
+		companyFacade = (CompanyFacade) clientBucket.getFacade();
 
-		Collection<Coupon> coupons = companyFacade.getCoupons(2);
+		Collection<Coupon> coupons = companyFacade.getCoupons(companyId);
 
 		return coupons;
 	}
@@ -133,7 +132,7 @@ public class CompanyService {
 	@POST
 	@Path("/update_coupon")
 	@Produces(MediaType.APPLICATION_JSON)
-	public JSONObject updateCompany(@FormParam("COUPON_ID") int id,
+	public JSONObject updateCoupon(@FormParam("COUPON_ID") int id,
 			@FormParam("TITLE") String title,
 			@FormParam("AMOUNT") String amount,
 			@FormParam("START_DATE_YEAR") String startDateYear,
@@ -150,7 +149,7 @@ public class CompanyService {
 		CompanyFacade companyFacade = null;
 		ClientBucket clientBucket = null;
 
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(false);
 		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
 		companyFacade = (CompanyFacade) clientBucket.getFacade();
 
@@ -194,7 +193,7 @@ public class CompanyService {
 		CompanyFacade companyFacade = null;
 		ClientBucket clientBucket = null;
 
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(false);
 		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
 		companyFacade = (CompanyFacade) clientBucket.getFacade();
 

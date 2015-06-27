@@ -41,11 +41,14 @@ public class SessionFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 
+		//disable caching for every response
+		response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0, post-check=0, pre-check=0");
+		response.setHeader("Pragma", "no-cache");
 		
 		if (session == null && request.getRequestURI().contains("/rest/login-service")) {
 			chain.doFilter(req, res);
 			
-		} else if (session != null && request.getRequestURI().contains("/rest/login-service")) {
+		} else if (session != null && request.getRequestURI().contains("/rest/login-service/login")) {
 			response.sendRedirect(request.getContextPath() + "/client_page.html");
 		} else if (session == null) {
 			response.sendRedirect(request.getContextPath() + "/login.html");

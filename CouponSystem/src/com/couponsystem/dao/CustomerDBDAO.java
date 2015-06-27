@@ -151,7 +151,7 @@ public class CustomerDBDAO implements CustomerDAO {
 	}
 
 	@Override
-	public Customer getCustomer(int id) throws CouponSystemException {
+	public Customer getCustomer(long customerId) throws CouponSystemException {
 
 		Connection connection = null;
 		try {
@@ -169,7 +169,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		try {
 
 			preparedStatement = connection.prepareStatement(selectSQL);
-			preparedStatement.setInt(1, id);
+			preparedStatement.setLong(1, customerId);
 
 			ResultSet resultSet = preparedStatement.executeQuery();
 

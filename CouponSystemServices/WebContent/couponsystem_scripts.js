@@ -41,34 +41,225 @@ function getYear(dateStr) {
 
 }
 
-function loadClientInfo(){
-	
+// //////////
+function logOut() {
+
+	$.ajax({
+		url : "rest/login-service/logout",
+		type : "POST",
+		success : function(data, textStatus, jqXHR) {
+			alert("You have been logged off successfully");
+			window.location.replace("http://stackoverflow.com");
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+			alert(textStatus + " : " + errorThrown);
+		}
+
+	});
+
+}
+// //////////
+
+function loadClientInfo() {
+
 	var response = getParameterByName("response");
 	var json = JSON.parse(response);
 
 	if (json.clientType == "ADMIN") {
+
 		$("#company-div").remove();
 		$("#customer-div").remove();
+
 	} else if (json.clientType == "COMPANY") {
+
 		$("#admin-div").remove();
 		$("#customer-div").remove();
+
+		$("#get_coupons_id").attr("value", json.clientId);
+		$("#company_coupons_comp_id").attr("value", json.clientId);
+
 	} else if (json.clientType == "CUSTOMER") {
+
 		$("#admin-div").remove();
 		$("#company-div").remove();
+
+		$("#get_customer_coupons_id").attr("value", json.clientId);
+		$("#customer_info_id").attr("value", json.clientId);
+
 	}
-	
+
 	$('#info_name').html(json.clientName);
 	$('#info_id').html(json.clientId);
 	$('#info_type').html(json.clientType);
-	
+
 }
 
-function displayCustomerInfo(){
+function getAllCustomerCouponsByType()
+
+function getAllCustomerCoupons(style) {
+
+	$('#get_all_customer_coupons_result').html('');
 	
 	
-	
+	var formData = $('form[name="get_all_customer_coupons_form"]').serialize();
+
+	$
+			.ajax({
+				url : "rest/customer_service/get_customer_coupons",
+				type : "POST",
+				data : formData,
+
+				success : function(data, textStatus, jqXHR) {
+					var json = JSON.parse(JSON.stringify(data));
+
+					var header = "<table border ='1'> <tr> "
+							+ "<th>ID</th>  <th>Coupon Title</th>  <th>Amount</th>  <th>Start Date</th>  "
+							+ "<th>End Date</th>  <th>Price</th>  <th>Type</th>  <th>Message</th>  <th>Image</th> "
+							+ " </tr>";
+
+					// $('#get_all_customer_coupons_result').append(header);
+
+					var content = header;
+
+					// $('#get_all_customer_coupons_result').append(content);
+
+					$.each(data.coupon, function(index, element) {
+
+						content += "<tr>"
+
+						+ "<td>" + element.id + "</td> "
+
+						+ "<td>" + element.title + "</td>"
+
+						+ "<td>" + element.amount + "</td>"
+
+						+ "<td>" + element.startDate + "</td>"
+
+						+ "<td>" + element.endDate + "</td>"
+
+						+ "<td>" + element.message + "</td>"
+
+						+ "<td>" + element.price + "</td>"
+
+						+ "<td>" + element.type + "</td>"
+
+						+ "<td>" + element.image + "</td>"
+
+						+ "</tr>"
+
+					});
+
+					content += "</table>";
+
+					$('#get_all_customer_coupons_result').append(content);
+
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					alert(textStatus);
+				}
+
+			});
+
 }
 
+function displayCustomerInfo() {
+
+	$('#display_customer_result').html('');
+
+	var formData = $('form[name="display_customer_form"]').serialize();
+
+	$
+			.ajax({
+				url : "rest/customer_service/display_customer",
+				type : "POST",
+				data : formData,
+
+				success : function(data, textStatus, jqXHR) {
+					var json = JSON.parse(JSON.stringify(data));
+
+					var content = "<form name='update_my_customer_form'>"
+							+ "<table border='1'>"
+
+							+ "<tr>" + "<th>ID</th>" + "<th>Customer Name</th>"
+							+ "<th>Password</th>" + "<th>Client Type</th>"
+							+ "<th>Update Info</th>" + "</tr>"
+
+							+ "<tr>" + "<td>"
+							+ "<input name='ID' type='number' value='"
+							+ json.clientId
+							+ "' readonly='readonly' />"
+							+ "</td>"
+
+							+ "<td>"
+							+ "<input class='update_my_info' name='NAME' type='text' value='"
+							+ json.clientName
+							+ "' readonly='readonly' />"
+							+ "</td>"
+
+							+ "<td>"
+							+ "<input class='update_my_info' name='PASSWORD' type='text' value='"
+							+ json.clientPassword
+							+ "' readonly='readonly' />"
+							+ "</td>"
+
+							+ "<td>"
+							+ json.clientType
+							+ "</td>"
+
+							+ "<td>"
+							+ "<input type='button' value='Update Info' id='update_my_customer_button' onclick='unlockUpdateMyCustomerInfo()' />"
+							+ "</td>"
+
+							+ "</tr>" + "</table>"
+
+							+ "</form>";
+
+					$('#display_customer_result').append(content);
+
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					alert(textStatus + " : " + errorThrown);
+				}
+
+			});
+
+}
+
+function unlockUpdateMyCustomerInfo() {
+
+	var editCell = ".update_my_info";
+	$(editCell).attr('readonly', false);
+	$(editCell).css('background-color', '#999999');
+
+	var updateButton = "#update_my_customer_button";
+	$(updateButton).prop('value', 'Send Update Info');
+	$(updateButton).attr("onclick", "updateMyCustomerInfo()");
+
+}
+
+function updateMyCustomerInfo() {
+
+	var formData = $('form[name="update_my_customer_form"]').serialize();
+
+	$.ajax({
+		url : "rest/customer_service/update_customer_info",
+		type : "POST",
+		data : formData,
+
+		success : function(data, textStatus, jqXHR) {
+			var json = JSON.parse(JSON.stringify(data));
+			alert(json.message);
+			$('#display_customer_result').html('');
+			displayCustomerInfo();
+
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+			alert(textStatus + " : " + errorThrown);
+		}
+
+	});
+
+}
 
 function getCompanyCouponsByType() {
 
@@ -796,9 +987,9 @@ function updateCustomer(id) {
 }
 
 function getParameterByName(name) {
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+	name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+	var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex
+			.exec(location.search);
+	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g,
+			" "));
 }
-

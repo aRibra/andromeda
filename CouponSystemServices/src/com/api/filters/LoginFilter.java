@@ -46,11 +46,10 @@ public class LoginFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 
-		System.out.println("in login");
 
 		if (session == null) {
 			chain.doFilter(req, res);
-			
+
 		} else if (session != null
 				&& request.getRequestURI().contains("client_page.html")) {
 			chain.doFilter(req, res);
@@ -65,26 +64,26 @@ public class LoginFilter implements Filter {
 
 			switch (clientType) {
 			case ADMIN:
-				if (uri.contains("/admin_service")) {
+				if (uri.contains("/admin_service") || uri.contains("/logout"))
 					chain.doFilter(req, res);
-				}
-				response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-				break;
+				else
+					response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 
+				break;
 			case COMPANY:
-				if (uri.contains("/company_service")) {
+				if (uri.contains("/company_service") || uri.contains("/logout"))
 					chain.doFilter(req, res);
-				}
-				response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-				break;
+				else
+					response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 
+				break;
 			case CUSTOMER:
-				if (uri.contains("/customer_service")) {
+				if (uri.contains("/customer_service") || uri.contains("/logout"))
 					chain.doFilter(req, res);
-				}
-				response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-				break;
+				else
+					response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 
+				break;
 			default:
 				response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 				break;

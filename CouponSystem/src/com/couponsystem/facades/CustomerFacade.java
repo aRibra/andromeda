@@ -46,6 +46,10 @@ public class CustomerFacade implements CouponSystemClientFacade {
 
 	}
 
+	public Customer getCustomer(long customerId) throws CouponSystemException {
+		return customerDao.getCustomer(customerId);
+	}
+	
 	public void updateCustomer(Customer customer) {
 		// A customer may update his own info.
 		customerDao.updateCustomer(customer);

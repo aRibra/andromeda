@@ -17,7 +17,7 @@
 
 	<h1>Client Page</h1> &nbsp;
 	
-	<table border="1">
+	<table border="1" style="background:gray;font-size:large ;">
 		<tr>
 			<th>Client Name</th>
 			<th>ID</th>
@@ -28,6 +28,7 @@
 			<td id="info_id"></td>
 			<td id="info_type"></td>
 		</tr>
+		<tr><td colspan="3" align="center"> <input id="log_out_button" type="button" value="Log Out" onclick="logOut()" /> </td></tr>
 	</table>
 
 	<div id="admin-div">
@@ -163,8 +164,9 @@
 
 		<h2>Get All Coupons</h2>
 		<form name="get_allcoupons_form">
-
-			<input type="button" value="Get All Coupons"
+			
+			<input id="get_coupons_id" name="COMP_ID" type="hidden" value="?" />
+			<input  type="button" value="Get All Coupons"
 				onclick="getAllCoupons()" /> <br />
 			<div id="get_allcoupons_result"></div>
 
@@ -178,7 +180,7 @@
 
 			<!-- CHANGE PARAMETER VALUE AND GET COMPANY ID FROM SESSION -->
 
-			<input type="text" name="COMP_ID" value="1"  />
+			<input id="company_coupons_comp_id" type="text" name="COMP_ID" value="?"  />
 
 			<select name="TYPE" >
 				<option value="RESTURANTS">RESTURANTS</option>
@@ -207,15 +209,70 @@
 		
 
 		<h2>Get Customer Info</h2>
-		<form name="get_customer_form">
+		<form name="display_customer_form">
 
 			<br /> Company ID: &nbsp; <span></span>
 			 <br /> 
+			 <input id="customer_info_id" name="CUSTOMER_ID" type="hidden" value="?" />
 			<input type="button" value="Get Customer" onclick="displayCustomerInfo()" />
 
-			<div id="get_customer_result"></div>
+			<div id="display_customer_result"></div>
 
 		</form>
+		
+		<hr />
+
+		<h2>Get All Coupons</h2>
+		<form name="get_all_customer_coupons_form">
+			
+			<input id="get_customer_coupons_id" name="CUSTOMER_ID" type="hidden" value="?" />
+			<input  type="button" value="Get my Coupons"
+				onclick="getAllCustomerCoupons('all')" /> <br />
+			<div id="get_all_customer_coupons_result"></div>
+
+		</form>
+		
+		<hr />
+
+		<h2>Get All Coupons By Type</h2>
+		<form name="get_all_customer_coupons_by_type_form">
+			
+			<input id="get_customer_coupons_by_type_id" name="CUSTOMER_ID" type="hidden" value="?" />
+			
+			<select name="TYPE" >
+				<option value="RESTURANTS">RESTURANTS</option>
+				<option value="ELECTRICITY">ELECTRICITY</option>
+				<option value="FOOD">FOOD</option>
+				<option value="HEALTH">HEALTH</option>
+
+				<option value="SPORTS">SPORTS</option>
+				<option value="CAMPING">CAMPING</option>
+				<option value="TRAVELLING">TRAVELLING</option>
+				<option value="HOTELS">HOTELS</option>
+			</select>
+			
+			<input  type="button" value="Get my Coupons (Type)"
+				onclick="getAllCustomerCoupons('byType')" /> <br />
+			<div id="get_all_customer_coupons_by_type_result"></div>
+
+		</form>
+
+			<hr />
+
+		<h2>Get All Coupons By Price</h2>
+		<form name="get_all_customer_coupons_by_price_form">
+			
+			<input id="get_customer_coupons_by_price_id" name="CUSTOMER_ID" type="hidden" value="?" />
+			
+			<input type="number" name="PRICE"  min="0" />
+			
+			<input  type="button" value="Get my Coupons (Price)"
+				onclick="getAllCustomerCoupons('byPrice')" /> <br />
+			<div id="get_all_customer_coupons_by_price_result"></div>
+
+		</form>
+		
+		
 
 	</div>
 
