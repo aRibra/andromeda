@@ -20,13 +20,13 @@ public interface CustomerDAO {
 
 	public Collection<Customer> getAllCustomers() throws CouponSystemException;
 
-	public Collection<Coupon> getCoupons(Customer customer)
+	public Collection<Coupon> getCoupons(long customerId)
 			throws CouponSystemException;
 
-	public void purchaseCoupon(Coupon coupon, Customer customer)
+	public void purchaseCoupon(Coupon coupon, long customerId)
 			throws CouponSystemException;
 
-	public Collection<Coupon> getAllPurchasedCoupons(Customer customer)
+	public Collection<Coupon> getAllPurchasedCoupons(long customerId)
 			throws CouponSystemException;
 
 	public Collection<Coupon> getAllPurchasedCouponsByType(
@@ -34,7 +34,7 @@ public interface CustomerDAO {
 			throws CouponSystemException;
 
 	public Collection<Coupon> getAllPurchasedCouponsByPrice(Double price,
-			Customer customer) throws CouponSystemException;
+			long customerId) throws CouponSystemException;
 
 	public Customer login(String companyName, String password)
 			throws CouponSystemException;

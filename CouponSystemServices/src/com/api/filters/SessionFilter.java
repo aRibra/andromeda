@@ -44,6 +44,7 @@ public class SessionFilter implements Filter {
 		
 		if (session == null && request.getRequestURI().contains("/rest/login-service")) {
 			chain.doFilter(req, res);
+			
 		} else if (session != null && request.getRequestURI().contains("/rest/login-service")) {
 			response.sendRedirect(request.getContextPath() + "/client_page.html");
 		} else if (session == null) {

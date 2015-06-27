@@ -50,7 +50,7 @@ public class LoginFilter implements Filter {
 
 		if (session == null) {
 			chain.doFilter(req, res);
-
+			
 		} else if (session != null
 				&& request.getRequestURI().contains("client_page.html")) {
 			chain.doFilter(req, res);

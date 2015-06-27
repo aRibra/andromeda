@@ -41,6 +41,35 @@ function getYear(dateStr) {
 
 }
 
+function loadClientInfo(){
+	
+	var response = getParameterByName("response");
+	var json = JSON.parse(response);
+
+	if (json.clientType == "ADMIN") {
+		$("#company-div").remove();
+		$("#customer-div").remove();
+	} else if (json.clientType == "COMPANY") {
+		$("#admin-div").remove();
+		$("#customer-div").remove();
+	} else if (json.clientType == "CUSTOMER") {
+		$("#admin-div").remove();
+		$("#company-div").remove();
+	}
+	
+	$('#info_name').html(json.clientName);
+	$('#info_id').html(json.clientId);
+	$('#info_type').html(json.clientType);
+	
+}
+
+function displayCustomerInfo(){
+	
+	
+	
+}
+
+
 function getCompanyCouponsByType() {
 
 	$('#get_coupons_by_type_result').html('');
@@ -765,3 +794,11 @@ function updateCustomer(id) {
 
 	});
 }
+
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+

@@ -254,7 +254,7 @@ public class CustomerDBDAO implements CustomerDAO {
 
 	// DONE - TODO: IBRAHIM
 	@Override
-	public Collection<Coupon> getCoupons(Customer customer)
+	public Collection<Coupon> getCoupons(long customerId)
 			throws CouponSystemException {
 
 		// retrieve coupons for a specific customer
@@ -276,7 +276,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		try {
 
 			preparedStatement = connection.prepareStatement(selectSQL);
-			preparedStatement.setLong(1, customer.getClientId());
+			preparedStatement.setLong(1, customerId);
 
 			ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -317,7 +317,7 @@ public class CustomerDBDAO implements CustomerDAO {
 	}
 
 	@Override
-	public void purchaseCoupon(Coupon coupon, Customer customer)
+	public void purchaseCoupon(Coupon coupon, long customerId)
 			throws CouponSystemException {
 
 		Connection connection = null;
@@ -337,7 +337,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			preparedStatement = connection.prepareStatement(insertSQL);
 
 			preparedStatement.setLong(1, coupon.getId());
-			preparedStatement.setLong(2, customer.getClientId());
+			preparedStatement.setLong(2, customerId);
 
 			preparedStatement.executeUpdate();
 
@@ -365,7 +365,7 @@ public class CustomerDBDAO implements CustomerDAO {
 	}
 
 	@Override
-	public Collection<Coupon> getAllPurchasedCoupons(Customer customer)
+	public Collection<Coupon> getAllPurchasedCoupons(long customerId)
 			throws CouponSystemException {
 
 		Connection connection = null;
@@ -385,7 +385,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		try {
 
 			preparedStatement = connection.prepareStatement(selectSQL);
-			preparedStatement.setLong(1, customer.getClientId());
+			preparedStatement.setLong(1, customerId);
 
 			ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -492,7 +492,7 @@ public class CustomerDBDAO implements CustomerDAO {
 
 	@Override
 	public Collection<Coupon> getAllPurchasedCouponsByPrice(Double price,
-			Customer customer) throws CouponSystemException {
+			long customerId) throws CouponSystemException {
 
 		Connection connection = null;
 		try {
@@ -512,7 +512,7 @@ public class CustomerDBDAO implements CustomerDAO {
 
 			preparedStatement = connection.prepareStatement(selectSQL);
 
-			preparedStatement.setLong(1, customer.getClientId());
+			preparedStatement.setLong(1, customerId);
 			preparedStatement.setDouble(2, price);
 
 			ResultSet resultSet = preparedStatement.executeQuery();

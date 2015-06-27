@@ -69,7 +69,7 @@ public class Test {
 		}
 
 		System.out.println(".--.--.--.--.--.--.--.--.--.--.--."
-				+ customerFacade.getAllPurchasedCoupons(customer));
+				+ customerFacade.getAllPurchasedCoupons(customer.getClientId()));
 
 		System.out
 				.println("*******admin-client-retrieved-a-customer**********");
@@ -193,7 +193,7 @@ public class Test {
 
 		System.out.println(c4);
 
-		System.out.println(customerDb.getCoupons(c4));
+		System.out.println(customerDb.getCoupons(c4.getClientId()));
 
 		System.out.println(customerDb.login("Wall Mart", "1234"));
 

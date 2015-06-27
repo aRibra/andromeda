@@ -10,7 +10,7 @@ import com.sun.jersey.spi.resource.Singleton;
 @Singleton
 @Path("/customer_service")
 public class CustomerService {
-
+	
 	
 	
 	@GET

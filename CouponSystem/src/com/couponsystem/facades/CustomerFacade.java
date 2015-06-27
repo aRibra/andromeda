@@ -51,25 +51,22 @@ public class CustomerFacade implements CouponSystemClientFacade {
 		customerDao.updateCustomer(customer);
 	}
 
-	public Collection<Coupon> getCoupons(Customer customer)
+	public Collection<Coupon> getCoupons(long customerId)
 			throws CouponSystemException {
-		return customerDao.getCoupons(customer);
+		return customerDao.getCoupons(customerId);
 	}
 
-	
-	public void purchaseCoupon(Coupon coupon, Customer customer)
+	public void purchaseCoupon(Coupon coupon, long customerId)
 			throws CouponSystemException {
-		customerDao.purchaseCoupon(coupon, customer);
+		customerDao.purchaseCoupon(coupon, customerId);
 	}
-	
-	
-	public Collection<Coupon> getAllPurchasedCoupons(Customer customer)
+
+	public Collection<Coupon> getAllPurchasedCoupons(long customerId)
 			throws CouponSystemException {
 		// get them for this precise user
-		return customerDao.getAllPurchasedCoupons(customer);
+		return customerDao.getAllPurchasedCoupons(customerId);
 	}
 
-	
 	public Collection<Coupon> getAllPurchasedCouponsByType(
 			CouponType couponType, Customer customer)
 			throws CouponSystemException {
@@ -78,12 +75,13 @@ public class CustomerFacade implements CouponSystemClientFacade {
 	}
 
 	// TODO: write method
-	public Collection<Coupon> getAllPurchasedCouponsByPrice(Customer customer) {
+	public Collection<Coupon> getAllPurchasedCouponsByPrice(Double price,
+			long customerId) throws CouponSystemException {
 		// get them for this precise user
 
 		// "SELECT cust.CUST_NAME, cpn.* FROM COUPON cpn INNER JOIN customer_coupon cc ON cpn.ID = cc.COUPON_ID AND cc.CUST_ID = 3 AND cpn.PRICE = 20 INNER JOIN customer cust ON cust.ID = cc.CUST_ID"
 
-		return null;
+		return customerDao.getAllPurchasedCouponsByPrice(price, customerId);
 	}
 
 }

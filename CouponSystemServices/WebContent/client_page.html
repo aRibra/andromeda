@@ -13,9 +13,22 @@
 
 <title>Coupon System - Client Page</title>
 </head>
-<body onload="setDates()">
+<body onload="setDates(); loadClientInfo();">
 
-	<h1>Client Page</h1>
+	<h1>Client Page</h1> &nbsp;
+	
+	<table border="1">
+		<tr>
+			<th>Client Name</th>
+			<th>ID</th>
+			<th>Type</th>
+		</tr>
+		<tr>
+			<td id="info_name"></td>
+			<td id="info_id"></td>
+			<td id="info_type"></td>
+		</tr>
+	</table>
 
 	<div id="admin-div">
 
@@ -191,6 +204,18 @@
 	<div id="customer-div">
 
 		<h1>Customer Space</h1>
+		
+
+		<h2>Get Customer Info</h2>
+		<form name="get_customer_form">
+
+			<br /> Company ID: &nbsp; <span></span>
+			 <br /> 
+			<input type="button" value="Get Customer" onclick="displayCustomerInfo()" />
+
+			<div id="get_customer_result"></div>
+
+		</form>
 
 	</div>
 
