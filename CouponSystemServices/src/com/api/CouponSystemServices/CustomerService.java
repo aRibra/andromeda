@@ -17,6 +17,7 @@ import org.codehaus.jettison.json.JSONObject;
 
 import com.couponsystem.beans.Company;
 import com.couponsystem.beans.Coupon;
+import com.couponsystem.beans.CouponType;
 import com.couponsystem.beans.Customer;
 import com.couponsystem.exceptions.CouponSystemException;
 import com.couponsystem.facades.AdminFacade;
@@ -80,11 +81,11 @@ public class CustomerService {
 		return jsonResponse;
 	}
 
-	
 	@POST
 	@Path("/get_customer_coupons")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Coupon> getAllCoupons(@FormParam("CUSTOMER_ID") int customerId) throws JSONException,
+	public Collection<Coupon> getAllCoupons(
+			@FormParam("CUSTOMER_ID") int customerId) throws JSONException,
 			CouponSystemException {
 
 		CustomerFacade customerFacade = null;
@@ -98,8 +99,51 @@ public class CustomerService {
 
 		return coupons;
 	}
-	
-	
+
+	@POST
+	@Path("/get_customer_coupons_by_type")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Coupon> getAllCouponsByType(
+			@FormParam("CUSTOMER_ID") int customerId,
+			@FormParam("TYPE") String type) throws JSONException,
+			CouponSystemException {
+
+		CustomerFacade customerFacade = null;
+		ClientBucket clientBucket = null;
+
+		HttpSession session = request.getSession(false);
+		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
+		customerFacade = (CustomerFacade) clientBucket.getFacade();
+
+		CouponType couponType = CouponType.valueOf(type);
+
+		Collection<Coupon> coupons = customerFacade
+				.getAllPurchasedCouponsByType(couponType, customerId);
+
+		return coupons;
+	}
+
+	@POST
+	@Path("/get_customer_coupons_by_price")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Coupon> getAllCouponsByPrice(
+			@FormParam("CUSTOMER_ID") int customerId,
+			@FormParam("PRICE") double price) throws JSONException,
+			CouponSystemException {
+
+		CustomerFacade customerFacade = null;
+		ClientBucket clientBucket = null;
+
+		HttpSession session = request.getSession(false);
+		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
+		customerFacade = (CustomerFacade) clientBucket.getFacade();
+
+		Collection<Coupon> coupons = customerFacade
+				.getAllPurchasedCouponsByPrice(price, customerId);
+
+		return coupons;
+	}
+
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String sayPlainTextHello() {

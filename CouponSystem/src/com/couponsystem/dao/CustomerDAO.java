@@ -30,7 +30,7 @@ public interface CustomerDAO {
 			throws CouponSystemException;
 
 	public Collection<Coupon> getAllPurchasedCouponsByType(
-			CouponType couponType, Customer customer)
+			CouponType couponType, long customerId)
 			throws CouponSystemException;
 
 	public Collection<Coupon> getAllPurchasedCouponsByPrice(Double price,

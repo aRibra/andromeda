@@ -428,7 +428,7 @@ public class CustomerDBDAO implements CustomerDAO {
 
 	@Override
 	public Collection<Coupon> getAllPurchasedCouponsByType(
-			CouponType couponType, Customer customer)
+			CouponType couponType, long customerId)
 			throws CouponSystemException {
 
 		Connection connection = null;
@@ -448,7 +448,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		try {
 
 			preparedStatement = connection.prepareStatement(selectSQL);
-			preparedStatement.setLong(1, customer.getClientId());
+			preparedStatement.setLong(1, customerId);
 			preparedStatement.setString(2, couponType.name());
 
 			ResultSet resultSet = preparedStatement.executeQuery();

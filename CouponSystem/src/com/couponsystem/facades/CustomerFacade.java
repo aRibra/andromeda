@@ -72,10 +72,10 @@ public class CustomerFacade implements CouponSystemClientFacade {
 	}
 
 	public Collection<Coupon> getAllPurchasedCouponsByType(
-			CouponType couponType, Customer customer)
+			CouponType couponType, long customerId)
 			throws CouponSystemException {
 		// get them for this precise user
-		return customerDao.getAllPurchasedCouponsByType(couponType, customer);
+		return customerDao.getAllPurchasedCouponsByType(couponType, customerId);
 	}
 
 	// TODO: write method

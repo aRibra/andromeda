@@ -49,7 +49,8 @@ function logOut() {
 		type : "POST",
 		success : function(data, textStatus, jqXHR) {
 			alert("You have been logged off successfully");
-			window.location.replace("http://stackoverflow.com");
+			var location = jqXHR.getResponseHeader('Location');
+			window.location.replace(location);
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
 			alert(textStatus + " : " + errorThrown);
@@ -84,6 +85,8 @@ function loadClientInfo() {
 		$("#company-div").remove();
 
 		$("#get_customer_coupons_id").attr("value", json.clientId);
+		$("#get_customer_coupons_by_type_id").attr("value", json.clientId);
+		$("#get_customer_coupons_by_price_id").attr("value", json.clientId);
 		$("#customer_info_id").attr("value", json.clientId);
 
 	}
@@ -94,18 +97,33 @@ function loadClientInfo() {
 
 }
 
-function getAllCustomerCouponsByType()
-
 function getAllCustomerCoupons(style) {
 
-	$('#get_all_customer_coupons_result').html('');
-	
-	
-	var formData = $('form[name="get_all_customer_coupons_form"]').serialize();
+	var url = "";
+	var position = "";
+	var formName = "";
+
+	if (style == "byAll") {
+		url = "rest/customer_service/get_customer_coupons";
+		position = "#get_all_customer_coupons_result";
+		formName = "form[name=get_all_customer_coupons_form]";
+	} else if (style == "byType") {
+		url = "rest/customer_service/get_customer_coupons_by_type";
+		position = "#get_all_customer_coupons_by_type_result";
+		formName = "form[name=get_all_customer_coupons_by_type_form]";
+	} else if (style == "byPrice") {
+		url = "rest/customer_service/get_customer_coupons_by_price";
+		position = "#get_all_customer_coupons_by_price_result";
+		formName = "form[name=get_all_customer_coupons_by_price_form]";
+	}
+
+	$(position).html('');
+
+	var formData = $(formName).serialize();
 
 	$
 			.ajax({
-				url : "rest/customer_service/get_customer_coupons",
+				url : url,
 				type : "POST",
 				data : formData,
 
@@ -151,7 +169,7 @@ function getAllCustomerCoupons(style) {
 
 					content += "</table>";
 
-					$('#get_all_customer_coupons_result').append(content);
+					$(position).append(content);
 
 				},
 				error : function(jqXHR, textStatus, errorThrown) {
