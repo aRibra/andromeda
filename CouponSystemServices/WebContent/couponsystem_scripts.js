@@ -116,7 +116,7 @@ function getAllCustomerCoupons(style) {
 		position = "#get_all_customer_coupons_by_price_result";
 		formName = "form[name=get_all_customer_coupons_by_price_form]";
 	}
-
+ 
 	$(position).html('');
 
 	var formData = $(formName).serialize();
