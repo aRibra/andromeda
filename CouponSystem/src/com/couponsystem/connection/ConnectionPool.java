@@ -87,10 +87,10 @@ public class ConnectionPool {
 
 	public void closePoolConnections() {
 		closeConnections(availableConnections);
-		availableConnections = new ArrayList<>();
+		availableConnections = new ArrayList<Connection>();
 
 		closeConnections(busyConnections);
-		busyConnections = new ArrayList<>();
+		busyConnections = new ArrayList<Connection>();
 	}
 
 	private void closeConnections(Collection<Connection> connections) {

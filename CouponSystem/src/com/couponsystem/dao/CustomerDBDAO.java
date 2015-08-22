@@ -213,7 +213,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			throw new CouponSystemException(e.getMessage(), stackTrace);
 		}
 
-		Collection<Customer> customersList = new ArrayList<>();
+		Collection<Customer> customersList = new ArrayList<Customer>();
 
 		String selectSQLQuery = "SELECT ID, CUST_NAME, CLIENT_TYPE FROM CUSTOMER";
 
@@ -269,7 +269,7 @@ public class CustomerDBDAO implements CustomerDAO {
 
 		PreparedStatement preparedStatement = null;
 
-		Collection<Coupon> couponList = new ArrayList<>();
+		Collection<Coupon> couponList = new ArrayList<Coupon>();
 
 		String selectSQL = "SELECT CPN.* FROM COUPON CPN INNER JOIN CUSTOMER_COUPON CC ON CC.COUPON_ID = CPN.ID AND CC.CUST_ID = ?";
 
@@ -378,7 +378,7 @@ public class CustomerDBDAO implements CustomerDAO {
 
 		PreparedStatement preparedStatement = null;
 
-		Collection<Coupon> couponList = new ArrayList<>();
+		Collection<Coupon> couponList = new ArrayList<Coupon>();
 
 		String selectSQL = "SELECT CPN.* FROM COUPON CPN INNER JOIN CUSTOMER_COUPON CC ON CPN.ID = CC.COUPON_ID AND CC.CUST_ID = ?";
 
@@ -441,7 +441,7 @@ public class CustomerDBDAO implements CustomerDAO {
 
 		PreparedStatement preparedStatement = null;
 
-		Collection<Coupon> couponList = new ArrayList<>();
+		Collection<Coupon> couponList = new ArrayList<Coupon>();
 
 		String selectSQL = "SELECT cpn.* FROM COUPON cpn INNER JOIN customer_coupon cc ON cpn.ID = cc.COUPON_ID AND cc.CUST_ID = ? AND cpn.TYPE = ? ";
 
@@ -504,7 +504,7 @@ public class CustomerDBDAO implements CustomerDAO {
 
 		PreparedStatement preparedStatement = null;
 
-		Collection<Coupon> couponList = new ArrayList<>();
+		Collection<Coupon> couponList = new ArrayList<Coupon>();
 
 		String selectSQL = "SELECT cpn.* FROM COUPON cpn INNER JOIN customer_coupon cc ON cpn.ID = cc.COUPON_ID AND cc.CUST_ID = ? AND cpn.PRICE = ?";
 

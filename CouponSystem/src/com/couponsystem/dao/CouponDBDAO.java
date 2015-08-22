@@ -331,7 +331,7 @@ public class CouponDBDAO implements CouponDAO {
 
 		PreparedStatement preparedStatement = null;
 
-		Collection<Coupon> couponList = new ArrayList<>();
+		Collection<Coupon> couponList = new ArrayList<Coupon>();
 
 		String selectSQLQuery = "SELECT * FROM COUPON CPN WHERE CPN.TYPE = ?";
 
@@ -400,7 +400,7 @@ public class CouponDBDAO implements CouponDAO {
 
 		PreparedStatement preparedStatement = null;
 
-		Collection<Coupon> couponList = new ArrayList<>();
+		Collection<Coupon> couponList = new ArrayList<Coupon>();
 
 		String selectSQLQuery = "SELECT * FROM COUPON cpn INNER JOIN company_coupon cc ON cpn.ID = cc.COUPON_ID AND cc.COMP_ID = ? AND cpn.type = ?";
 
@@ -466,7 +466,7 @@ public class CouponDBDAO implements CouponDAO {
 
 		PreparedStatement preparedStatement = null;
 
-		List<Coupon> coupList = new ArrayList<>();
+		List<Coupon> coupList = new ArrayList<Coupon>();
 
 		String selectSQLQuery = "SELECT ID, TITLE, START_DATE, END_DATE, AMOUNT, TYPE, MESSAGE, PRICE, IMAGE FROM COUPON";
 

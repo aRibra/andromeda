@@ -230,7 +230,7 @@ public class CompanyDBDAO implements CompanyDAO {
 		}
 		PreparedStatement preparedStatement = null;
 
-		Collection<Company> companyList = new ArrayList<>();
+		Collection<Company> companyList = new ArrayList<Company>();
 
 		String selectSQLQuery = "SELECT ID, COMP_NAME, EMAIL, CLIENT_TYPE FROM COMPANY";
 
@@ -285,7 +285,7 @@ public class CompanyDBDAO implements CompanyDAO {
 		}
 		PreparedStatement preparedStatement = null;
 
-		Collection<Coupon> couponList = new ArrayList<>();
+		Collection<Coupon> couponList = new ArrayList<Coupon>();
 
 		String selectSQLQuery = "SELECT CPN.ID, CPN.TITLE, DATE_FORMAT(CPN.START_DATE, \"%d/%l/%Y\") AS START_DATE, DATE_FORMAT(CPN.END_DATE, \"%d/%l/%Y\") AS END_DATE, CPN.AMOUNT, CPN.TYPE, CPN.PRICE, CPN.MESSAGE, CPN.IMAGE  FROM COUPON CPN INNER JOIN COMPANY_COUPON CC ON CPN.ID = CC.COUPON_ID AND CC.COMP_ID = ?";
 
