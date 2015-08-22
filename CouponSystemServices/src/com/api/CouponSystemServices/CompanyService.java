@@ -1,34 +1,34 @@
 package com.api.CouponSystemServices;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Locale;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.websocket.server.PathParam;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
-import com.couponsystem.beans.*;
+import com.api.business_delegate.BusinessDelegate;
+import com.couponsystem.beans.Coupon;
+import com.couponsystem.beans.CouponType;
 import com.couponsystem.exceptions.CouponSystemException;
-import com.couponsystem.facades.AdminFacade;
 import com.couponsystem.facades.CompanyFacade;
 import com.couponsystem.helper.classes.ClientBucket;
 import com.sun.jersey.spi.resource.Singleton;
+
+import couponsystem.ejb.db.Income;
+import couponsystem.ejb.db.IncomeType;
 
 @Singleton
 @Path("/company_service")
@@ -37,6 +37,29 @@ public class CompanyService {
 	@Context
 	private HttpServletRequest request;
 
+	private BusinessDelegate delegate;
+	
+	@PostConstruct
+	public void init(){
+		delegate = new BusinessDelegate();
+	}
+	
+	@POST
+	@Path("/view_income")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Income> viewIncomeByCompany() throws JSONException,
+			CouponSystemException {
+
+		ClientBucket clientBucket = null;
+
+		HttpSession session = request.getSession(false);
+		clientBucket = (ClientBucket) session.getAttribute("clientBucket");
+		
+		Collection<Income> incomeCollection = delegate.viewIncomeByCompany(clientBucket.getClient().getClientId());
+
+		return incomeCollection;
+	}
+	
 	@POST
 	@Path("/create_coupon")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -89,6 +112,14 @@ public class CompanyService {
 		JSONObject jsonResponse = new JSONObject();
 		jsonResponse.put("success", true);
 		jsonResponse.put("message", "company created successfully");
+		
+		
+		Income income = new Income();
+		
+		income.setExecutorName(clientBucket.getClient().getClientName());
+		income.setDescription(IncomeType.COMPANY_NEW_COUPON);
+		income.setAmount(100);
+		delegate.storeIncome(income);
 
 		return jsonResponse;
 	}
@@ -179,6 +210,14 @@ public class CompanyService {
 		JSONObject jsonResponse = new JSONObject();
 		jsonResponse.put("success", true);
 		jsonResponse.put("message", "coupon updated successfully");
+		
+		
+		Income income = new Income();
+		
+		income.setExecutorName(clientBucket.getClient().getClientName());
+		income.setDescription(IncomeType.COMPANY_UPDATE_COUPON);
+		income.setAmount(10);
+		delegate.storeIncome(income);
 
 		return jsonResponse;
 	}

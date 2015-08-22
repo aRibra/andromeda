@@ -3,6 +3,8 @@ package com.api.CouponSystemServices;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.FormParam;
@@ -16,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
+import com.api.business_delegate.BusinessDelegate;
 import com.couponsystem.CouponSystem;
 import com.couponsystem.beans.Company;
 import com.couponsystem.beans.Coupon;
@@ -26,15 +29,57 @@ import com.couponsystem.facades.CompanyFacade;
 import com.couponsystem.helper.classes.ClientBucket;
 import com.sun.jersey.spi.resource.Singleton;
 
+import couponsystem.ejb.db.Income;
+
 @Singleton
 @Path("/admin_service")
 public class AdminService {
 
 	@Context
 	private HttpServletRequest request;
+	
+	private BusinessDelegate delegate;
 
 	// CouponSystem couponSystem = CouponSystem.getInstance();
 
+	@PostConstruct
+	public void init(){
+		delegate = new BusinessDelegate();
+	}
+	
+	@POST
+	@Path("/view_all_incomes")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Income> viewIncomeByCustomer() throws JSONException,
+			CouponSystemException {
+		
+		Collection<Income> incomeCollection = delegate.viewAllIncome();
+
+		return incomeCollection;
+	}
+	
+	@POST
+	@Path("/view_income_by_customer")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Income> viewIncomeByCustomer(@FormParam("CUSTOMER_ID") int customerId) throws JSONException,
+			CouponSystemException {
+		
+		Collection<Income> incomeCollection = delegate.viewIncomeByCustomer(customerId);
+
+		return incomeCollection;
+	}
+	
+	@POST
+	@Path("/view_income_by_company")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Income> viewIncomeByCompany(@FormParam("COMP_ID") int companyId) throws JSONException,
+			CouponSystemException {
+		
+		Collection<Income> incomeCollection = delegate.viewIncomeByCompany(companyId);
+
+		return incomeCollection;
+	}
+	
 	@POST
 	@Path("/create_company")
 	@Produces(MediaType.APPLICATION_JSON)
