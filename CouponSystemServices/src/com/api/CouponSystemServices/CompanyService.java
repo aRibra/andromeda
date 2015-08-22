@@ -19,7 +19,7 @@ import javax.ws.rs.core.MediaType;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
-import com.api.business_delegate.BusinessDelegate;
+import com.api.business.BusinessDelegate;
 import com.couponsystem.beans.Coupon;
 import com.couponsystem.beans.CouponType;
 import com.couponsystem.exceptions.CouponSystemException;
